@@ -1,6 +1,6 @@
 # Local Security Policy
 
-### Password Policy
+### Password Policy (Configure Password Policies?)
 - Enforce password history: 3 remembered
 - Max password age: 30 days
 - Min password age: 1 day
@@ -10,19 +10,19 @@
 - Relax minimum password length limits: Disabled
 - Store passwords using reversible encryption: Disabled
 
-### Account Lockout Policy
+### Account Lockout Policy (Configure Account Lockout Policies?)
 - Account lockout duration: 30 mins
 - Account lockout threshold: 5
 - Allow Administrator account lockout: Enabled
 - Reset account lockout counter after: 30 mins
 
-### Local Audit Policy
+### Local Audit Policy (Configure Local Audit Policies?)
 - ALL: Success & Failure
 
-### Security Options
+### Security Options (Configure Security Options?)
 
 #### Accounts
-- Administrator account atatus: Disabled
+- Administrator account status: Disabled
 - Block Microsoft accounts: Enabled
 - Guest account status: Disabled
 - Limit local use of blank passwords to console logon only: Enabled
@@ -81,9 +81,6 @@
 - Allow automatic administrative logon: Disabled
 - Allow floppy copy and access to all drives and all folders: Disabled
 
-#### Shutdown
-- Allow system to be shutdown without having to log on: Enabled
-
 #### System Cryptography
 - Force strong key protection for user keys stored on the computer: User must enter a password each time they use a key
 - Use FIPS compliant algorithms for encryption, hashing, and signing: Enabled
@@ -91,9 +88,9 @@
 #### System Objects
 - Require case insensitivity for non-Windows subsystems: Enabled
 
-### User Account Control
+### User Account Control (Configure User Account Control?)
 - Admin Approval Mode for the Built-in Administrator account: Enabled
-- Allow UIAccess applications to prompt for elevation without using the secure desktop
+- Allow UIAccess applications to prompt for elevation without using the secure desktop: Disabled
 - Behavior of the elevation prompt for administrators in Admin Approval Mode: Prompt for consent on the secure desktop
 - Behavior of the elevation prompt for standard users: Prompt for credentials on the secure desktop
 - Detect application installations and prompt for elevation: Enabled
@@ -103,7 +100,7 @@
 - Switch to the secure desktop when prompting for elevation: Enabled
 
 
-### Windows Defender Firewall with Advanced Security
+### Windows Defender Firewall with Advanced Security (Configure Windows Defender Firewall?)
 
 #### Domain Profile
 - Firewall state: On
@@ -121,7 +118,7 @@
 - Outbound connections: Allow
 
 
-### Advanced Audit Policy Configuration
+### Advanced Audit Policy Configuration (Configure Advanced Audit Policies?)
 - ALL: Sucess & Failure
 
 
@@ -135,7 +132,7 @@
 
 # Group Policy
 
-## Computer Configuration
+## Computer Configuration (Configure Computer Configuration Settings?)
 
 ### Administrative Templates
 
@@ -159,6 +156,13 @@
 
 #### Autoplay Policies
 - Turn off Autoplay: Enabled
+
+#### File Explorer
+- Configure Windows Defender SmartScreen: Enabled (Warn and Prevent Bypass)
+
+#### Windows Update
+- Configure auto-restart reminder notifications for updates: Enabled
+- Configure Automatic Updates: Enabled
 
 #### Credential User Interface
 - Do not display the password reveal button: Enabled
@@ -184,5 +188,134 @@
 - Turn on script scanning: Enabled
 - Configure monitoring for incoming and outgoing file and progam activity: Not configured
 
-##### Scan
-- Check for the latest virus and spyware 
+###### Scan
+- Check for the latest virus and spyware security intelligence before running a scheduled scan: Enabled
+- Scan archive files: Enabled
+- Scan removable drives: Enabled
+- Scan packed executables: Enabled
+- Scan network files: Enabled
+- Specify the interval to run quick scans per day: Enabled (12)
+
+##### Security Intelligence Updates
+- Turn on scan after security intelligence update: Enabled
+- Allow security intelligence updates from Microsoft Update: Enabled
+- Allow real-time security intelligence updates based on reports to Microsoft MAPS: Enabled
+- Check for the latest virus and spyware security intelligence on startup: Enabled
+
+
+#### Security Center
+- Turn on Security Center (Domain PC's only)
+
+
+#### Windows Defender SmartScreen
+
+##### Enhanced Phishing Protection
+- Notify Malicious: Enabled
+- Notify Password Reuse: Enabled
+- Notify Unsafe App: Enabled
+- Service Enabled: Enabled
+
+##### Explorer
+- Configure Windows Defender SmartScreen: Enabled
+
+##### Microsoft Edge
+- Configure Windows Defender SmartScreen: Enabled
+- Prevent bypassing Windows Defender SmartScreen prompts for sites: Enabled
+
+
+### Microsoft Management Console
+- Windows Firewall with Advanced Security: Enabled
+
+
+
+## User Configuration (Configure User Configuration Settings?)
+
+### Windows Components
+
+#### Autoplay Policies
+- Turn off Autoplay: Enabled
+
+#### Network Sharing
+- Prevent users from sharing files within their profile
+
+#### Windows Defender SmartScreen
+- Microsoft Edge --> Configure Windows Defender SmartScreen: Enabled
+- Prevent bypassing Windows Defender SmartScreen prompts for sites: Enabled
+
+
+
+# Services
+- Windows Defender Antivirus Network Inspection Service (WdNisSvc): Automatic, Start
+- Windows Defender Antivirus Service (WinDefend): Automatic, Start
+- Microsoft Defender Core Service (MDCoreSvc): Automatic, Start
+- Print Spooler (Spooler): Disabled, Stop
+- Security Accounts Manager (SamSs): Automatic, Start
+- Security Center (wscsvc): Automatic, Start
+- Software Protection (sppsvc): Automatic, Start
+- Windows Defender Firewall (mpssvc): Automatic, Start
+- Windows Error Reporting Service (WerSvc): Automatic, Start
+- Windows Event Log (EventLog): Automatic, Start
+- Windows Security Service (SecurityHealthService): Automatic, Start
+- Windows Update (wuauserv): Automatic, Start
+
+
+
+# (Enable or Disable RDP/Remote Assistance?)
+
+## Enable RDP/Remote Assistance
+
+### Group Policy --> Computer Configuration --> Administrative Templates
+
+- Network --> Network Connections --> Windows Defender Firewall --> Domain Profile/Standard Profile --> Allow inbound Remote Desktop exceptions: Enabled
+- Network --> Network Connections --> Windows Defender Firewall --> Domain Profile/Standard Profile --> Allow inbound remote administration exceptions: Enabled
+
+- Remote Desktop Services --> Remote Desktop Session Host --> Connections --> Allow users to connect remotely by using Remote Desktop Services: Enabled
+
+- Remote Desktop Services --> Remote Desktop Session Host --> Security --> Always prompt for password upon connection: Enabled
+- Remote Desktop Services --> Remote Desktop Session Host --> Security --> Require user authentication for remote connections by using Network Level Authentication: Enabled
+
+- Remote Desktop Services --> Remote Desktop Session Host --> Session Time Limits --> End session when time limits are reached: Enabled
+
+- Windows Remote Management (WinRM) --> WinRM Service --> Allow unencrypted traffic: Disabled
+
+- Windows Remote Shell --> Allow Remote Shell Access: Enabled
+
+### Settings
+- Remote Desktop --> Enable Remote Desktop: Toggle ON
+- System Properties --> Allow Remote Assistance connections to this computer: CHECK
+- System Properties --> Allow remote connections to this computer: SELECT
+
+### Services
+- Remote Desktop Configuration (SessionEnv): Automatic, Start
+- Remote Desktop Services (TermService): Automatic, Start
+- Remote Desktop Services UserMode Port Redirector (UmRdpService): Automatic, Start
+- Windows Remote Management (WinRM): Automatic, Start
+
+## Disable RDP/Remote Assistance
+
+### Group Policy --> Computer Configuration --> Administrative Templates
+
+- Network --> Network Connections --> Windows Defender Firewall --> Domain Profile/Standard Profile --> Allow inbound Remote Desktop exceptions: Disabled
+- Network --> Network Connections --> Windows Defender Firewall --> Domain Profile/Standard Profile --> Allow inbound remote administration exceptions: Disabled
+
+- Remote Desktop Services --> Remote Desktop Session Host --> Connections --> Allow users to connect remotely by using Remote Desktop Services: Disabled
+
+- Windows Remote Shell --> Allow Remote Shell Access: Disabled
+
+### Settings
+- Remote Desktop --> Enable Remote Desktop: Toggle OFF
+- System Properties --> Allow Remote Assistance connections to this computer: UNCHECK
+- System Properties --> Don't Allow remote connections to this computer: SELECT
+
+### Services
+- Remote Desktop Configuration (SessionEnv): Disabled, Stop
+- Remote Desktop Services (TermService): Disabled, Stop
+- Remote Desktop Services UserMode Port Redirector (UmRdpService): Disabled, Stop
+- Remote Registry (RemoteRegistry): Disabled, Stop
+- Windows Remote Management (WinRM): Disabled, Stop
+
+# (Enable or Disable FTP?)
+
+## Enable FTP
+
+## Disable FTP

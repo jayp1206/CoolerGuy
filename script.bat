@@ -1,2 +1,0 @@
-:: Script for CyberPatriot Windows
-
