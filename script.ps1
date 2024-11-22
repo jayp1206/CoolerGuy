@@ -45,8 +45,10 @@ function Set-PasswordPolicies {
     if ($content -contains $allocateCDRomsKey) {
         # Replace the value from 0 to 1 if found
         $content = $content -replace '(MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\AllocateCDRoms=1,"0")', 'MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\AllocateCDRoms=1,"1"'
+        
     } else {
         # Add the line if it doesn't exist
+        Write-Host "adding CDRoms"  -ForegroundColor Yellow
         $content += 'MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\AllocateCDRoms=1,"1"'
     }
 
@@ -57,6 +59,7 @@ function Set-PasswordPolicies {
         $content = $content -replace '(MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\AllocateFloppies=1,"0")', 'MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\AllocateFloppies=1,"1"'
     } else {
         # Add the line if it doesn't exist
+        Write-Host "adding floppies"  -ForegroundColor Yellow
         $content += 'MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\AllocateFloppies=1,"1"'
     }
 
@@ -67,6 +70,7 @@ function Set-PasswordPolicies {
         $content = $content -replace "(MACHINE\\System\\CurrentControlSet\\Control\\SAM\\MinimumPasswordLengthAudit=4,)\d+", "MACHINE\System\CurrentControlSet\Control\SAM\MinimumPasswordLengthAudit=4,10"
     } else {
         # Add the line if it doesn't exist
+        Write-Host "adding passlenaudit"  -ForegroundColor Yellow
         $content += "MACHINE\System\CurrentControlSet\Control\SAM\MinimumPasswordLengthAudit=4,10"
     }
 
@@ -76,6 +80,7 @@ function Set-PasswordPolicies {
         $content = $content -replace "(MACHINE\System\CurrentControlSet\Control\SAM\RelaxMinimumPasswordLengthLimits=4,)\d+", "MACHINE\System\CurrentControlSet\Control\SAM\RelaxMinimumPasswordLengthLimits=4,0"
     } else {
         # Add the line if it doesn't exist
+        Write-Host "adding relaxpasslen" -ForegroundColor Yellow
         $content += "MACHINE\System\CurrentControlSet\Control\SAM\RelaxMinimumPasswordLengthLimits=4,0"
     }
 
