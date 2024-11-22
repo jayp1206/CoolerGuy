@@ -1,41 +1,43 @@
+# MUST INSTALL MICROSFT LGPO
+
 # Local Security Policy
 
-### Password Policy (Configure Password Policies?)
-- Enforce password history: 3 remembered
-- Max password age: 30 days
-- Min password age: 1 day
-- Minimum password length: 10 characters
-- Minimum password length audit: 10 characters
-- Password must meet complexity requirements: Enabled
-- Relax minimum password length limits: Disabled
-- Store passwords using reversible encryption: Disabled
+### Password Policy (Configure Password Policies?) ✓
+- Enforce password history: 3 remembered ✓
+- Max password age: 30 days ✓
+- Min password age: 1 day ✓
+- Minimum password length: 10 characters ✓
+- Minimum password length audit: 10 characters ✓
+- Password must meet complexity requirements: Enabled ✓
+- Relax minimum password length limits: Disabled ✓
+- Store passwords using reversible encryption: Disabled ✓
 
-### Account Lockout Policy (Configure Account Lockout Policies?)
-- Account lockout duration: 30 mins
-- Account lockout threshold: 5
-- Allow Administrator account lockout: Enabled
-- Reset account lockout counter after: 30 mins
+### Account Lockout Policy (Configure Account Lockout Policies?) ✓
+- Account lockout duration: 30 mins ✓
+- Account lockout threshold: 5 ✓
+- Allow Administrator account lockout: Enabled ✓
+- Reset account lockout counter after: 30 mins ✓
 
-### Local Audit Policy (Configure Local Audit Policies?)
-- ALL: Success & Failure
+### Local Audit Policy (Configure Local Audit Policies?) ✓
+- ALL: Success & Failure ✓
 
 ### Security Options (Configure Security Options?)
 
 #### Accounts
-- Administrator account status: Disabled
+- Administrator account status: Disabled ✓
 - Block Microsoft accounts: Enabled
-- Guest account status: Disabled
-- Limit local use of blank passwords to console logon only: Enabled
+- Guest account status: Disabled ✓
+- Limit local use of blank passwords to console logon only: Enabled ✓
 
 #### Audit
 - Audit the access of global system objects: Enabled
 - Audit the use of Backup and Restore privileges: Enabled
-- Shut down system immediately if unable to log security audits: Enabled
+- Shut down system immediately if unable to log security audits: Enabled ✓
 
 #### Devices
 - Prevent users from installing printer drivers: Enabled
-- Restrict CD-ROM access to locally logged-on user only: Enabled
-- Restrict floppy access to locally logged-on user only: Enabled
+- Restrict CD-ROM access to locally logged-on user only: Enabled ✓
+- Restrict floppy access to locally logged-on user only: Enabled ✓
 
 #### Domain Controller
 - Allow vulnerable Netlogon secure channel connections: Disabled
