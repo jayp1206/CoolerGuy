@@ -20,7 +20,6 @@ function Set-PasswordPolicies {
     # Configure password complexity, reversible encryption, audits, lockout, admin account, guest account
     $content = $content `
         -Replace "PasswordComplexity = 0", "PasswordComplexity = 1" `
-        -Replace [regex]::Escape("MACHINE\System\CurrentControlSet\Control\SAM\RelaxMinimumPasswordLengthLimits=4,1"), "MACHINE\System\CurrentControlSet\Control\SAM\RelaxMinimumPasswordLengthLimits=4,0" `
         -Replace "ClearTextPassword = 1", "ClearTextPassword = 0" `
         -Replace "AuditSystemEvents\s*=\s*\d+", "AuditSystemEvents = 3" `
         -Replace "AuditLogonEvents\s*=\s*\d+", "AuditLogonEvents = 3" `
@@ -69,6 +68,15 @@ function Set-PasswordPolicies {
     } else {
         # Add the line if it doesn't exist
         $content += "MACHINE\System\CurrentControlSet\Control\SAM\MinimumPasswordLengthAudit=4,10"
+    }
+
+    $relaxMinPassLengthKey = 'MACHINE\System\CurrentControlSet\Control\SAM\RelaxMinimumPasswordLengthLimits='
+    if ($content -contains $relaxMinPassLengthKey) {
+        # Replace the value from 0 to 1 if found
+        $content = $content -replace "(MACHINE\System\CurrentControlSet\Control\SAM\RelaxMinimumPasswordLengthLimits=4,)\d+", "MACHINE\System\CurrentControlSet\Control\SAM\RelaxMinimumPasswordLengthLimits=4,0"
+    } else {
+        # Add the line if it doesn't exist
+        $content += "MACHINE\System\CurrentControlSet\Control\SAM\RelaxMinimumPasswordLengthLimits=4,0"
     }
 
     # Create modified secpol.cfg file
