@@ -1,12 +1,12 @@
 function Set-PasswordPolicies {
     # Enforce password history: 3 days 
-    #net accounts /uniquepw:3
+    net accounts /uniquepw:3
 
     # Max password age: 30 days
-    #net accounts /maxpwage:30
+    net accounts /maxpwage:30
 
     # Min password age: 1 day
-    #net accounts /minpwage:1
+    net accounts /minpwage:1
 
     # Min password length: 10 chars
     net accounts /minpwlen:10
@@ -72,7 +72,7 @@ function Set-PasswordPolicies {
     }
 
     # Create modified secpol.cfg file
-    $content | Out-File C:\modified_secpol.cfg -Force
+    $content | Out-File C:\secpol.cfg -Force
 
     # Apply new config and remove temp files
     secedit /configure /db c:\windows\security\local.sdb /cfg c:\secpol.cfg /areas SECURITYPOLICY
