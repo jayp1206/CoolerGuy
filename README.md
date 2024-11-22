@@ -1,4 +1,4 @@
-# MUST INSTALL MICROSFT LGPO
+# MUST RUN "Set-ExecutionPolicy unrestricted"
 
 # Local Security Policy
 

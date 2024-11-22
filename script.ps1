@@ -75,7 +75,7 @@ function Set-PasswordPolicies {
     $content | Out-File C:\modified_secpol.cfg -Force
 
     # Apply new config and remove temp files
-    /configure /db c:\windows\security\local.sdb /cfg c:\secpol.cfg /areas SECURITYPOLICY
+    secedit /configure /db c:\windows\security\local.sdb /cfg c:\secpol.cfg /areas SECURITYPOLICY
     Remove-Item C:\secpol.cfg -Force
     gpupdate /force
 
