@@ -11,11 +11,13 @@ function Set-PasswordPolicies {
     # Min password length: 10 chars
     net accounts /minpwlen:10
 
+    # Copy current secpol.cfg file
     secedit /export /cfg c:\secpol.cfg
     
-    
+    # Load secpol.cfg into memory
     $content = (Get-Content C:\secpol.cfg)
 
+    # Configure password complexity, reversible encryption, audits, lockout, admin account, guest account
     $content = $content `
         -Replace "PasswordComplexity = 0", "PasswordComplexity = 1" `
         -Replace [regex]::Escape("MACHINE\System\CurrentControlSet\Control\SAM\RelaxMinimumPasswordLengthLimits=4,1"), "MACHINE\System\CurrentControlSet\Control\SAM\RelaxMinimumPasswordLengthLimits=4,0" `
@@ -38,6 +40,8 @@ function Set-PasswordPolicies {
         -Replace [regex]::Escape("MACHINE\System\CurrentControlSet\Control\Lsa\LimitBlankPasswordUse=4,0"), "MACHINE\System\CurrentControlSet\Control\Lsa\LimitBlankPasswordUse=4,1" `
         -Replace [regex]::Escape("MACHINE\System\CurrentControlSet\Control\Lsa\CrashOnAuditFail=4,0"), "MACHINE\System\CurrentControlSet\Control\Lsa\CrashOnAuditFail=4,1" `
         
+
+    # Limit CD Rom access to locally logged on users: Enable
     $allocateCDRomsKey = 'MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\AllocateCDRoms=1,"0"'
     if ($content -contains $allocateCDRomsKey) {
         # Replace the value from 0 to 1 if found
@@ -47,6 +51,7 @@ function Set-PasswordPolicies {
         $content += 'MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\AllocateCDRoms=1,"1"'
     }
 
+    # Limit Floppy access to locally logged on users: Enable
     $allocateFloppiesKey = 'MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\AllocateFloppies=1,"0"'
     if ($content -contains $allocateFloppiesKey) {
         # Replace the value from 0 to 1 if found
@@ -56,6 +61,7 @@ function Set-PasswordPolicies {
         $content += 'MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\AllocateFloppies=1,"1"'
     }
 
+    # Audit password length: 10 chars
     $passwordLengthAuditKey = 'MACHINE\System\CurrentControlSet\Control\SAM\MinimumPasswordLengthAudit='
     if ($content -contains $passwordLengthAuditKey) {
         # Replace the value from 0 to 1 if found
@@ -65,12 +71,13 @@ function Set-PasswordPolicies {
         $content += "MACHINE\System\CurrentControlSet\Control\SAM\MinimumPasswordLengthAudit=4,10"
     }
 
-    
+    # Create modified secpol.cfg file
     $content | Out-File C:\modified_secpol.cfg -Force
 
-    #secedit /configure /db c:\windows\security\local.sdb /cfg c:\secpol.cfg /areas SECURITYPOLICY
+    # Apply new config and remove temp files
+    /configure /db c:\windows\security\local.sdb /cfg c:\secpol.cfg /areas SECURITYPOLICY
     Remove-Item C:\secpol.cfg -Force
-    #gpupdate /force
+    gpupdate /force
 
     Write-Host "Password policies configured successfully" -ForegroundColor Green
 }
