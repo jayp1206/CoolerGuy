@@ -1,4 +1,4 @@
-function Set-PasswordPolicies {
+function Set-SecurityPolicies {
     # Copy current secpol.cfg file
     secedit /export /cfg original_secpol.cfg
 
