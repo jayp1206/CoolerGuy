@@ -26,11 +26,35 @@ function Set-SecurityPolicies {
 }
 
 
+function Enable-Firewall {
+    # Enable firewall for domain, private, and public
+    Set-NetFirewallProfile -Profile Domain,Private,Public -Enabled True
+
+    # Configure inbound and outbound rules
+    Set-NetFirewallProfile -Profile Domain -DefaultInboundAction Block -DefaultOutboundAction Allow
+    Set-NetFirewallProfile -Profile Private -DefaultInboundAction Block -DefaultOutboundAction Allow
+    Set-NetFirewallProfile -Profile Public -DefaultInboundAction Block -DefaultOutboundAction Allow
+}
+
+
+
+
+
+
+
+
 
 
 $securityPolicy = Read-Host "Configure Password Policies? (y/n) "
 if ($securityPolicy -eq 'y') { 
     Set-SecurityPolicies
 } else {
-    Write-Host "Skipping Security Policies"
+    Write-Host "Skipping Security Policies" -ForegroundColor Yellow
+}   
+
+$firewall = Read-Host "Configure Windows Defender Firewall? (y/n) "
+if ($firewall -eq 'y') { 
+    Enable-Firewall
+} else {
+    Write-Host "Skipping Firewall Configuration" -ForegroundColor Yellow
 }   

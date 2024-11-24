@@ -4,103 +4,103 @@
 
 ## (Configure Security Policies?)
 
-### Password Policy
-- Enforce password history: 5 remembered 
-- Max password age: 30 days 
-- Min password age: 10 days 
-- Minimum password length: 10 characters 
-- Minimum password length audit: 10 characters 
-- Password must meet complexity requirements: Enabled 
-- Relax minimum password length limits: Disabled 
-- Store passwords using reversible encryption: Disabled 
+### Password Policy ✔
+- Enforce password history: 5 remembered ✔
+- Max password age: 30 days ✔
+- Min password age: 10 days ✔
+- Minimum password length: 10 characters ✔
+- Minimum password length audit: 10 characters ✔
+- Password must meet complexity requirements: Enabled ✔
+- Relax minimum password length limits: Disabled ✔
+- Store passwords using reversible encryption: Disabled ✔
 
-### Account Lockout Policy
-- Account lockout duration: 30 mins 
-- Account lockout threshold: 5 
-- Allow Administrator account lockout: Enabled 
-- Reset account lockout counter after: 30 mins 
+### Account Lockout Policy ✔
+- Account lockout duration: 30 mins ✔
+- Account lockout threshold: 5 ✔
+- Allow Administrator account lockout: Enabled ✔
+- Reset account lockout counter after: 30 mins ✔
 
-### Local Audit Policy
-- ALL: Success & Failure 
+### Local Audit Policy ✔
+- ALL: Success & Failure ✔
 
 ### Security Options
 
-#### Accounts
-- Administrator account status: Disabled 
-- Block Microsoft accounts: Can't add or log on
-- Guest account status: Disabled 
-- Limit local use of blank passwords to console logon only: Enabled 
+#### Accounts ✔
+- Administrator account status: Disabled ✔
+- Block Microsoft accounts: Can't add or log on ✔
+- Guest account status: Disabled ✔
+- Limit local use of blank passwords to console logon only: Enabled ✔
 
-#### Audit
-- Audit the access of global system objects: Enabled
-- Audit the use of Backup and Restore privileges: Enabled
-- Shut down system immediately if unable to log security audits: Enabled 
+#### Audit ✔
+- Audit the access of global system objects: Enabled ✔
+- Audit the use of Backup and Restore privileges: Enabled ✔
+- Shut down system immediately if unable to log security audits: Enabled ✔
 
-#### Devices
-- Prevent users from installing printer drivers: Enabled
-- Restrict CD-ROM access to locally logged-on user only: Enabled 
-- Restrict floppy access to locally logged-on user only: Enabled 
+#### Devices ✔
+- Prevent users from installing printer drivers: Enabled ✔
+- Restrict CD-ROM access to locally logged-on user only: Enabled ✔ 
+- Restrict floppy access to locally logged-on user only: Enabled ✔
 
-#### Domain Member
-- Digitally encrypt or sign secure channel data (always): Enabled
-- Digitally encrypt secure channel data (when possible): Enabled
-- Digitally sign secure channel data (when possible): Enabled
-- Maximum machine account password age: 30 days
-- Require strong (Windows 2000 or later) session key: Enabled
+#### Domain Member ✔
+- Digitally encrypt or sign secure channel data (always): Enabled ✔
+- Digitally encrypt secure channel data (when possible): Enabled ✔
+- Digitally sign secure channel data (when possible): Enabled ✔
+- Maximum machine account password age: 30 days ✔
+- Require strong (Windows 2000 or later) session key: Enabled ✔
 
-#### Interactive Logon
-- Display user information when the session is locked: Do not display
-- Do not require CTRL + ALT + DEL: Disabled
-- Don't display last signed-in: Enabled
-- Don't display username at sign-in: Enabled
-- Machine account lockout threshold: 5
-- Machine inactivity limit: 600 sec
-- Prompt user to change password before expiration: 5 days
+#### Interactive Logon ✔
+- Display user information when the session is locked: Do not display ✔
+- Do not require CTRL + ALT + DEL: Disabled ✔
+- Don't display last signed-in: Enabled ✔
+- Don't display username at sign-in: Enabled ✔
+- Machine account lockout threshold: 5 ✔
+- Machine inactivity limit: 600 sec ✔
+- Prompt user to change password before expiration: 5 days ✔
 
-#### Microsoft Network Client
-- Digitally sign communications (always): Enabled
-- Digitally sign communications (if server agrees): Enabled
-- Send unencrypted passwords to third-party SMB servers: Disabled
+#### Microsoft Network Client ✔
+- Digitally sign communications (always): Enabled ✔
+- Digitally sign communications (if server agrees): Enabled ✔
+- Send unencrypted passwords to third-party SMB servers: Disabled ✔
 
-#### Microsoft Network Server
-- Digitally sign communications (always): Enabled
-- Digitally sign communications (if client agrees): Enabled
-- Disconnect clients when logon hours expire: Enabled
+#### Microsoft Network Server ✔
+- Digitally sign communications (always): Enabled ✔
+- Digitally sign communications (if client agrees): Enabled ✔
+- Disconnect clients when logon hours expire: Enabled ✔
 
-#### Network Access
-- Allow anonymous SID/Name translation: Disabled
-- Do not allow anonymous enumeration of SAM accounts: Enabled
-- Do not allow anonymous enumeration of SAM accounts and shared: Enabled
-- Do not allow storage of passwords and credentials for network authentication: Enabled
-- Let Everyone permissions apply to anonymous users: Disabled
-- Shared that can be accessed anonymously: Not Defined (remove all)
+#### Network Access ✔
+- Allow anonymous SID/Name translation: Disabled ✔
+- Do not allow anonymous enumeration of SAM accounts: Enabled ✔
+- Do not allow anonymous enumeration of SAM accounts and shared: Enabled ✔
+- Do not allow storage of passwords and credentials for network authentication: Enabled ✔
+- Let Everyone permissions apply to anonymous users: Disabled ✔
+- Shared that can be accessed anonymously: Not Defined (remove all) ✔
 
-#### Network Security
-- Force logoff when logon hours expire: Enable
-- Audit incoming NTLM Traffic: Enable auditing for all accounts
-- Audit NTL authentication in this domain: Enable all
+#### Network Security ✔
+- Force logoff when logon hours expire: Enable ✔
+- Audit incoming NTLM Traffic: Enable auditing for all accounts ✔
+- Audit NTL authentication in this domain: Enable all ✔
 
-#### Recovery Console
-- Allow automatic administrative logon: Disabled
-- Allow floppy copy and access to all drives and all folders: Disabled
+#### Recovery Console ✔
+- Allow automatic administrative logon: Disabled ✔
+- Allow floppy copy and access to all drives and all folders: Disabled ✔
 
-#### System Cryptography
-- Force strong key protection for user keys stored on the computer: User must enter a password each time they use a key
-- Use FIPS compliant algorithms for encryption, hashing, and signing: Enabled
+#### System Cryptography ✔
+- Force strong key protection for user keys stored on the computer: User must enter a password each time they use a key ✔
+- Use FIPS compliant algorithms for encryption, hashing, and signing: Enabled ✔
 
-#### System Objects
-- Require case insensitivity for non-Windows subsystems: Enabled
+#### System Objects ✔
+- Require case insensitivity for non-Windows subsystems: Enabled ✔
 
-### User Account Control (Configure User Account Control?)
-- Admin Approval Mode for the Built-in Administrator account: Enabled
-- Allow UIAccess applications to prompt for elevation without using the secure desktop: Disabled
-- Behavior of the elevation prompt for administrators in Admin Approval Mode: Prompt for consent on the secure desktop
-- Behavior of the elevation prompt for standard users: Prompt for credentials on the secure desktop
-- Detect application installations and prompt for elevation: Enabled
-- Only elevate executables that are signed and validated: Enabled
-- Only elevate UIAccess applications that are installed in secure locations: Enabled
-- Run all administrators in Admin Approval Mode: Enabled
-- Switch to the secure desktop when prompting for elevation: Enabled
+### User Account Control (Configure User Account Control?) ✔
+- Admin Approval Mode for the Built-in Administrator account: Enabled ✔
+- Allow UIAccess applications to prompt for elevation without using the secure desktop: Disabled ✔
+- Behavior of the elevation prompt for administrators in Admin Approval Mode: Prompt for consent on the secure desktop ✔
+- Behavior of the elevation prompt for standard users: Prompt for credentials on the secure desktop ✔
+- Detect application installations and prompt for elevation: Enabled ✔
+- Only elevate executables that are signed and validated: Enabled ✔
+- Only elevate UIAccess applications that are installed in secure locations: Enabled ✔
+- Run all administrators in Admin Approval Mode: Enabled ✔
+- Switch to the secure desktop when prompting for elevation: Enabled ✔
 
 
 ### Windows Defender Firewall with Advanced Security (Configure Windows Defender Firewall?)
