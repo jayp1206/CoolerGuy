@@ -22,34 +22,32 @@ function Set-SecurityPolicies {
     secedit /configure /db c:\windows\security\local.sdb /cfg merged_secpol.cfg /areas SECURITYPOLICY
     gpupdate /force
 
-    Write-Host "Security policies configured successfully" -ForegroundColor Green
+    Write-Host "Security policies configured successfully!" -ForegroundColor Green
 }
 
 
 function Enable-Firewall {
-# Array of registry paths for firewall profiles
-$firewallProfiles = @{
-    Domain  = "HKLM:\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile"
-    Private = "HKLM:\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile"
-    Public  = "HKLM:\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile"
-}
+# Path for the firewall registry settings
+$baseKey = "HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall"
 
-# Settings to apply to each profile
-$firewallSettings = @{
-    EnableFirewall        = 1  # Firewall state: On
-    DefaultInboundAction  = 1  # Inbound connections: Block
-    DefaultOutboundAction = 0  # Outbound connections: Allow
-}
+# Profile names
+$profiles = @("DomainProfile", "PrivateProfile", "PublicProfile")
 
-# Apply settings to each profile
-foreach ($profile in $firewallProfiles.Values) {
-    foreach ($setting in $firewallSettings.GetEnumerator()) {
-        Set-ItemProperty -Path $profile -Name $setting.Key -Value $setting.Value
+# Loop through each profile to create the necessary keys if they don't exist
+foreach ($profile in $profiles) {
+    $profileKey = Join-Path $baseKey $profile
+
+    # Create the profile registry key if it doesn't exist
+    if (-not (Test-Path $profileKey)) {
+        New-Item -Path $profileKey -Force | Out-Null
     }
-}
 
-# Restart firewall service
-Restart-Service -Name mpssvc
+    # Set firewall settings for each profile
+    Set-ItemProperty -Path $profileKey -Name "EnableFirewall" -Value 1          # Enable firewall
+    Set-ItemProperty -Path $profileKey -Name "DefaultInboundAction" -Value 1    # Block inbound connections
+    Set-ItemProperty -Path $profileKey -Name "DefaultOutboundAction" -Value 0   # Allow outbound connections
+
+Write-Host "Windows Firewall profiles configured successfully!"
 }
 
 
