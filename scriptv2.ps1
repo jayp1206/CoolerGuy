@@ -27,6 +27,19 @@ function Set-SecurityPolicies {
 
 
 function Enable-Firewall {
+    # Enable all firewall profiles
+    Set-NetFirewallProfile -All -Enabled True
+    
+    # Block inbound connections
+    Set-NetFirewallProfile –Name Public –DefaultInboundAction Block
+    Set-NetFirewallProfile –Name Private –DefaultInboundAction Block
+    Set-NetFirewallProfile –Name Domain –DefaultInboundAction Block
+
+    # Allow outbound connections
+    Set-NetFirewallProfile –Name Public –DefaultOutboundAction Allow
+    Set-NetFirewallProfile –Name Private –DefaultOutboundAction Allow
+    Set-NetFirewallProfile –Name Domain –DefaultOutboundAction Allow
+
     # Path for the firewall registry settings
     $baseKey = "HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall"
 
@@ -39,6 +52,7 @@ function Enable-Firewall {
 
         # Create the profile registry key if it doesn't exist
         if (-not (Test-Path $profileKey)) {
+            Write-Host "Folder not detected, creating..."
             New-Item -Path $profileKey -Force | Out-Null
         }
 
@@ -46,9 +60,9 @@ function Enable-Firewall {
         Set-ItemProperty -Path $profileKey -Name "EnableFirewall" -Value 1          # Enable firewall
         Set-ItemProperty -Path $profileKey -Name "DefaultInboundAction" -Value 1    # Block inbound connections
         Set-ItemProperty -Path $profileKey -Name "DefaultOutboundAction" -Value 0   # Allow outbound connections
+    }
 
     Write-Host "Windows Firewall profiles configured successfully!"
-    }
 }
 
 
