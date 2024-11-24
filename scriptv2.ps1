@@ -27,13 +27,29 @@ function Set-SecurityPolicies {
 
 
 function Enable-Firewall {
-    # Enable firewall for domain, private, and public
-    Set-NetFirewallProfile -Profile Domain,Private,Public -Enabled True
+# Array of registry paths for firewall profiles
+$firewallProfiles = @{
+    Domain  = "HKLM:\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile"
+    Private = "HKLM:\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile"
+    Public  = "HKLM:\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile"
+}
 
-    # Configure inbound and outbound rules
-    Set-NetFirewallProfile -Profile Domain -DefaultInboundAction Block -DefaultOutboundAction Allow
-    Set-NetFirewallProfile -Profile Private -DefaultInboundAction Block -DefaultOutboundAction Allow
-    Set-NetFirewallProfile -Profile Public -DefaultInboundAction Block -DefaultOutboundAction Allow
+# Settings to apply to each profile
+$firewallSettings = @{
+    EnableFirewall        = 1  # Firewall state: On
+    DefaultInboundAction  = 1  # Inbound connections: Block
+    DefaultOutboundAction = 0  # Outbound connections: Allow
+}
+
+# Apply settings to each profile
+foreach ($profile in $firewallProfiles.Values) {
+    foreach ($setting in $firewallSettings.GetEnumerator()) {
+        Set-ItemProperty -Path $profile -Name $setting.Key -Value $setting.Value
+    }
+}
+
+# Restart firewall service
+Restart-Service -Name mpssvc
 }
 
 
