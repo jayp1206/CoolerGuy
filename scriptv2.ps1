@@ -27,29 +27,29 @@ function Set-SecurityPolicies {
 
 
 function Enable-Firewall {
-# Path for the firewall registry settings
-$baseKey = "HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall"
+    # Path for the firewall registry settings
+    $baseKey = "HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall"
 
-# Profile names
-$profiles = @("DomainProfile", "PrivateProfile", "PublicProfile")
+    # Profile names
+    $profiles = @("DomainProfile", "PrivateProfile", "PublicProfile")
 
-# Loop through each profile to create the necessary keys if they don't exist
-foreach ($profile in $profiles) {
-    $profileKey = Join-Path $baseKey $profile
+    # Loop through each profile to create the necessary keys if they don't exist
+    foreach ($profile in $profiles) {
+        $profileKey = Join-Path $baseKey $profile
 
-    # Create the profile registry key if it doesn't exist
-    if (-not (Test-Path $profileKey)) {
-        New-Item -Path $profileKey -Force | Out-Null
+        # Create the profile registry key if it doesn't exist
+        if (-not (Test-Path $profileKey)) {
+            New-Item -Path $profileKey -Force | Out-Null
+        }
+
+        # Set firewall settings for each profile
+        Set-ItemProperty -Path $profileKey -Name "EnableFirewall" -Value 1          # Enable firewall
+        Set-ItemProperty -Path $profileKey -Name "DefaultInboundAction" -Value 1    # Block inbound connections
+        Set-ItemProperty -Path $profileKey -Name "DefaultOutboundAction" -Value 0   # Allow outbound connections
+
+    Write-Host "Windows Firewall profiles configured successfully!"
     }
-
-    # Set firewall settings for each profile
-    Set-ItemProperty -Path $profileKey -Name "EnableFirewall" -Value 1          # Enable firewall
-    Set-ItemProperty -Path $profileKey -Name "DefaultInboundAction" -Value 1    # Block inbound connections
-    Set-ItemProperty -Path $profileKey -Name "DefaultOutboundAction" -Value 0   # Allow outbound connections
-
-Write-Host "Windows Firewall profiles configured successfully!"
 }
-
 
 
 
