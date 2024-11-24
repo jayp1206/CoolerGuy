@@ -102,23 +102,24 @@
 - Run all administrators in Admin Approval Mode: Enabled ✔
 - Switch to the secure desktop when prompting for elevation: Enabled ✔
 
+## Configure Windows Defender Firewall?
 
-### Windows Defender Firewall with Advanced Security (Configure Windows Defender Firewall?)
+### Windows Defender Firewall with Advanced Security ✔
 
-#### Domain Profile
-- Firewall state: On
-- Inbound connections: Block
-- Outbound connections: Allow
+#### Domain Profile ✔
+- Firewall state: On ✔
+- Inbound connections: Block ✔
+- Outbound connections: Allow ✔
 
-#### Private Profile
-- Firewall state: On
-- Inbound connections: Block
-- Outbound connections: Allow
+#### Private Profile ✔
+- Firewall state: On ✔
+- Inbound connections: Block ✔
+- Outbound connections: Allow ✔
 
-#### Public Profile
-- Firewall state: On
-- Inbound connections: Block
-- Outbound connections: Allow
+#### Public Profile ✔
+- Firewall state: On ✔
+- Inbound connections: Block ✔
+- Outbound connections: Allow ✔
 
 
 ### Advanced Audit Policy Configuration (Configure Advanced Audit Policies?)

@@ -31,15 +31,15 @@ function Enable-Firewall {
     Set-NetFirewallProfile -All -Enabled True
     
     # Block inbound connections
-    Set-NetFirewallProfile –Name Public –DefaultInboundAction Block
-    Set-NetFirewallProfile –Name Private –DefaultInboundAction Block
-    Set-NetFirewallProfile –Name Domain –DefaultInboundAction Block
+    Set-NetFirewallProfile -Name Public -DefaultInboundAction Block
+    Set-NetFirewallProfile -Name Private -DefaultInboundAction Block
+    Set-NetFirewallProfile -Name Domain -DefaultInboundAction Block
 
     # Allow outbound connections
-    Set-NetFirewallProfile –Name Public –DefaultOutboundAction Allow
-    Set-NetFirewallProfile –Name Private –DefaultOutboundAction Allow
-    Set-NetFirewallProfile –Name Domain –DefaultOutboundAction Allow
-    
+    Set-NetFirewallProfile -Name Public -DefaultOutboundAction Allow
+    Set-NetFirewallProfile -Name Private -DefaultOutboundAction Allow
+    Set-NetFirewallProfile -Name Domain -DefaultOutboundAction Allow
+
     Write-Host "Windows Firewall profiles configured successfully!"
 }
 
