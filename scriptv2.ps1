@@ -114,34 +114,163 @@ function Enable-Audits {
 
     }
 
+    gpupdate /force
+
     Write-Host "Advanced Audit Policies Configured Successfully!" -ForegroundColor Green
+}
+
+function Group-Policies {
+    ## Windows Firewall ##
+
+    # File and print exceptions: disable
+    $path = "HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall\StandardProfile\Services\FileAndPrint"
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "Enabled" -Value 0
+
+    $path = "HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Services\FileAndPrint"
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "Enabled" -Value 0
+
+
+    # UPnP exceptions: disable
+    $path = "HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall\StandardProfile\Services\UPnPFramework"
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "Enabled" -Value 0
+
+    $path = "HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Services\UPnPFramework"
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "Enabled" -Value 0
+
+
+    # Allow logging: log dropped packets, log successful connections
+    $path = "HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall\StandardProfile\Logging"
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "LogDroppedPackets" -Value 1
+    Set-ItemProperty -Path $path -Name "LogSuccessfulConnections" -Value 1
+
+    $path = "HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Logging"
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "LogDroppedPackets" -Value 1
+    Set-ItemProperty -Path $path -Name "LogSuccessfulConnections" -Value 1
+
+
+    # Prohibit unicast response to multicast: enable
+    $path = "HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall\StandardProfile"
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "DisableUnicastResponsesToMulticastBroadcast" -Value 1
+
+    $path = "HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile"
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "DisableUnicastResponsesToMulticastBroadcast" -Value 1
+
+
+    # Protect all network connections: enable
+    $path = "HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall\StandardProfile"
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "EnableFirewall" -Value 1
+
+    $path = "HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile"
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "EnableFirewall" -Value 1
+
+
+
+    ## Remote Assistance ##
+
+    # Allow only windows vista+ connections: enable
+    $path = "HKLM:\Software\policies\Microsoft\Windows NT\Terminal Services"
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "CreateEncryptedOnlyTickets" -Value 1
+
+    # Session logging: enable
+    Set-ItemProperty -Path $path -Name "LoggingEnabled" -Value 1
+
+
+
+    ## Remote Desktop ##
+
+    # Require specific security layer for RDP connections: SSL
+    Set-ItemProperty -Path $path -Name "SecurityLayer" -Value 2
+
+    # Client connection encryption level: high
+    Set-ItemProperty -Path $path -Name "MinEncryptionLevel" -Value 3
+
+    # Prompt for password upon connection: enable
+    Set-ItemProperty -Path $path -Name "fPromptForPassword" -Value 1
+
+    # Require secure RPC communication: enable
+    Set-ItemProperty -Path $path -Name "fEncryptRPCTraffic" -Value 1
+
+
+
+function Show-Network-Shares {
+    # Get all network shares excluding default ones (ADMIN$, C$, IPC$)
+    $allshares = Get-WmiObject -Class Win32_Share | Where-Object {
+        $_.Name -notin @('ADMIN$', 'C$', 'IPC$')
+    }
+
+    # Check if there are any shares
+    if ($allshares.Count -eq 0) {
+        Write-Host "No shares found." -ForegroundColor Green
+    } else {
+        # Display the share names and their paths
+        $allshares | ForEach-Object {
+            Write-Host "Share Name: $($_.Name)"
+            Write-Host "Path: $($_.Path)"
+            Write-Host "---------------------------------"
+        }
+    }
 }
 
 
 
-
-
-
-$securityPolicy = Read-Host "Configure Security Policies? (y/n) "
+$securityPolicy = $(Write-Host "Configure Security Policies? (y/n): " -ForegroundColor Blue -NoNewLine; Read-Host)
 if ($securityPolicy -eq 'y') { 
     Set-SecurityPolicies
 } else {
     Write-Host "Skipping Security Policies" -ForegroundColor Yellow
 }   
 
-$firewall = Read-Host "Configure Windows Defender Firewall? (y/n) "
+$firewall = $(Write-Host "Configure Windows Defender Firewall? (y/n): " -ForegroundColor Blue -NoNewLine; Read-Host)
 if ($firewall -eq 'y') { 
     Enable-Firewall
 } else {
     Write-Host "Skipping Firewall Configuration" -ForegroundColor Yellow
 }
 
-$auditing = Read-Host "Configure Advanced Audit Policies? (y/n) "
+$auditing = $(Write-Host "Configure Advanced Auditing? (y/n): " -ForegroundColor Blue -NoNewLine; Read-Host)
 if ($auditing -eq 'y') { 
     Enable-Audits
 } else {
     Write-Host "Skipping Advanced Audit Policies" -ForegroundColor Yellow
 }   
+
+$groupPolicy = $(Write-Host "Configure Group Policy? (y/n): " -ForegroundColor Blue -NoNewLine; Read-Host)
+if ($groupPolicy -eq 'y') { 
+    Group-Policies
+} else {
+    Write-Host "Skipping Advanced Audit Policies" -ForegroundColor Yellow
+}   
+
+$shares = $(Write-Host "List All Network Shares? (y/n):  " -ForegroundColor Blue -NoNewLine; Read-Host)
+if ($shares -eq 'y') {
+    Show-Network-Shares
+} else {
+    Write-Host "Skipping Network Shares List" -ForegroundColor Yellow
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 # SIG # Begin signature block
 # MIIFTAYJKoZIhvcNAQcCoIIFPTCCBTkCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR

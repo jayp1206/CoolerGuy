@@ -102,7 +102,7 @@
 - Run all administrators in Admin Approval Mode: Enabled ✔
 - Switch to the secure desktop when prompting for elevation: Enabled ✔
 
-## Configure Windows Defender Firewall?
+## (Configure Windows Defender Firewall?)
 
 ### Windows Defender Firewall with Advanced Security ✔
 
@@ -122,41 +122,45 @@
 - Outbound connections: Allow ✔
 
 
-### Advanced Audit Policy Configuration (Configure Advanced Audit Policies?)
-- ALL: Sucess & Failure
+## (Configure Advanced Audit Policies?)
+### Advanced Audit Policy Configuration ✔
+- ALL: Sucess & Failure ✔
 
 
 
 # Computer Management
 
-### Shared Folders
-- List all shares except ADMIN$, C$, IPC$
+## (List All Network Shares ?)
+### Shared Folders ✔
+- List all shares except ADMIN$, C$, IPC$ ✔
 
 
-
+# (Configure Group Policy?)
 # Group Policy
 
-## Computer Configuration (Configure Computer Configuration Settings?)
+## Computer Configuration 
 
 ### Administrative Templates
 
-#### Network Connections --> Windows Defender Firewall (Domain Profile and Standard Profile)
-- Allow ICMP Exceptions: Disabled
-- Allow inbound file and printer sharing exception: Disabled
-- Allow inbound UPnP framework exceptions: Disabled
-- Allow local program exceptions: Disabled
-- Allow logging: Enabled
-- Define inbound program exceptions: Disabled
-- Do not allow exceptions: Enabled
-- Prohibit unicast responses to multicast or broadcast requests: Enabled
-- Protect all network connections: Enabled
+#### Network --> Network Connections --> Windows Defender Firewall (Domain Profile and Standard Profile)
+- Allow inbound file and printer sharing exception: Disabled ✔
+- Allow inbound UPnP framework exceptions: Disabled ✔
+- Allow logging: Enabled ✔
+- Prohibit unicast responses to multicast or broadcast requests: Enabled ✔
+- Protect all network connections: Enabled ✔
 
 #### System --> Remote Assistance
-- Allow only Windows Vista or later connections: Enabled
-- Turn on session logging: Enabled'
+- Allow only Windows Vista or later connections: Enabled ✔
+- Turn on session logging: Enabled ✔
 
 
 ### Windows Components
+
+#### Remote Desktop Services --> Remote Desktop Session Host --> Security
+- Require use of specific security layer for remote (RDP) connections: SSL ✔
+- Set client connection encryption level: Enabled, High Level ✔
+- Always prompt for password upon connection: Enabled ✔
+- Require secure RPC communication: Enabled ✔
 
 #### Autoplay Policies
 - Turn off Autoplay: Enabled
@@ -261,8 +265,10 @@
 - Windows Event Log (EventLog): Automatic, Start
 - Windows Security Service (SecurityHealthService): Automatic, Start
 - Windows Update (wuauserv): Automatic, Start
+- Work Wide Web Publishing service: Disabled, stop
 
-
+# Settings
+- Remote Desktop --> Require computers to use Network Level Authenticaiton to connect: Enabled
 
 # (Enable or Disable RDP/Remote Assistance?)
 
@@ -283,6 +289,10 @@
 - Windows Remote Management (WinRM) --> WinRM Service --> Allow unencrypted traffic: Disabled
 
 - Windows Remote Shell --> Allow Remote Shell Access: Enabled
+
+### Group Policy --> System --> Remote Assistance
+- Configure Offer Remote Assistance: Enabled, allow helpers to remotely control
+- Configure Solicited Remote Assistance: Enabled, allow helpers to remotely control
 
 ### Settings
 - Remote Desktop --> Enable Remote Desktop: Toggle ON
@@ -305,6 +315,10 @@
 - Remote Desktop Services --> Remote Desktop Session Host --> Connections --> Allow users to connect remotely by using Remote Desktop Services: Disabled
 
 - Windows Remote Shell --> Allow Remote Shell Access: Disabled
+
+### Group Policy --> System --> Remote Assistance
+- Configure Offer Remote Assistance: Disabled
+- Configure Solicited Remote Assistance: Disabled
 
 ### Settings
 - Remote Desktop --> Enable Remote Desktop: Toggle OFF
