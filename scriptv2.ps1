@@ -202,6 +202,70 @@ function Group-Policies {
     Set-ItemProperty -Path $path -Name "fEncryptRPCTraffic" -Value 1
 
 
+    ## Autoplay ##
+
+    # Turn off autoplay: for all drives
+    $path = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "NoDriveTypeAutoRun" -Value 255
+
+
+    ## Smartscreen ##
+
+    # (File Explorer) Configure Smartscreen: warn and prevent bypass
+    $path = "HKLM:\Software\Policies\Microsoft\Windows\System"
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "EnableSmartScreen" -Value 1
+    Set-ItemProperty -Path $path -Name "ShellSmartScreenLevel" -Value 0
+
+
+    ## Windows Update ##
+
+    # Automatic Updates: enable, auto download; notify to install and restart, 
+    $path = "HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU"
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "NoAutoUpdate" -Value 0
+    Set-ItemProperty -Path $path -Name "AUOptions" -Value 7
+
+    ## Credential UI ##
+
+    # Do not show reveal password button: enable
+    $path = "HKLM:\Software\Policies\Microsoft\Windows\CredUI"
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "DisablePasswordReveal" -Value 1
+
+
+    ## Event Logging ##
+
+    # Turn on logging: enable
+    $path = "HKLM:\Software\Policies\Microsoft\Windows\EventLog\Setup"
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "Enabled" -Value 1
+
+
+    ## Microsoft Defender Antivirus
+
+    # Allow antimalware service to start with normal priority: enable
+    $path = "HKLM:\Software\Policies\Microsoft\Windows Defender"
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "AllowFastServiceStartup" -Value 1
+
+    # Turn off MDA: disable
+    Set-ItemProperty -Path $path -Name "DisableAntiSpyware" -Value 0
+
+    # Configure detection for unwanted applications: enable
+    Set-ItemProperty -Path $path -Name "PUAProtection" -Value 1
+
+
+    ## Real Time Protection ##
+
+    # Turn off real time protection: disable
+    $path = "HKLM:\Software\Policies\Microsoft\Windows Defender\Real-Time Protection"
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "DisableRealtimeMonitoring" -Value 0
+
+
+
 
 function Show-Network-Shares {
     # Get all network shares excluding default ones (ADMIN$, C$, IPC$)

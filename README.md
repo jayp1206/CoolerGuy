@@ -163,29 +163,24 @@
 - Require secure RPC communication: Enabled ✔
 
 #### Autoplay Policies
-- Turn off Autoplay: Enabled
+- Turn off Autoplay: Enabled ✔
 
 #### File Explorer
-- Configure Windows Defender SmartScreen: Enabled (Warn and Prevent Bypass)
+- Configure Windows Defender SmartScreen: Enabled (Warn and Prevent Bypass) ✔
 
 #### Windows Update
-- Configure auto-restart reminder notifications for updates: Enabled
-- Configure Automatic Updates: Enabled
+- Configure Automatic Updates: Enabled ✔
 
 #### Credential User Interface
-- Do not display the password reveal button: Enabled
+- Do not display the password reveal button: Enabled ✔
 
 #### Event Log Service --> Setup
-- Turn on Logging: Enabled
-
-#### Event Logging
-- Enable protected event logging: Enabled
+- Turn on Logging: Enabled ✔
 
 #### Microsoft Defender Antivirus
-- Allow antimalware service to startup with normal priority: Enabled
-- Turn off Microsoft Defender Antivirus: Disabled
-- Configure detection for potentially unwanted applications: Enabled
-- Allow antimalware service to remain running always: Enabled
+- Allow antimalware service to startup with normal priority: Enabled ✔
+- Turn off Microsoft Defender Antivirus: Disabled ✔
+- Configure detection for potentially unwanted applications: Enabled ✔
 
 ##### Real Time Protection
 - Turn off real-time protection: Disabled
