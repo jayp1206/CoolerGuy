@@ -169,7 +169,9 @@
 - Configure Windows Defender SmartScreen: Enabled (Warn and Prevent Bypass) ✔
 
 #### Windows Update ✔
-- Configure Automatic Updates: Enabled ✔
+- Configure Automatic Updates: Enabled, auto download and schedule install ✔
+- Allow Automatic Updates immediate installation: Enabled ✔
+- Automatic Updates detection frequency: 22 hours ✔
 
 #### Credential User Interface ✔
 - Do not display the password reveal button: Enabled ✔
@@ -228,25 +230,13 @@
 - Prevent bypassing Windows Defender SmartScreen prompts for sites: Enabled ✔
 
 
-### Microsoft Management Console
-- Windows Firewall with Advanced Security: Enabled
-
-
-
 ## User Configuration (Configure User Configuration Settings?)
 
-### Windows Components
+### Shared Folders ✔
+- Allow shared folder to be published: Disabled ✔
 
-#### Autoplay Policies
-- Turn off Autoplay: Enabled
-
-#### Network Sharing
-- Prevent users from sharing files within their profile
-
-#### Windows Defender SmartScreen
-- Microsoft Edge --> Configure Windows Defender SmartScreen: Enabled
-- Prevent bypassing Windows Defender SmartScreen prompts for sites: Enabled
-
+### Windows Components --> Network Sharing ✔
+- Prevent users from sharing files within their profile ✔
 
 
 # Services
@@ -262,7 +252,7 @@
 - Windows Event Log (EventLog): Automatic, Start
 - Windows Security Service (SecurityHealthService): Automatic, Start
 - Windows Update (wuauserv): Automatic, Start
-- Work Wide Web Publishing service: Disabled, stop
+- World Wide Web Publishing service: Disabled, stop
 
 # Settings
 - Remote Desktop --> Require computers to use Network Level Authenticaiton to connect: Enabled

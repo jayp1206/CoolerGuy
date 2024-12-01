@@ -221,11 +221,21 @@ function Group-Policies {
 
     ## Windows Update ##
 
-    # Automatic Updates: enable, auto download; notify to install and restart, 
+    # Automatic Updates: enable
     $path = "HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU"
     New-Item -Path $path -Force
     Set-ItemProperty -Path $path -Name "NoAutoUpdate" -Value 0
-    Set-ItemProperty -Path $path -Name "AUOptions" -Value 7
+
+    # Auto download and schedule install 
+    Set-ItemProperty -Path $path -Name "AUOptions" -Value 4
+
+    # Allow auto-updates immediate installation
+    Set-ItemProperty -Path $path -Name "AutoInstallMinorUpdates" -Value 1
+
+    # Automatic update detection frequency: 22 hours
+    Set-ItemProperty -Path $path -Name "DetectionFrequencyEnabled" -Value 1
+    Set-ItemProperty -Path $path -Name "DetectionFrequency" -Value 22
+
 
     ## Credential UI ##
 
@@ -352,6 +362,13 @@ function Group-Policies {
     # (Microsoft Edge) Prevent bypassing smartscreen prompts for sites: enable
     Set-ItemProperty -Path $path -Name "PreventOverride" -Value 1
 
+
+    ## User Configuration ##
+    
+
+    gpupdate /force
+
+    Write-Host "Successfully Configured Group Policy!" -ForegroundColor Green
 }
 
 function Show-Network-Shares {
@@ -366,10 +383,28 @@ function Show-Network-Shares {
     } else {
         # Display the share names and their paths
         $allshares | ForEach-Object {
-            Write-Host "Share Name: $($_.Name)"
-            Write-Host "Path: $($_.Path)"
+            Write-Host "Share Name: $($_.Name)" -ForegroundColor Red
+            Write-Host "Path: $($_.Path)" -ForegroundColor Red
             Write-Host "---------------------------------"
         }
+    }
+
+    $disablesharing = $(Write-Host "Disable file/folder sharing? (y/n): " -ForegroundColor Blue -NoNewLine; Read-Host)
+    if ($disablesharing -eq 'y') { 
+
+        # Allow shared folder to be published: disable
+        $path = "HKCU:\Software\Policies\Microsoft\Windows NT\SharedFolders"
+        New-Item -Path $path -Force
+        Set-ItemProperty -Path $path -Name "PublishSharedFolders" -Value 0
+
+        # Prevent users from sharing files within their profile: enable
+        $path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+        New-Item -Path $path -Force
+        Set-ItemProperty -Path $path -Name "NoInplaceSharing" -Value 1
+
+        gpupdate /force
+
+        Write-Host "Disabled Folder Sharing!" -ForegroundColor Green
     }
 }
 
