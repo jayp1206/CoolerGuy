@@ -142,88 +142,90 @@
 
 ### Administrative Templates
 
-#### Network --> Network Connections --> Windows Defender Firewall (Domain Profile and Standard Profile)
+#### Network --> Network Connections --> Windows Defender Firewall (Domain Profile and Standard Profile) ✔
 - Allow inbound file and printer sharing exception: Disabled ✔
 - Allow inbound UPnP framework exceptions: Disabled ✔
 - Allow logging: Enabled ✔
 - Prohibit unicast responses to multicast or broadcast requests: Enabled ✔
 - Protect all network connections: Enabled ✔
 
-#### System --> Remote Assistance
+#### System --> Remote Assistance ✔
 - Allow only Windows Vista or later connections: Enabled ✔
 - Turn on session logging: Enabled ✔
 
 
 ### Windows Components
 
-#### Remote Desktop Services --> Remote Desktop Session Host --> Security
+#### Remote Desktop Services --> Remote Desktop Session Host --> Security ✔
 - Require use of specific security layer for remote (RDP) connections: SSL ✔
 - Set client connection encryption level: Enabled, High Level ✔
 - Always prompt for password upon connection: Enabled ✔
 - Require secure RPC communication: Enabled ✔
 
-#### Autoplay Policies
+#### Autoplay Policies ✔
 - Turn off Autoplay: Enabled ✔
 
-#### File Explorer
+#### File Explorer ✔
 - Configure Windows Defender SmartScreen: Enabled (Warn and Prevent Bypass) ✔
 
-#### Windows Update
+#### Windows Update ✔
 - Configure Automatic Updates: Enabled ✔
 
-#### Credential User Interface
+#### Credential User Interface ✔
 - Do not display the password reveal button: Enabled ✔
 
-#### Event Log Service --> Setup
+#### Event Log Service --> Setup ✔
 - Turn on Logging: Enabled ✔
 
-#### Microsoft Defender Antivirus
+#### Microsoft Defender Antivirus ✔
 - Allow antimalware service to startup with normal priority: Enabled ✔
 - Turn off Microsoft Defender Antivirus: Disabled ✔
 - Configure detection for potentially unwanted applications: Enabled ✔
 
-##### Real Time Protection
-- Turn off real-time protection: Disabled
-- Turn on behavior monitoring: Enabled
-- Scan all downloaded files and attachments: Enabled
-- Monitor file and program activity on your computer: Enabled
-- Turn on process scanning whenever real-time protection is enabled: Enabled
-- Turn on script scanning: Enabled
-- Configure monitoring for incoming and outgoing file and progam activity: Not configured
+##### Microsoft Defender Exploit Guard ✔
+- Network Protection --> Prevent users and apps from accessing dangerous websites: Enabled ✔
 
-###### Scan
-- Check for the latest virus and spyware security intelligence before running a scheduled scan: Enabled
-- Scan archive files: Enabled
-- Scan removable drives: Enabled
-- Scan packed executables: Enabled
-- Scan network files: Enabled
-- Specify the interval to run quick scans per day: Enabled (12)
+##### Real Time Protection ✔
+- Turn off real-time protection: Disabled ✔
+- Turn on behavior monitoring: Enabled ✔
+- Scan all downloaded files and attachments: Enabled ✔
+- Monitor file and program activity on your computer: Enabled ✔
+- Turn on process scanning whenever real-time protection is enabled: Enabled ✔
+- Turn on script scanning: Enabled ✔
+- Configure monitoring for incoming and outgoing file and progam activity: Not configured (inbound/outbound) ✔
 
-##### Security Intelligence Updates
-- Turn on scan after security intelligence update: Enabled
-- Allow security intelligence updates from Microsoft Update: Enabled
-- Allow real-time security intelligence updates based on reports to Microsoft MAPS: Enabled
-- Check for the latest virus and spyware security intelligence on startup: Enabled
+###### Scan ✔
+- Check for the latest virus and spyware security intelligence before running a scheduled scan: Enabled ✔
+- Scan archive files: Enabled ✔
+- Scan removable drives: Enabled ✔
+- Scan packed executables: Enabled ✔
+- Scan network files: Enabled ✔
+- Specify the interval to run quick scans per day: Enabled (12) ✔
+
+##### Security Intelligence Updates ✔
+- Turn on scan after security intelligence update: Enabled ✔
+- Allow real-time security intelligence updates based on reports to Microsoft MAPS: Enabled ✔
+- Check for the latest virus and spyware security intelligence on startup: Enabled ✔
 
 
-#### Security Center
-- Turn on Security Center (Domain PC's only)
+#### Security Center ✔
+- Turn on Security Center (Domain PC's only) ✔
 
 
 #### Windows Defender SmartScreen
 
-##### Enhanced Phishing Protection
+##### (Win11 ONLY) Enhanced Phishing Protection
 - Notify Malicious: Enabled
 - Notify Password Reuse: Enabled
 - Notify Unsafe App: Enabled
 - Service Enabled: Enabled
 
-##### Explorer
-- Configure Windows Defender SmartScreen: Enabled
+##### Explorer ✔
+- Configure Windows Defender SmartScreen: Enabled, Block ✔
 
 ##### Microsoft Edge
-- Configure Windows Defender SmartScreen: Enabled
-- Prevent bypassing Windows Defender SmartScreen prompts for sites: Enabled
+- Configure Windows Defender SmartScreen: Enabled ✔
+- Prevent bypassing Windows Defender SmartScreen prompts for sites: Enabled ✔
 
 
 ### Microsoft Management Console
