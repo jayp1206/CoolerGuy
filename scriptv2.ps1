@@ -210,13 +210,21 @@ function Group-Policies {
     Set-ItemProperty -Path $path -Name "NoDriveTypeAutoRun" -Value 255
 
 
-    ## Smartscreen ##
+    ## Windows Defender SmartScreen ##
 
-    # (File Explorer) Configure Smartscreen: warn and prevent bypass
+    # (Explorer) Configure SmartScreen: enable, warn and prevent bypass
     $path = "HKLM:\Software\Policies\Microsoft\Windows\System"
     New-Item -Path $path -Force
     Set-ItemProperty -Path $path -Name "EnableSmartScreen" -Value 1
-    Set-ItemProperty -Path $path -Name "ShellSmartScreenLevel" -Value 0
+    Set-ItemProperty -Path $path -Name "ShellSmartScreenLevel" -Value "Block" -Type String
+
+    # (Microsoft Edge) Configure SmartScreen: enable
+    $path = "HKLM:\Software\Policies\Microsoft\MicrosoftEdge\PhishingFilter"
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "EnabledV9" -Value 1
+
+    # (Microsoft Edge) Prevent bypassing smartscreen prompts for sites: enable
+    Set-ItemProperty -Path $path -Name "PreventOverride" -Value 1
 
 
     ## Windows Update ##
@@ -346,27 +354,10 @@ function Group-Policies {
     Set-ItemProperty -Path $path -Name "SecurityCenterInDomain" -Value 1
 
 
-    ## Windows Defender SmartScreen ##
 
-    # (Explorer) Configure SmartScreen: enable, warn and prevent bypass
-    $path = "HKLM:\Software\Policies\Microsoft\Windows\System"
-    New-Item -Path $path -Force
-    Set-ItemProperty -Path $path -Name "EnableSmartScreen" -Value 1
-    Set-ItemProperty -Path $path -Name "ShellSmartScreenLevel" -Value "Block" -PropertyType String
-
-    # (Microsoft Edge) Configure SmartScreen: enable
-    $path = "HKLM:\Software\Policies\Microsoft\MicrosoftEdge\PhishingFilter"
-    New-Item -Path $path -Force
-    Set-ItemProperty -Path $path -Name "EnabledV9" -Value 1
-
-    # (Microsoft Edge) Prevent bypassing smartscreen prompts for sites: enable
-    Set-ItemProperty -Path $path -Name "PreventOverride" -Value 1
 
 
     ## User Configuration ##
-
-
-    gpupdate /force
 
     Write-Host "Successfully Configured Group Policy!" -ForegroundColor Green
 }

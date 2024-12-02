@@ -145,7 +145,7 @@
 #### Network --> Network Connections --> Windows Defender Firewall (Domain Profile and Standard Profile) ✔
 - Allow inbound file and printer sharing exception: Disabled ✔
 - Allow inbound UPnP framework exceptions: Disabled ✔
-- Allow logging: Enabled ✔
+- Allow logging: log dropped packets, log successful connections ✔
 - Prohibit unicast responses to multicast or broadcast requests: Enabled ✔
 - Protect all network connections: Enabled ✔
 
@@ -165,10 +165,7 @@
 #### Autoplay Policies ✔
 - Turn off Autoplay: Enabled ✔
 
-#### File Explorer ✔
-- Configure Windows Defender SmartScreen: Enabled (Warn and Prevent Bypass) ✔
-
-#### Windows Update ✔
+#### Windows Update 
 - Configure Automatic Updates: Enabled, auto download and schedule install ✔
 - Allow Automatic Updates immediate installation: Enabled ✔
 - Automatic Updates detection frequency: 22 hours ✔
@@ -187,31 +184,31 @@
 ##### Microsoft Defender Exploit Guard ✔
 - Network Protection --> Prevent users and apps from accessing dangerous websites: Enabled ✔
 
-##### Real Time Protection ✔
-- Turn off real-time protection: Disabled ✔
-- Turn on behavior monitoring: Enabled ✔
-- Scan all downloaded files and attachments: Enabled ✔
-- Monitor file and program activity on your computer: Enabled ✔
-- Turn on process scanning whenever real-time protection is enabled: Enabled ✔
-- Turn on script scanning: Enabled ✔
-- Configure monitoring for incoming and outgoing file and progam activity: Not configured (inbound/outbound) ✔
+##### Real Time Protection 
+- Turn off real-time protection: Disabled 
+- Turn on behavior monitoring: Enabled 
+- Scan all downloaded files and attachments: Enabled 
+- Monitor file and program activity on your computer: Enabled 
+- Turn on process scanning whenever real-time protection is enabled: Enabled 
+- Turn on script scanning: Enabled 
+- Configure monitoring for incoming and outgoing file and progam activity: Not configured (inbound/outbound) 
 
-###### Scan ✔
-- Check for the latest virus and spyware security intelligence before running a scheduled scan: Enabled ✔
-- Scan archive files: Enabled ✔
-- Scan removable drives: Enabled ✔
-- Scan packed executables: Enabled ✔
-- Scan network files: Enabled ✔
-- Specify the interval to run quick scans per day: Enabled (12) ✔
+###### Scan 
+- Check for the latest virus and spyware security intelligence before running a scheduled scan: Enabled 
+- Scan archive files: Enabled 
+- Scan removable drives: Enabled 
+- Scan packed executables: Enabled 
+- Scan network files: Enabled 
+- Specify the interval to run quick scans per day: Enabled (12) 
 
-##### Security Intelligence Updates ✔
-- Turn on scan after security intelligence update: Enabled ✔
-- Allow real-time security intelligence updates based on reports to Microsoft MAPS: Enabled ✔
-- Check for the latest virus and spyware security intelligence on startup: Enabled ✔
+##### Security Intelligence Updates 
+- Turn on scan after security intelligence update: Enabled 
+- Allow real-time security intelligence updates based on reports to Microsoft MAPS: Enabled 
+- Check for the latest virus and spyware security intelligence on startup: Enabled 
 
 
-#### Security Center ✔
-- Turn on Security Center (Domain PC's only) ✔
+#### Security Center 
+- Turn on Security Center (Domain PC's only) 
 
 
 #### Windows Defender SmartScreen
@@ -223,20 +220,20 @@
 - Service Enabled: Enabled
 
 ##### Explorer ✔
-- Configure Windows Defender SmartScreen: Enabled, Block ✔
+- Configure Windows Defender SmartScreen: Enabled (Warn and prevent bypass) ✔
 
-##### Microsoft Edge
+##### Microsoft Edge✔
 - Configure Windows Defender SmartScreen: Enabled ✔
 - Prevent bypassing Windows Defender SmartScreen prompts for sites: Enabled ✔
 
 
 ## User Configuration (Configure User Configuration Settings?)
 
-### Shared Folders ✔
-- Allow shared folder to be published: Disabled ✔
+### Shared Folders 
+- Allow shared folder to be published: Disabled 
 
-### Windows Components --> Network Sharing ✔
-- Prevent users from sharing files within their profile ✔
+### Windows Components --> Network Sharing 
+- Prevent users from sharing files within their profile 
 
 
 # Services
