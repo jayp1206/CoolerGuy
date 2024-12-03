@@ -184,31 +184,31 @@
 ##### Microsoft Defender Exploit Guard ✔
 - Network Protection --> Prevent users and apps from accessing dangerous websites: Enabled ✔
 
-##### Real Time Protection 
-- Turn off real-time protection: Disabled 
-- Turn on behavior monitoring: Enabled 
-- Scan all downloaded files and attachments: Enabled 
-- Monitor file and program activity on your computer: Enabled 
-- Turn on process scanning whenever real-time protection is enabled: Enabled 
-- Turn on script scanning: Enabled 
-- Configure monitoring for incoming and outgoing file and progam activity: Not configured (inbound/outbound) 
+##### Real Time Protection ✔
+- Turn off real-time protection: Disabled ✔
+- Turn on behavior monitoring: Enabled ✔
+- Scan all downloaded files and attachments: Enabled ✔
+- Monitor file and program activity on your computer: Enabled ✔
+- Turn on process scanning whenever real-time protection is enabled: Enabled ✔
+- Turn on script scanning: Enabled ✔
+- Configure monitoring for incoming and outgoing file and progam activity: Not configured (inbound/outbound) ✔
 
-###### Scan 
-- Check for the latest virus and spyware security intelligence before running a scheduled scan: Enabled 
-- Scan archive files: Enabled 
-- Scan removable drives: Enabled 
-- Scan packed executables: Enabled 
-- Scan network files: Enabled 
-- Specify the interval to run quick scans per day: Enabled (12) 
+###### Scan ✔
+- Check for the latest virus and spyware security intelligence before running a scheduled scan: Enabled ✔
+- Scan archive files: Enabled ✔
+- Scan removable drives: Enabled ✔
+- Scan packed executables: Enabled ✔
+- Scan network files: Enabled ✔
+- Specify the interval to run quick scans per day: Enabled (12) ✔
 
-##### Security Intelligence Updates 
-- Turn on scan after security intelligence update: Enabled 
-- Allow real-time security intelligence updates based on reports to Microsoft MAPS: Enabled 
-- Check for the latest virus and spyware security intelligence on startup: Enabled 
+##### Security Intelligence Updates ✔
+- Turn on scan after security intelligence update: Enabled ✔
+- Allow real-time security intelligence updates based on reports to Microsoft MAPS: Enabled ✔
+- Check for the latest virus and spyware security intelligence on startup: Enabled ✔
 
 
-#### Security Center 
-- Turn on Security Center (Domain PC's only) 
+#### Security Center ✔
+- Turn on Security Center (Domain PC's only) ✔
 
 
 #### Windows Defender SmartScreen
@@ -226,13 +226,13 @@
 - Configure Windows Defender SmartScreen: Enabled ✔
 - Prevent bypassing Windows Defender SmartScreen prompts for sites: Enabled ✔
 
+# (Disable file/folder Sharing?)
+## User Configuration 
 
-## User Configuration (Configure User Configuration Settings?)
-
-### Shared Folders 
+### Shared Folders ✔
 - Allow shared folder to be published: Disabled 
 
-### Windows Components --> Network Sharing 
+### Windows Components --> Network Sharing ✔
 - Prevent users from sharing files within their profile 
 
 

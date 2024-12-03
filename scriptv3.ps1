@@ -247,6 +247,73 @@ function Group-Policies {
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableNetworkProtection" -Data 1 -Type "DWord"
 
 
+    ## Real Time Protection ##
+    $RegPath = "Software\Policies\Microsoft\Windows Defender\Real-Time Protection"
+
+    # Turn off real time protection: disable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableRealtimeMonitoring" -Data 0 -Type "DWord"
+    
+    # Turn on behavior monitoring: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableBehaviorMonitoring" -Data 0 -Type "DWord"
+    
+    # Scan all downloaded files and attachments: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableIOAVProtection" -Data 0 -Type "DWord"
+    
+    # Monitor file and program activity: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableOnAccessProtection" -Data 0 -Type "DWord"
+    
+    # Turn on process scanning when real-time is enabled: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableScanOnRealtimeEnable" -Data 0 -Type "DWord"
+    
+    # Turn on script scanning: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableScriptScanning" -Data 0 -Type "DWord"
+    
+    # Configure monitoring for in/out file and program activity: inbound/outbound
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RealtimeScanDirection" -Data 0 -Type "DWord"
+
+
+    ## Scan ##
+    $RegPath = "Software\Policies\Microsoft\Windows Defender\Scan"
+
+    # Check for latest virus/spyware intelligence before scheduled scans: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "CheckForSignaturesBeforeRunningScan" -Data 1 -Type "DWord"
+
+    # Scan archive files: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableArchiveScanning" -Data 0 -Type "DWord"
+
+    # Scan removable drives: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableRemovableDriveScanning" -Data 0 -Type "DWord"
+
+    # Scan packed executables: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisablePackedExeScanning" -Data 0 -Type "DWord"
+
+    # Scan network files: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableScanningNetworkFiles" -Data 0 -Type "DWord"
+
+    # Specify quick scan interval: 12 hours
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "QuickScanInterval" -Data 12 -Type "DWord"
+
+
+    ## Security Intelligence Updates ##
+    $RegPath = "Software\Policies\Microsoft\Windows Defender\Signature Updates"
+
+    # Turn on scan after security intelligence update: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableScanOnUpdate" -Data 0 -Type "DWord"
+
+    # Allow real-time sec intel updates based on MS MAPS reports: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RealtimeSignatureDelivery" -Data 1 -Type "DWord"
+
+    # Check for latest virus/spyware sec intel on startup: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "UpdateOnStartUp" -Data 1 -Type "DWord"
+
+    
+    ## Security Center ##
+
+    # Turn on security center: enable
+    $RegPath = "Software\Policies\Microsoft\Windows NT\Security Center"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "SecurityCenterInDomain" -Data 1 -Type "DWord"
+
+
     ## SmartScreen ##
 
     # (Explorer) Configure SmartScreen: enable
@@ -260,26 +327,20 @@ function Group-Policies {
     $RegPath = "Software\Policies\Microsoft\MicrosoftEdge\PhishingFilter"
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnabledV9" -Data 1 -Type "DWord"
  
-    # (Microsoft Edge) Prevent bypassing smartscreen prompts for sites: enable
+    # (Edge) Prevent bypassing smartscreen prompts for sites: enable
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "PreventOverride" -Data 1 -Type "DWord"
 
 
-
-
-
-
-    
-
-
-
-
-
-
-
-
     gpupdate.exe /force
-
     Write-Host "Successfully Configured Group Policy!" -ForegroundColor Green
+}
+
+function Disable-RDP {
+    Write-Host "Successfully Disabled RDP!" -ForegroundColor Green
+}
+
+function Enable-RDP {
+    Write-Host "Successfully Enabled RDP!" -ForegroundColor Green
 }
 
 function Show-Network-Shares {
@@ -302,15 +363,21 @@ function Show-Network-Shares {
 
     $disablesharing = $(Write-Host "Disable file/folder sharing? (y/n): " -ForegroundColor Blue -NoNewLine; Read-Host)
     if ($disablesharing -eq 'y') { 
+        Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+        Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
+        Install-Module -Name PolicyFileEditor -RequiredVersion 3.0.0 -Scope CurrentUser
 
-        # Allow shared folder to be published: disable
+        $UserDir = "$env:windir\system32\GroupPolicy\User\registry.pol"
 
+        # Allow shared folders to be published: disable
+        $RegPath = "Software\Policies\Microsoft\Windows NT\SharedFolders"
+        Set-PolicyFileEntry -Path $UserDir -Key $RegPath -ValueName "PublishSharedFolders" -Data 0 -Type "DWord"
 
         # Prevent users from sharing files within their profile: enable
-
+        $RegPath = "Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+        Set-PolicyFileEntry -Path $UserDir -Key $RegPath -ValueName "NoInplaceSharing" -Data 1 -Type "DWord"
 
         gpupdate.exe /force
-
         Write-Host "Disabled Folder Sharing!" -ForegroundColor Green
     }
 }
