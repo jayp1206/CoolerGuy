@@ -319,15 +319,71 @@ function Group-Policies {
     Write-Host "Successfully Configured Group Policy!" -ForegroundColor Green
 }
 
+function Services {
+    # Windows Defender Antivirus Network Inspection Service (WdNisSvc): Automatic, Start
+    Set-Service -Name "WdNisSvc" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "WdNisSvc" -Force -ErrorAction SilentlyContinue
+    
+    # Windows Defender Antivirus Service (WinDefend): Automatic, Start
+    Set-Service -Name "WinDefend" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "WinDefend" -Force -ErrorAction SilentlyContinue
+
+    # Microsoft Defender Core Service (MDCoreSvc): Automatic, Start
+    Set-Service -Name "MDCoreSvc" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "MDCoreSvc" -Force -ErrorAction SilentlyContinue
+
+    # Print Spooler (Spooler): Disabled, Stop
+    Set-Service -Name "Spooler" -StartupType "Disabled" -Force -ErrorAction SilentlyContinue
+    Stop-Service -Name "Spooler" -Force -ErrorAction SilentlyContinue
+
+    # Security Center (wscsvc): Automatic, Start
+    Set-Service -Name "wscsvc" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "wscsvc" -Force -ErrorAction SilentlyContinue
+
+    # Software Protection (sppsvc): Automatic, Start
+    Set-Service -Name "sppsvc" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "sppsvc" -Force -ErrorAction SilentlyContinue
+
+    # Windows Defender Firewall (mpssvc): Automatic, Start
+    Set-Service -Name "mpssvc" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "mpssvc" -Force -ErrorAction SilentlyContinue
+
+    # Windows Error Reporting Service (WerSvc): Automatic, Start
+    Set-Service -Name "WerSvc" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "WerSvc" -Force -ErrorAction SilentlyContinue
+
+    # Windows Event Log (EventLog): Automatic, Start
+    Set-Service -Name "EventLog" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "EventLog" -Force -ErrorAction SilentlyContinue
+
+    # Windows Security Service (SecurityHealthService): Automatic, Start
+    Set-Service -Name "SecurityHealthService" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "SecurityHealthService" -Force -ErrorAction SilentlyContinue
+
+    # Windows Update (wuauserv): Automatic, Start
+    Set-Service -Name "wuauserv" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "wuauserv" -Force -ErrorAction SilentlyContinue
+
+    # World Wide Web Publishing service (W3SVC): Disabled, stop
+    Set-Service -Name "W3SVC" -StartupType "Disabled" -Force -ErrorAction SilentlyContinue
+    Stop-Service -Name "W3SVC" -Force -ErrorAction SilentlyContinue
+
+
+
+
+    Write-Host "Successfully Configured Services!" -ForegroundColor Green
+}
+
 function Disable-RDP {
     Write-Host "Successfully Disabled RDP!" -ForegroundColor Green
+
 }
 
 function Enable-RDP {
     Write-Host "Successfully Enabled RDP!" -ForegroundColor Green
 }
 
-function Show-Network-Shares {
+function Show-Network {
     # Get all network shares excluding default ones (ADMIN$, C$, IPC$)
     $allshares = Get-WmiObject -Class Win32_Share | Where-Object {
         $_.Name -notin @('ADMIN$', 'C$', 'IPC$')
@@ -368,37 +424,51 @@ function Show-Network-Shares {
 
 
 
-$securityPolicy = $(Write-Host "Configure Security Policies? (y/n): " -ForegroundColor Blue -NoNewLine; Read-Host)
+$securityPolicy = $(Write-Host "Configure Security Policies? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
 if ($securityPolicy -eq 'y') { 
     Set-SecurityPolicies
 } else {
     Write-Host "Skipping Security Policies" -ForegroundColor Yellow
 }   
 
-$firewall = $(Write-Host "Configure Windows Defender Firewall? (y/n): " -ForegroundColor Blue -NoNewLine; Read-Host)
+$firewall = $(Write-Host "Configure Windows Defender Firewall? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
 if ($firewall -eq 'y') { 
     Enable-Firewall
 } else {
     Write-Host "Skipping Firewall Configuration" -ForegroundColor Yellow
 }
 
-$auditing = $(Write-Host "Configure Advanced Auditing? (y/n): " -ForegroundColor Blue -NoNewLine; Read-Host)
+$auditing = $(Write-Host "Configure Advanced Auditing? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
 if ($auditing -eq 'y') { 
     Enable-Audits
 } else {
     Write-Host "Skipping Advanced Audit Policies" -ForegroundColor Yellow
 }   
 
-$groupPolicy = $(Write-Host "Configure Group Policy? (y/n): " -ForegroundColor Blue -NoNewLine; Read-Host)
+$groupPolicy = $(Write-Host "Configure Group Policy? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
 if ($groupPolicy -eq 'y') { 
     Group-Policies
 } else {
-    Write-Host "Skipping Advanced Audit Policies" -ForegroundColor Yellow
+    Write-Host "Skipping Group Policy" -ForegroundColor Yellow
 }   
 
-$shares = $(Write-Host "List All Network Shares? (y/n):  " -ForegroundColor Blue -NoNewLine; Read-Host)
+$enableRDP = $(Write-Host "Enable RDP? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
+if ($enableRDP -eq 'y') { 
+    Enable-RDP
+} else {
+    Write-Host "Not Enabling RDP" -ForegroundColor Yellow
+}   
+
+$disableRDP = $(Write-Host "Disable RDP? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
+if ($disableRDP -eq 'y') { 
+    Disable-RDP
+} else {
+    Write-Host "Not Disabling RDP" -ForegroundColor Yellow
+}   
+
+$shares = $(Write-Host "List All Network Shares? (y/n):  " -ForegroundColor Cyan -NoNewLine; Read-Host)
 if ($shares -eq 'y') {
-    Show-Network-Shares
+    Show-Network
 } else {
     Write-Host "Skipping Network Shares List" -ForegroundColor Yellow
 }

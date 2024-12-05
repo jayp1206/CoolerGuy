@@ -230,26 +230,30 @@
 ## User Configuration 
 
 ### Shared Folders ✔
-- Allow shared folder to be published: Disabled 
+- Allow shared folder to be published: Disabled ✔
 
 ### Windows Components --> Network Sharing ✔
-- Prevent users from sharing files within their profile 
+- Prevent users from sharing files within their profile ✔
 
 
 # Services
-- Windows Defender Antivirus Network Inspection Service (WdNisSvc): Automatic, Start
-- Windows Defender Antivirus Service (WinDefend): Automatic, Start
-- Microsoft Defender Core Service (MDCoreSvc): Automatic, Start
-- Print Spooler (Spooler): Disabled, Stop
+- Windows Defender Antivirus Network Inspection Service (WdNisSvc): Automatic, Start ✔
+- Windows Defender Antivirus Service (WinDefend): Automatic, Start ✔
+- Microsoft Defender Core Service (MDCoreSvc): Automatic, Start ✔
+- Print Spooler (Spooler): Disabled, Stop ✔
 - Security Accounts Manager (SamSs): Automatic, Start
-- Security Center (wscsvc): Automatic, Start
-- Software Protection (sppsvc): Automatic, Start
-- Windows Defender Firewall (mpssvc): Automatic, Start
-- Windows Error Reporting Service (WerSvc): Automatic, Start
-- Windows Event Log (EventLog): Automatic, Start
-- Windows Security Service (SecurityHealthService): Automatic, Start
-- Windows Update (wuauserv): Automatic, Start
-- World Wide Web Publishing service: Disabled, stop
+- Security Center (wscsvc): Automatic, Start ✔
+- Software Protection (sppsvc): Automatic, Start ✔
+- Windows Defender Firewall (mpssvc): Automatic, Start ✔
+- Windows Error Reporting Service (WerSvc): Automatic, Start ✔
+- Windows Event Log (EventLog): Automatic, Start ✔
+- Windows Security Service (SecurityHealthService): Automatic, Start ✔
+- Windows Update (wuauserv): Automatic, Start ✔
+- World Wide Web Publishing service (W3SVC): Disabled, Stop ✔
+- Telnet (TlntSvr): Disabled, Stop 
+- Background Intelligent Transfer Service (BITS): Automatic, Start
+- IPsec Policy Agent (PolicyAgent): Automatic, Start
+- File Transfer Protocol Service (FTPSVC): Disabled, Stop
 
 # Settings
 - Remote Desktop --> Require computers to use Network Level Authenticaiton to connect: Enabled
