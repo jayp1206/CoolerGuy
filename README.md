@@ -250,13 +250,13 @@
 - Windows Security Service (SecurityHealthService): Automatic, Start ✔
 - Windows Update (wuauserv): Automatic, Start ✔
 - World Wide Web Publishing service (W3SVC): Disabled, Stop ✔
-- Telnet (TlntSvr): Disabled, Stop 
-- Background Intelligent Transfer Service (BITS): Automatic, Start
-- IPsec Policy Agent (PolicyAgent): Automatic, Start
-- File Transfer Protocol Service (FTPSVC): Disabled, Stop
+- Telnet (TlntSvr): Disabled, Stop ✔
+- Background Intelligent Transfer Service (BITS): Automatic, Start ✔
+- IPsec Policy Agent (PolicyAgent): Automatic, Start ✔
+- File Transfer Protocol Service (FTPSVC): Disabled, Stop ✔
 
 # Settings
-- Remote Desktop --> Require computers to use Network Level Authenticaiton to connect: Enabled
+- Remote Desktop --> Require computers to use Network Level Authenticaiton to connect: Enabled ✔
 
 # (Enable or Disable RDP/Remote Assistance?)
 

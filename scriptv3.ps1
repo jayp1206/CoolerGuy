@@ -368,12 +368,31 @@ function Services {
     Set-Service -Name "W3SVC" -StartupType "Disabled" -Force -ErrorAction SilentlyContinue
     Stop-Service -Name "W3SVC" -Force -ErrorAction SilentlyContinue
 
+    # Telnet (TlntSvr): Disabled, Stop 
+    Set-Service -Name "TlntSvr" -StartupType "Disabled" -Force -ErrorAction SilentlyContinue
+    Stop-Service -Name "TlntSvr"
 
+    # Background Intelligent Transfer Service (BITS): Automatic, Start
+    Set-Service -Name "BITS" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "BITS"
 
+    # IPsec Policy Agent (PolicyAgent): Automatic, Start
+    Set-Service -Name "PolicyAgent" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "PolicyAgent"
+
+    # FTP, File Transfer Protocol Service (FTPSVC): Disabled, Stop
+    Set-Service -Name "FTPSVC" -StartupType "Disabled" -Force -ErrorAction SilentlyContinue
+    Stop-Service -Name "FTPSVC"
 
     Write-Host "Successfully Configured Services!" -ForegroundColor Green
 }
 
+function Set-Settings {
+    # Remote Desktop --> Require computers to use Network Level Authenticaiton to connect: Enable
+    Set-NetworkLevelAuthentication -EnableNLA $true
+    
+    Write-Host "Successfully Configured General Settings!" -ForegroundColor Green
+}
 function Disable-RDP {
     Write-Host "Successfully Disabled RDP!" -ForegroundColor Green
 
@@ -451,6 +470,13 @@ if ($groupPolicy -eq 'y') {
 } else {
     Write-Host "Skipping Group Policy" -ForegroundColor Yellow
 }   
+
+$settings = $(Write-Host "Configure General Settings? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
+if ($settings -eq 'y') { 
+    Set-Settings
+} else {
+    Write-Host "Not Enabling RDP" -ForegroundColor Yellow
+} 
 
 $enableRDP = $(Write-Host "Enable RDP? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
 if ($enableRDP -eq 'y') { 
