@@ -325,3 +325,6 @@
 ## Enable FTP
 
 ## Disable FTP
+
+
+# Scan for Prohibited Files

@@ -390,7 +390,7 @@ function Services {
 function Set-Settings {
     # Remote Desktop --> Require computers to use Network Level Authenticaiton to connect: Enable
     Set-NetworkLevelAuthentication -EnableNLA $true
-    
+
     Write-Host "Successfully Configured General Settings!" -ForegroundColor Green
 }
 function Disable-RDP {
@@ -400,6 +400,11 @@ function Disable-RDP {
 
 function Enable-RDP {
     Write-Host "Successfully Enabled RDP!" -ForegroundColor Green
+}
+
+function Search-Files {
+    # File extensions to search for
+    $extensions = @('*.mp3', '*.mp4', '*.exe', '*.bat', '*.vbs', '*.msi')
 }
 
 function Show-Network {
@@ -488,6 +493,13 @@ if ($enableRDP -eq 'y') {
 $disableRDP = $(Write-Host "Disable RDP? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
 if ($disableRDP -eq 'y') { 
     Disable-RDP
+} else {
+    Write-Host "Not Disabling RDP" -ForegroundColor Yellow
+}   
+
+$scanfiles = $(Write-Host "Scan for Prohibited Files? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
+if ($scanfiles -eq 'y') { 
+    Search-Files
 } else {
     Write-Host "Not Disabling RDP" -ForegroundColor Yellow
 }   
