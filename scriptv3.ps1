@@ -497,6 +497,14 @@ if ($disableRDP -eq 'y') {
     Write-Host "Not Disabling RDP" -ForegroundColor Yellow
 }   
 
+$services = $(Write-Host "Configure Services? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
+if ($services -eq 'y') { 
+    Services
+} else {
+    Write-Host "Not Configuring services" -ForegroundColor Yellow
+}   
+
+
 $scanfiles = $(Write-Host "Scan for Prohibited Files? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
 if ($scanfiles -eq 'y') { 
     Search-Files
