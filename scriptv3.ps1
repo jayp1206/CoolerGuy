@@ -321,68 +321,68 @@ function Group-Policies {
 
 function Services {
     # Windows Defender Antivirus Network Inspection Service (WdNisSvc): Automatic, Start
-    Set-Service -Name "WdNisSvc" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Set-Service -Name "WdNisSvc" -StartupType "Automatic" -ErrorAction SilentlyContinue
     Start-Service -Name "WdNisSvc" -Force -ErrorAction SilentlyContinue
     
     # Windows Defender Antivirus Service (WinDefend): Automatic, Start
-    Set-Service -Name "WinDefend" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Set-Service -Name "WinDefend" -StartupType "Automatic" -ErrorAction SilentlyContinue
     Start-Service -Name "WinDefend" -Force -ErrorAction SilentlyContinue
 
     # Microsoft Defender Core Service (MDCoreSvc): Automatic, Start
-    Set-Service -Name "MDCoreSvc" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Set-Service -Name "MDCoreSvc" -StartupType "Automatic" -ErrorAction SilentlyContinue
     Start-Service -Name "MDCoreSvc" -Force -ErrorAction SilentlyContinue
 
     # Print Spooler (Spooler): Disabled, Stop
-    Set-Service -Name "Spooler" -StartupType "Disabled" -Force -ErrorAction SilentlyContinue
+    Set-Service -Name "Spooler" -StartupType "Disabled" -ErrorAction SilentlyContinue
     Stop-Service -Name "Spooler" -Force -ErrorAction SilentlyContinue
 
     # Security Center (wscsvc): Automatic, Start
-    Set-Service -Name "wscsvc" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Set-Service -Name "wscsvc" -StartupType "Automatic" -ErrorAction SilentlyContinue
     Start-Service -Name "wscsvc" -Force -ErrorAction SilentlyContinue
 
     # Software Protection (sppsvc): Automatic, Start
-    Set-Service -Name "sppsvc" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Set-Service -Name "sppsvc" -StartupType "Automatic" -ErrorAction SilentlyContinue
     Start-Service -Name "sppsvc" -Force -ErrorAction SilentlyContinue
 
     # Windows Defender Firewall (mpssvc): Automatic, Start
-    Set-Service -Name "mpssvc" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Set-Service -Name "mpssvc" -StartupType "Automatic" -ErrorAction SilentlyContinue
     Start-Service -Name "mpssvc" -Force -ErrorAction SilentlyContinue
 
     # Windows Error Reporting Service (WerSvc): Automatic, Start
-    Set-Service -Name "WerSvc" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Set-Service -Name "WerSvc" -StartupType "Automatic" -ErrorAction SilentlyContinue
     Start-Service -Name "WerSvc" -Force -ErrorAction SilentlyContinue
 
     # Windows Event Log (EventLog): Automatic, Start
-    Set-Service -Name "EventLog" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Set-Service -Name "EventLog" -StartupType "Automatic" -ErrorAction SilentlyContinue
     Start-Service -Name "EventLog" -Force -ErrorAction SilentlyContinue
 
     # Windows Security Service (SecurityHealthService): Automatic, Start
-    Set-Service -Name "SecurityHealthService" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Set-Service -Name "SecurityHealthService" -StartupType "Automatic" -ErrorAction SilentlyContinue
     Start-Service -Name "SecurityHealthService" -Force -ErrorAction SilentlyContinue
 
     # Windows Update (wuauserv): Automatic, Start
-    Set-Service -Name "wuauserv" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
+    Set-Service -Name "wuauserv" -StartupType "Automatic" -ErrorAction SilentlyContinue
     Start-Service -Name "wuauserv" -Force -ErrorAction SilentlyContinue
 
     # World Wide Web Publishing service (W3SVC): Disabled, stop
-    Set-Service -Name "W3SVC" -StartupType "Disabled" -Force -ErrorAction SilentlyContinue
+    Set-Service -Name "W3SVC" -StartupType "Disabled" -ErrorAction SilentlyContinue
     Stop-Service -Name "W3SVC" -Force -ErrorAction SilentlyContinue
 
     # Telnet (TlntSvr): Disabled, Stop 
-    Set-Service -Name "TlntSvr" -StartupType "Disabled" -Force -ErrorAction SilentlyContinue
-    Stop-Service -Name "TlntSvr"
+    Set-Service -Name "TlntSvr" -StartupType "Disabled" -ErrorAction SilentlyContinue
+    Stop-Service -Name "TlntSvr" -Force -ErrorAction SilentlyContinue
 
     # Background Intelligent Transfer Service (BITS): Automatic, Start
-    Set-Service -Name "BITS" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
-    Start-Service -Name "BITS"
+    Set-Service -Name "BITS" -StartupType "Automatic" -ErrorAction SilentlyContinue
+    Start-Service -Name "BITS" -Force -ErrorAction SilentlyContinue
 
     # IPsec Policy Agent (PolicyAgent): Automatic, Start
-    Set-Service -Name "PolicyAgent" -StartupType "Automatic" -Force -ErrorAction SilentlyContinue
-    Start-Service -Name "PolicyAgent"
+    Set-Service -Name "PolicyAgent" -StartupType "Automatic" -ErrorAction SilentlyContinue
+    Start-Service -Name "PolicyAgent" -Force -ErrorAction SilentlyContinue
 
     # FTP, File Transfer Protocol Service (FTPSVC): Disabled, Stop
-    Set-Service -Name "FTPSVC" -StartupType "Disabled" -Force -ErrorAction SilentlyContinue
-    Stop-Service -Name "FTPSVC"
+    Set-Service -Name "FTPSVC" -StartupType "Disabled" -ErrorAction SilentlyContinue
+    Stop-Service -Name "FTPSVC" -Force -ErrorAction SilentlyContinue
 
     Write-Host "Successfully Configured Services!" -ForegroundColor Green
 }
