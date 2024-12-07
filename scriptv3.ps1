@@ -322,15 +322,15 @@ function Group-Policies {
 function Services {
     # Windows Defender Antivirus Network Inspection Service (WdNisSvc): Automatic, Start
     Set-Service -Name "WdNisSvc" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "WdNisSvc" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "WdNisSvc" -ErrorAction SilentlyContinue
     
     # Windows Defender Antivirus Service (WinDefend): Automatic, Start
     Set-Service -Name "WinDefend" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "WinDefend" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "WinDefend" -ErrorAction SilentlyContinue
 
     # Microsoft Defender Core Service (MDCoreSvc): Automatic, Start
     Set-Service -Name "MDCoreSvc" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "MDCoreSvc" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "MDCoreSvc" -ErrorAction SilentlyContinue
 
     # Print Spooler (Spooler): Disabled, Stop
     Set-Service -Name "Spooler" -StartupType "Disabled" -ErrorAction SilentlyContinue
@@ -338,31 +338,31 @@ function Services {
 
     # Security Center (wscsvc): Automatic, Start
     Set-Service -Name "wscsvc" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "wscsvc" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "wscsvc" -ErrorAction SilentlyContinue
 
     # Software Protection (sppsvc): Automatic, Start
     Set-Service -Name "sppsvc" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "sppsvc" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "sppsvc" -ErrorAction SilentlyContinue
 
     # Windows Defender Firewall (mpssvc): Automatic, Start
     Set-Service -Name "mpssvc" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "mpssvc" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "mpssvc" -ErrorAction SilentlyContinue
 
     # Windows Error Reporting Service (WerSvc): Automatic, Start
     Set-Service -Name "WerSvc" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "WerSvc" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "WerSvc" -ErrorAction SilentlyContinue
 
     # Windows Event Log (EventLog): Automatic, Start
     Set-Service -Name "EventLog" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "EventLog" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "EventLog" -ErrorAction SilentlyContinue
 
     # Windows Security Service (SecurityHealthService): Automatic, Start
     Set-Service -Name "SecurityHealthService" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "SecurityHealthService" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "SecurityHealthService" -ErrorAction SilentlyContinue
 
     # Windows Update (wuauserv): Automatic, Start
     Set-Service -Name "wuauserv" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "wuauserv" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "wuauserv" -ErrorAction SilentlyContinue
 
     # World Wide Web Publishing service (W3SVC): Disabled, stop
     Set-Service -Name "W3SVC" -StartupType "Disabled" -ErrorAction SilentlyContinue
@@ -374,11 +374,11 @@ function Services {
 
     # Background Intelligent Transfer Service (BITS): Automatic, Start
     Set-Service -Name "BITS" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "BITS" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "BITS" -ErrorAction SilentlyContinue
 
     # IPsec Policy Agent (PolicyAgent): Automatic, Start
     Set-Service -Name "PolicyAgent" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "PolicyAgent" -Force -ErrorAction SilentlyContinue
+    Start-Service -Name "PolicyAgent" -ErrorAction SilentlyContinue
 
     # FTP, File Transfer Protocol Service (FTPSVC): Disabled, Stop
     Set-Service -Name "FTPSVC" -StartupType "Disabled" -ErrorAction SilentlyContinue
