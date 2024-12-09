@@ -395,16 +395,77 @@ function Set-Settings {
 }
 function Disable-RDP {
     Write-Host "Successfully Disabled RDP!" -ForegroundColor Green
-
 }
 
 function Enable-RDP {
     Write-Host "Successfully Enabled RDP!" -ForegroundColor Green
 }
 
+function Disable-FTP {
+    Write-Host "Successfully Disabled FTP!" -ForegroundColor Green
+}
+
+function Enable-FTP {
+    Write-Host "Successfully Enabled FTP!" -ForegroundColor Green
+}
 function Search-Files {
-    # File extensions to search for
-    $extensions = @('*.mp3', '*.mp4', '*.exe', '*.bat', '*.vbs', '*.msi')
+    # Prohibited file extensions
+    $prohibitedExtensions = @(
+    '*.midi', '*.mid', '*.mp3', '*.mp2', '*.mpa', '*.abs', '*.mpega', '*.au', '*.snd', '*.aiff', '*.aif', '*.sid', '*.flac', '*.cda', '*.wav', '*.aac', '*.ogg', '*.m4a', '*.wma', # Audio
+    '*.mpeg', '*.mpe', '*.dl', '*.movie', '*.movi', '*.mv', '*.iff', '*.anim5', '*.anim3', '*.anim7', '*.avi', '*.vfw', '*.avx', '*.fli', '*.flc', '*.mov', '*.qt', '*.spl', '*.swf', '*.dcr', '*.dxr', '*.rpm', '*.rm', '*.smi', '*.ra', '*.ram', '*.rv', '*.wmv', '*.asf', '*.asx', '*.wax', '*.wmx', '*.3gp', '*.mkv', '*.ts', '*.webm', '*.vob', '*.m2ts', '*.flv', '*.m4v', # Video
+    '*.tiff', '*.tif', '*.rs', '*.im1', '*.gif', '*.jpeg', '*.jpg', '*.jpe', '*.png', '*.rgb', '*.xwd', '*.xpm', '*.ppm', '*.pbm', '*.pgm', '*.pcx', '*.ico', '*.svg', '*.svgz', '*.bmp', '*.raw', '*.heic', '*.psd', # Image
+    '*.jar', '*.py', '*.exe', '*.bat', '*.ps1', '*.msi', '*.com', '*.cmd', '*.sh', '*.vbs', '*.reg', '*.hta', '*.js', '*.cpl', '*.scr', # Executables
+    '*.zip', '*.rar', '*.7z', '*.tar', '*.gz', '*.bz2', '*.iso', '*.img', # Archives/Containers
+    '*.txt', '*.csv', '*.json', '*.xml', '*.yaml', '*.yml', '*.log' # Text
+    )
+    
+    # Current user's folder
+    $currentUserFolder = "$env:SystemDrive\Users\$env:USERNAME"
+
+    # Users folder
+    $usersFolder = "$env:SystemDrive\Users"
+
+    # Track if any files are found
+    $filesFound = $false
+
+
+    # Loop through all user directories excluding the current user
+    Get-ChildItem -Path $usersFolder -Directory | Where-Object {
+        $_.FullName -ne $currentUserFolder
+    } | ForEach-Object {
+            $userDir = $_.FullName
+            # Scan for prohibited files in the user's root folder
+            Get-ChildItem -Path $userDir -File -ErrorAction SilentlyContinue | ForEach-Object {
+                if ($prohibitedExtensions -contains "*$($_.Extension)") {
+                    Write-Host "---------------------------------------------------------------------------------------" -ForegroundColor White
+                    Write-Host "File Name: $($_.Name)" -ForegroundColor Magenta
+                    Write-Host "Full Path: $($_.FullName)" -ForegroundColor Magenta
+                    Write-Host "---------------------------------------------------------------------------------------" -ForegroundColor White
+                    $filesFound = $true
+                }
+            }
+
+            # Exclude folders like AppData and those starting with "."
+            Get-ChildItem -Path $userDir -Recurse -Directory -ErrorAction SilentlyContinue | Where-Object {
+                $_.Name -ne "AppData" -and -not ($_.Name -like ".*")
+            } | ForEach-Object {
+                    $folder = $_.FullName
+
+                    # Scan for prohibited extensions
+                    foreach ($ext in $prohibitedExtensions) {
+                        Get-ChildItem -Path $folder -Recurse -Include $ext -ErrorAction SilentlyContinue | ForEach-Object {
+                            Write-Host "---------------------------------------------------------------------------------------" -ForegroundColor White
+                            Write-Host "File Name: $($_.Name)" -ForegroundColor Magenta
+                            Write-Host "Full Path: $($_.FullName)" -ForegroundColor Magenta
+                            Write-Host "---------------------------------------------------------------------------------------" -ForegroundColor White
+                            $filesFound = $true
+                        }
+                    }
+            }
+        }
+        if (-not $filesFound) {
+            Write-Host "No prohibited files found." -ForegroundColor Green
+        }
 }
 
 function Show-Network {
@@ -480,22 +541,26 @@ $settings = $(Write-Host "Configure General Settings? (y/n): " -ForegroundColor 
 if ($settings -eq 'y') { 
     Set-Settings
 } else {
-    Write-Host "Not Enabling RDP" -ForegroundColor Yellow
+    Write-Host "Not Configuring Settings" -ForegroundColor Yellow
 } 
 
-$enableRDP = $(Write-Host "Enable RDP? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
-if ($enableRDP -eq 'y') { 
+$RDP = $(Write-Host "Enable or Disable RDP? (e/d): " -ForegroundColor Cyan -NoNewLine; Read-Host)
+if ($RDP -eq 'e') { 
     Enable-RDP
-} else {
-    Write-Host "Not Enabling RDP" -ForegroundColor Yellow
-}   
-
-$disableRDP = $(Write-Host "Disable RDP? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
-if ($disableRDP -eq 'y') { 
+} elseif ($RDP -eq 'd') {
     Disable-RDP
 } else {
-    Write-Host "Not Disabling RDP" -ForegroundColor Yellow
-}   
+    Write-Host "Not Configuring RDP" -ForegroundColor Yellow
+} 
+
+$FTP = $(Write-Host "Enable or Disable FTP? (e/d): " -ForegroundColor Cyan -NoNewLine; Read-Host)
+if ($FTP -eq 'e') { 
+    Enable-FTP
+} elseif ($RDP -eq 'd') {
+    Disable-FTP
+} else {
+    Write-Host "Not Configuring FTP" -ForegroundColor Yellow
+} 
 
 $services = $(Write-Host "Configure Services? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
 if ($services -eq 'y') { 
@@ -509,7 +574,7 @@ $scanfiles = $(Write-Host "Scan for Prohibited Files? (y/n): " -ForegroundColor 
 if ($scanfiles -eq 'y') { 
     Search-Files
 } else {
-    Write-Host "Not Disabling RDP" -ForegroundColor Yellow
+    Write-Host "Not Scanning Files" -ForegroundColor Yellow
 }   
 
 $shares = $(Write-Host "List All Network Shares? (y/n):  " -ForegroundColor Cyan -NoNewLine; Read-Host)
