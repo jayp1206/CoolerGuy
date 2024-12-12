@@ -172,6 +172,22 @@ function Group-Policies {
     # Require secure RPC communication: enable
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fEncryptRPCTraffic" -Data 1 -Type "DWord"
 
+    # Always prompt for password: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fPromptForPassword" -Data 1 -Type "DWord"
+
+    # Require network level authentication: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "UserAuthentication" -Data 1 -Type "DWord"
+
+    # End session when time limit is reached: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fResetBroken" -Data 1 -Type "DWord"
+
+
+    ## Windows Remote Management ## 
+    $RegPath = "Software\Policies\Microsoft\Windows\WinRM\Client"
+    
+    # Allow unencrypted traffic: disable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowUnencryptedTraffic" -Data 0 -Type "DWord"
+
 
     ## Autoplay Policies ##
 
@@ -321,83 +337,86 @@ function Group-Policies {
 
 function Services {
     # Windows Defender Antivirus Network Inspection Service (WdNisSvc): Automatic, Start
-    Set-Service -Name "WdNisSvc" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "WdNisSvc" -ErrorAction SilentlyContinue
+    Set-Service -Name "WdNisSvc" -StartupType "Automatic" -ErrorAction Continue
+    Start-Service -Name "WdNisSvc" -ErrorAction Continue
     
     # Windows Defender Antivirus Service (WinDefend): Automatic, Start
-    Set-Service -Name "WinDefend" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "WinDefend" -ErrorAction SilentlyContinue
+    Set-Service -Name "WinDefend" -StartupType "Automatic" -ErrorAction Continue
+    Start-Service -Name "WinDefend" -ErrorAction Continue
 
     # Microsoft Defender Core Service (MDCoreSvc): Automatic, Start
-    Set-Service -Name "MDCoreSvc" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "MDCoreSvc" -ErrorAction SilentlyContinue
+    Set-Service -Name "MDCoreSvc" -StartupType "Automatic" -ErrorAction Continue
+    Start-Service -Name "MDCoreSvc" -ErrorAction Continue
 
     # Print Spooler (Spooler): Disabled, Stop
-    Set-Service -Name "Spooler" -StartupType "Disabled" -ErrorAction SilentlyContinue
-    Stop-Service -Name "Spooler" -Force -ErrorAction SilentlyContinue
+    Set-Service -Name "Spooler" -StartupType "Disabled" -ErrorAction Continue
+    Stop-Service -Name "Spooler" -Force -ErrorAction Continue
 
     # Security Center (wscsvc): Automatic, Start
-    Set-Service -Name "wscsvc" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "wscsvc" -ErrorAction SilentlyContinue
+    Set-Service -Name "wscsvc" -StartupType "Automatic" -ErrorAction Continue
+    Start-Service -Name "wscsvc" -ErrorAction Continue
 
     # Software Protection (sppsvc): Automatic, Start
-    Set-Service -Name "sppsvc" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "sppsvc" -ErrorAction SilentlyContinue
+    Set-Service -Name "sppsvc" -StartupType "Automatic" -ErrorAction Continue
+    Start-Service -Name "sppsvc" -ErrorAction Continue
 
     # Windows Defender Firewall (mpssvc): Automatic, Start
-    Set-Service -Name "mpssvc" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "mpssvc" -ErrorAction SilentlyContinue
+    Set-Service -Name "mpssvc" -StartupType "Automatic" -ErrorAction Continue
+    Start-Service -Name "mpssvc" -ErrorAction Continue
 
     # Windows Error Reporting Service (WerSvc): Automatic, Start
-    Set-Service -Name "WerSvc" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "WerSvc" -ErrorAction SilentlyContinue
+    Set-Service -Name "WerSvc" -StartupType "Automatic" -ErrorAction Continue
+    Start-Service -Name "WerSvc" -ErrorAction Continue
 
     # Windows Event Log (EventLog): Automatic, Start
-    Set-Service -Name "EventLog" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "EventLog" -ErrorAction SilentlyContinue
+    Set-Service -Name "EventLog" -StartupType "Automatic" -ErrorAction Continue
+    Start-Service -Name "EventLog" -ErrorAction Continue
 
     # Windows Security Service (SecurityHealthService): Automatic, Start
-    Set-Service -Name "SecurityHealthService" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "SecurityHealthService" -ErrorAction SilentlyContinue
+    Set-Service -Name "SecurityHealthService" -StartupType "Automatic" -ErrorAction Continue
+    Start-Service -Name "SecurityHealthService" -ErrorAction Continue
 
     # Windows Update (wuauserv): Automatic, Start
-    Set-Service -Name "wuauserv" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "wuauserv" -ErrorAction SilentlyContinue
+    Set-Service -Name "wuauserv" -StartupType "Automatic" -ErrorAction Continue
+    Start-Service -Name "wuauserv" -ErrorAction Continue
 
     # World Wide Web Publishing service (W3SVC): Disabled, stop
-    Set-Service -Name "W3SVC" -StartupType "Disabled" -ErrorAction SilentlyContinue
-    Stop-Service -Name "W3SVC" -Force -ErrorAction SilentlyContinue
+    Set-Service -Name "W3SVC" -StartupType "Disabled" -ErrorAction Continue
+    Stop-Service -Name "W3SVC" -Force -ErrorAction Continue
 
     # Telnet (TlntSvr): Disabled, Stop 
-    Set-Service -Name "TlntSvr" -StartupType "Disabled" -ErrorAction SilentlyContinue
-    Stop-Service -Name "TlntSvr" -Force -ErrorAction SilentlyContinue
+    Set-Service -Name "TlntSvr" -StartupType "Disabled" -ErrorAction Continue
+    Stop-Service -Name "TlntSvr" -Force -ErrorAction Continue
 
     # Background Intelligent Transfer Service (BITS): Automatic, Start
-    Set-Service -Name "BITS" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "BITS" -ErrorAction SilentlyContinue
+    Set-Service -Name "BITS" -StartupType "Automatic" -ErrorAction Continue
+    Start-Service -Name "BITS" -ErrorAction Continue
 
     # IPsec Policy Agent (PolicyAgent): Automatic, Start
-    Set-Service -Name "PolicyAgent" -StartupType "Automatic" -ErrorAction SilentlyContinue
-    Start-Service -Name "PolicyAgent" -ErrorAction SilentlyContinue
+    Set-Service -Name "PolicyAgent" -StartupType "Automatic" -ErrorAction Continue
+    Start-Service -Name "PolicyAgent" -ErrorAction Continue
 
     # FTP, File Transfer Protocol Service (FTPSVC): Disabled, Stop
-    Set-Service -Name "FTPSVC" -StartupType "Disabled" -ErrorAction SilentlyContinue
-    Stop-Service -Name "FTPSVC" -Force -ErrorAction SilentlyContinue
+    Set-Service -Name "FTPSVC" -StartupType "Disabled" -ErrorAction Continue
+    Stop-Service -Name "FTPSVC" -Force -ErrorAction Continue
+
+    # Remote Registry (RemoteRegistry): Disabled, Stop
+    Set-Service -Name "RemoteRegistry" -StartupType "Disabled" -ErrorAction Continue
+    Stop-Service -Name "RemoteRegistry" -Force -ErrorAction Continue
 
     Write-Host "Successfully Configured Services!" -ForegroundColor Green
 }
 
-function Set-Settings {
-    # Remote Desktop --> Require computers to use Network Level Authenticaiton to connect: Enable
-    Set-NetworkLevelAuthentication -EnableNLA $true
-
-    Write-Host "Successfully Configured General Settings!" -ForegroundColor Green
-}
 function Disable-RDP {
     Write-Host "Successfully Disabled RDP!" -ForegroundColor Green
 }
 
 function Enable-RDP {
+    Set-Service -Name "FTPSVC" -StartupType "Disabled" -ErrorAction Continue
+    Stop-Service -Name "FTPSVC" -Force -ErrorAction Continue
+
+
+
     Write-Host "Successfully Enabled RDP!" -ForegroundColor Green
 }
 
@@ -435,7 +454,7 @@ function Search-Files {
     } | ForEach-Object {
             $userDir = $_.FullName
             # Scan for prohibited files in the user's root folder
-            Get-ChildItem -Path $userDir -File -ErrorAction SilentlyContinue | ForEach-Object {
+            Get-ChildItem -Path $userDir -File -ErrorAction Continue | ForEach-Object {
                 if ($prohibitedExtensions -contains "*$($_.Extension)") {
                     Write-Host "---------------------------------------------------------------------------------------" -ForegroundColor White
                     Write-Host "File Name: $($_.Name)" -ForegroundColor Magenta
@@ -446,14 +465,14 @@ function Search-Files {
             }
 
             # Exclude folders like AppData and those starting with "."
-            Get-ChildItem -Path $userDir -Recurse -Directory -ErrorAction SilentlyContinue | Where-Object {
+            Get-ChildItem -Path $userDir -Recurse -Directory -ErrorAction Continue | Where-Object {
                 $_.Name -ne "AppData" -and -not ($_.Name -like ".*")
             } | ForEach-Object {
                     $folder = $_.FullName
 
                     # Scan for prohibited extensions
                     foreach ($ext in $prohibitedExtensions) {
-                        Get-ChildItem -Path $folder -Recurse -Include $ext -ErrorAction SilentlyContinue | ForEach-Object {
+                        Get-ChildItem -Path $folder -Recurse -Include $ext -ErrorAction Continue | ForEach-Object {
                             Write-Host "---------------------------------------------------------------------------------------" -ForegroundColor White
                             Write-Host "File Name: $($_.Name)" -ForegroundColor Magenta
                             Write-Host "Full Path: $($_.FullName)" -ForegroundColor Magenta
@@ -536,13 +555,6 @@ if ($groupPolicy -eq 'y') {
 } else {
     Write-Host "Skipping Group Policy" -ForegroundColor Yellow
 }   
-
-$settings = $(Write-Host "Configure General Settings? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
-if ($settings -eq 'y') { 
-    Set-Settings
-} else {
-    Write-Host "Not Configuring Settings" -ForegroundColor Yellow
-} 
 
 $RDP = $(Write-Host "Enable or Disable RDP? (e/d): " -ForegroundColor Cyan -NoNewLine; Read-Host)
 if ($RDP -eq 'e') { 

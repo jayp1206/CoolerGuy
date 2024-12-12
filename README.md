@@ -142,6 +142,7 @@
 
 ### Administrative Templates
 
+
 #### Network --> Network Connections --> Windows Defender Firewall (Domain Profile and Standard Profile) ✔
 - Allow inbound file and printer sharing exception: Disabled ✔
 - Allow inbound UPnP framework exceptions: Disabled ✔
@@ -161,6 +162,12 @@
 - Set client connection encryption level: Enabled, High Level ✔
 - Always prompt for password upon connection: Enabled ✔
 - Require secure RPC communication: Enabled ✔
+- Security --> Always prompt for password upon connection: Enabled ✔
+- Security --> Require user authentication for remote connections by using Network Level Authentication: Enabled ✔
+- Session Time Limits --> End session when time limits are reached: Enabled ✔
+
+#### Windows Remote Management
+- Windows Remote Management (WinRM) --> WinRM Service --> Allow unencrypted traffic: Disabled ✔
 
 #### Autoplay Policies ✔
 - Turn off Autoplay: Enabled ✔
@@ -254,9 +261,10 @@
 - Background Intelligent Transfer Service (BITS): Automatic, Start ✔
 - IPsec Policy Agent (PolicyAgent): Automatic, Start ✔
 - File Transfer Protocol Service (FTPSVC): Disabled, Stop ✔
+- Remote Registry (RemoteRegistry): Disabled, Stop ✔
 
 # Settings
-- Remote Desktop --> Require computers to use Network Level Authenticaiton to connect: Enabled ✔
+- Remote Desktop --> Require computers to use Network Level Authentication to connect: Enabled ✔
 
 # (Enable or Disable RDP/Remote Assistance?)
 
@@ -268,13 +276,6 @@
 - Network --> Network Connections --> Windows Defender Firewall --> Domain Profile/Standard Profile --> Allow inbound remote administration exceptions: Enabled
 
 - Remote Desktop Services --> Remote Desktop Session Host --> Connections --> Allow users to connect remotely by using Remote Desktop Services: Enabled
-
-- Remote Desktop Services --> Remote Desktop Session Host --> Security --> Always prompt for password upon connection: Enabled
-- Remote Desktop Services --> Remote Desktop Session Host --> Security --> Require user authentication for remote connections by using Network Level Authentication: Enabled
-
-- Remote Desktop Services --> Remote Desktop Session Host --> Session Time Limits --> End session when time limits are reached: Enabled
-
-- Windows Remote Management (WinRM) --> WinRM Service --> Allow unencrypted traffic: Disabled
 
 - Windows Remote Shell --> Allow Remote Shell Access: Enabled
 
@@ -317,7 +318,6 @@
 - Remote Desktop Configuration (SessionEnv): Disabled, Stop
 - Remote Desktop Services (TermService): Disabled, Stop
 - Remote Desktop Services UserMode Port Redirector (UmRdpService): Disabled, Stop
-- Remote Registry (RemoteRegistry): Disabled, Stop
 - Windows Remote Management (WinRM): Disabled, Stop
 
 # (Enable or Disable FTP?)
