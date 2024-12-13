@@ -532,7 +532,7 @@ function Search-Files {
     } | ForEach-Object {
             $userDir = $_.FullName
             # Scan for files in each user's folder
-            Get-ChildItem -Path $userDir -File -ErrorAction Continue | ForEach-Object {
+            Get-ChildItem -Path $userDir -File -Exclude *.url, *.lnk -ErrorAction Continue | ForEach-Object {
                 Write-Host "---------------------------------------------------------------------------------------" -ForegroundColor White
                 Write-Host "File Name: $($_.Name)" -ForegroundColor Magenta
                 Write-Host "Full Path: $($_.FullName)" -ForegroundColor Magenta
@@ -547,7 +547,7 @@ function Search-Files {
                     $folder = $_.FullName
 
                     # Scan for files in "Users" folder
-                    Get-ChildItem -Path $folder -Recurse -File -ErrorAction Continue | ForEach-Object {
+                    Get-ChildItem -Path $folder -Recurse -File -Exclude *.url, *.lnk -ErrorAction Continue | ForEach-Object {
                         Write-Host "---------------------------------------------------------------------------------------" -ForegroundColor White
                         Write-Host "File Name: $($_.Name)" -ForegroundColor Magenta
                         Write-Host "Full Path: $($_.FullName)" -ForegroundColor Magenta
