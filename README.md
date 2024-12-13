@@ -121,6 +121,8 @@
 - Inbound connections: Block ✔
 - Outbound connections: Allow ✔
 
+#### Block File and Printer Sharing ✔
+
 
 ## (Configure Advanced Audit Policies?)
 ### Advanced Audit Policy Configuration ✔
@@ -260,11 +262,17 @@
 - Telnet (TlntSvr): Disabled, Stop ✔
 - Background Intelligent Transfer Service (BITS): Automatic, Start ✔
 - IPsec Policy Agent (PolicyAgent): Automatic, Start ✔
-- File Transfer Protocol Service (FTPSVC): Disabled, Stop ✔
 - Remote Registry (RemoteRegistry): Disabled, Stop ✔
+- Internet Connection Sharing (SharedAccess): Disabled, Stop ✔
+- UPnP Device Host (upnphost): Disabled, Stop ✔
+- Net TCP Port Sharing Service (NetTcpPortSharing): Disabled, Stop ✔
+- Windows Media Player Network Sharing Service (WMPNetworkSVC): Disabled, Stop ✔
 
-# Settings
-- Remote Desktop --> Require computers to use Network Level Authentication to connect: Enabled ✔
+
+
+- Disable Telnet Windows feature ✔
+- Disable remote Powershell ✔
+
 
 # (Enable or Disable RDP/Remote Assistance?)
 
@@ -272,59 +280,65 @@
 
 ### Group Policy --> Computer Configuration --> Administrative Templates
 
-- Network --> Network Connections --> Windows Defender Firewall --> Domain Profile/Standard Profile --> Allow inbound Remote Desktop exceptions: Enabled
-- Network --> Network Connections --> Windows Defender Firewall --> Domain Profile/Standard Profile --> Allow inbound remote administration exceptions: Enabled
+- Network --> Network Connections --> Windows Defender Firewall --> Domain Profile/Standard Profile --> Allow inbound Remote Desktop exceptions: Enabled ✔
+- Network --> Network Connections --> Windows Defender Firewall --> Domain Profile/Standard Profile --> Allow inbound remote administration exceptions: Enabled ✔
 
-- Remote Desktop Services --> Remote Desktop Session Host --> Connections --> Allow users to connect remotely by using Remote Desktop Services: Enabled
+- Remote Desktop Services --> Remote Desktop Session Host --> Connections --> Allow users to connect remotely by using Remote Desktop Services: Enabled ✔
 
-- Windows Remote Shell --> Allow Remote Shell Access: Enabled
-
-### Group Policy --> System --> Remote Assistance
-- Configure Offer Remote Assistance: Enabled, allow helpers to remotely control
-- Configure Solicited Remote Assistance: Enabled, allow helpers to remotely control
+- Windows Remote Shell --> Allow Remote Shell Access: Enabled ✔
 
 ### Settings
-- Remote Desktop --> Enable Remote Desktop: Toggle ON
-- System Properties --> Allow Remote Assistance connections to this computer: CHECK
-- System Properties --> Allow remote connections to this computer: SELECT
+- Remote Desktop --> Enable Remote Desktop: Toggle ON (Registry) ✔
+- System Properties --> Allow Remote Assistance connections to this computer: CHECK (Registry) ✔
+- System Properties --> Allow remote connections to this computer: SELECT (Registry) ✔
+
+### Firewall
+- Allow RDP group through firewall ✔
 
 ### Services
-- Remote Desktop Configuration (SessionEnv): Automatic, Start
-- Remote Desktop Services (TermService): Automatic, Start
-- Remote Desktop Services UserMode Port Redirector (UmRdpService): Automatic, Start
-- Windows Remote Management (WinRM): Automatic, Start
+- Remote Desktop Configuration (SessionEnv): Automatic, Start ✔
+- Remote Desktop Services (TermService): Automatic, Start ✔
+- Remote Desktop Services UserMode Port Redirector (UmRdpService): Automatic, Start ✔
+- Windows Remote Management (WinRM): Automatic, Start ✔
 
 ## Disable RDP/Remote Assistance
 
 ### Group Policy --> Computer Configuration --> Administrative Templates
 
-- Network --> Network Connections --> Windows Defender Firewall --> Domain Profile/Standard Profile --> Allow inbound Remote Desktop exceptions: Disabled
-- Network --> Network Connections --> Windows Defender Firewall --> Domain Profile/Standard Profile --> Allow inbound remote administration exceptions: Disabled
+- Network --> Network Connections --> Windows Defender Firewall --> Domain Profile/Standard Profile --> Allow inbound Remote Desktop exceptions: Disabled ✔
+- Network --> Network Connections --> Windows Defender Firewall --> Domain Profile/Standard Profile --> Allow inbound remote administration exceptions: Disabled ✔
 
-- Remote Desktop Services --> Remote Desktop Session Host --> Connections --> Allow users to connect remotely by using Remote Desktop Services: Disabled
+- Windows Components --> Remote Desktop Services --> Remote Desktop Session Host --> Connections --> Allow users to connect remotely by using Remote Desktop Services: Disabled ✔
+- Windows Components --> Remote Desktop Services --> Remote Desktop Session Host --> Connections --> Set rules for remote control of Remote Desktop Services user sessions: No remote control allowed ✔
 
-- Windows Remote Shell --> Allow Remote Shell Access: Disabled
+- Windows Remote Shell --> Allow Remote Shell Access: Disabled ✔
 
 ### Group Policy --> System --> Remote Assistance
-- Configure Offer Remote Assistance: Disabled
-- Configure Solicited Remote Assistance: Disabled
+- Configure Offer Remote Assistance: Disabled ✔
+- Configure Solicited Remote Assistance: Disabled ✔
 
 ### Settings
-- Remote Desktop --> Enable Remote Desktop: Toggle OFF
-- System Properties --> Allow Remote Assistance connections to this computer: UNCHECK
-- System Properties --> Don't Allow remote connections to this computer: SELECT
+- Remote Desktop --> Enable Remote Desktop: Toggle OFF (Registry) ✔
+- System Properties --> Allow Remote Assistance connections to this computer: UNCHECK (Registry) ✔
+- System Properties --> Don't Allow remote connections to this computer: SELECT (Registry) ✔
+
+### Firewall
+- Don't allow RDP group through firewall ✔
 
 ### Services
-- Remote Desktop Configuration (SessionEnv): Disabled, Stop
-- Remote Desktop Services (TermService): Disabled, Stop
-- Remote Desktop Services UserMode Port Redirector (UmRdpService): Disabled, Stop
-- Windows Remote Management (WinRM): Disabled, Stop
+- Remote Desktop Configuration (SessionEnv): Disabled, Stop ✔
+- Remote Desktop Services (TermService): Disabled, Stop ✔
+- Remote Desktop Services UserMode Port Redirector (UmRdpService): Disabled, Stop ✔
+- Windows Remote Management (WinRM): Disabled, Stop ✔
 
 # (Enable or Disable FTP?)
 
 ## Enable FTP
+- File Transfer Protocol Service (FTPSVC): Automatic, Start ✔
+
 
 ## Disable FTP
+- File Transfer Protocol Service (FTPSVC): Disabled, Stop ✔
 
 
-# Scan for Prohibited Files
+# Scan for Prohibited Files ✔

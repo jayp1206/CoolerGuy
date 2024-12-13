@@ -24,79 +24,15 @@ function Enable-Firewall {
     Set-NetFirewallProfile -Name Private -DefaultOutboundAction Allow
     Set-NetFirewallProfile -Name Domain -DefaultOutboundAction Allow
 
+    Disable-NetFirewallRule -DisplayGroup "File and Printer Sharing"
+
     Write-Host "Windows Firewall profiles configured successfully!" -ForegroundColor Green
 }
 
 
 function Enable-Audits {
     # List of all advanced audit policies
-    $subcategories = @(
-    "Security State Change",
-    "Security System Extension",
-    "System Integrity",
-    "IPsec Driver",
-    "Other System Events",
-    "Logon",
-    "Logoff",
-    "Account Lockout",
-    "IPsec Main Mode",
-    "IPsec Quick Mode",
-    "IPsec Extended Mode",
-    "Special Logon",
-    "Other Logon/Logoff Events",
-    "Network Policy Server",
-    "User / Device Claims",
-    "Group Membership",
-    "File System",
-    "Registry",
-    "Kernel Object",
-    "SAM",
-    "Certification Services",
-    "Application Generated",
-    "Handle Manipulation",
-    "File Share",
-    "Filtering Platform Packet Drop",
-    "Filtering Platform Connection",
-    "Other Object Access Events",
-    "Detailed File Share",
-    "Removable Storage",
-    "Central Policy Staging",
-    "Sensitive Privilege Use",
-    "Non Sensitive Privilege Use",
-    "Other Privilege Use Events",
-    "Process Creation",
-    "Process Termination",
-    "DPAPI Activity",
-    "RPC Events",
-    "Plug and Play Events",
-    "Token Right Adjusted Events",
-    "Audit Policy Change",
-    "Authentication Policy Change",
-    "Authorization Policy Change",
-    "MPSSVC Rule-Level Policy Change",
-    "Filtering Platform Policy Change",
-    "Other Policy Change Events",
-    "User Account Management",
-    "Computer Account Management",
-    "Security Group Management",
-    "Distribution Group Management",
-    "Application Group Management",
-    "Other Account Management Events",
-    "Directory Service Access",
-    "Directory Service Changes",
-    "Directory Service Replication",
-    "Detailed Directory Service Replication",
-    "Credential Validation",
-    "Kerberos Service Ticket Operations",
-    "Other Account Logon Events",
-    "Kerberos Authentication Service"
-    )
-
-    # Set each to Sucess & Failure
-    foreach ($subcategory in $subcategories) {
-        auditpol /set /subcategory:"$subcategory" /success:enable /failure:enable
-
-    }
+    auditpol /set /category:* /success:enable /failure:enable
 
     gpupdate /force
 
@@ -335,108 +271,246 @@ function Group-Policies {
     Write-Host "Successfully Configured Group Policy!" -ForegroundColor Green
 }
 
-function Services {
+function Set-Services {
     # Windows Defender Antivirus Network Inspection Service (WdNisSvc): Automatic, Start
-    Set-Service -Name "WdNisSvc" -StartupType "Automatic" -ErrorAction Continue
+    Set-Service -Name "WdNisSvc" -StartupType Automatic -ErrorAction Continue
     Start-Service -Name "WdNisSvc" -ErrorAction Continue
     
     # Windows Defender Antivirus Service (WinDefend): Automatic, Start
-    Set-Service -Name "WinDefend" -StartupType "Automatic" -ErrorAction Continue
+    Set-Service -Name "WinDefend" -StartupType Automatic -ErrorAction Continue
     Start-Service -Name "WinDefend" -ErrorAction Continue
 
     # Microsoft Defender Core Service (MDCoreSvc): Automatic, Start
-    Set-Service -Name "MDCoreSvc" -StartupType "Automatic" -ErrorAction Continue
+    Set-Service -Name "MDCoreSvc" -StartupType Automatic -ErrorAction Continue
     Start-Service -Name "MDCoreSvc" -ErrorAction Continue
 
     # Print Spooler (Spooler): Disabled, Stop
-    Set-Service -Name "Spooler" -StartupType "Disabled" -ErrorAction Continue
+    Set-Service -Name "Spooler" -StartupType Disabled -ErrorAction Continue
     Stop-Service -Name "Spooler" -Force -ErrorAction Continue
 
     # Security Center (wscsvc): Automatic, Start
-    Set-Service -Name "wscsvc" -StartupType "Automatic" -ErrorAction Continue
+    Set-Service -Name "wscsvc" -StartupType Automatic -ErrorAction Continue
     Start-Service -Name "wscsvc" -ErrorAction Continue
 
     # Software Protection (sppsvc): Automatic, Start
-    Set-Service -Name "sppsvc" -StartupType "Automatic" -ErrorAction Continue
+    Set-Service -Name "sppsvc" -StartupType Automatic -ErrorAction Continue
     Start-Service -Name "sppsvc" -ErrorAction Continue
 
     # Windows Defender Firewall (mpssvc): Automatic, Start
-    Set-Service -Name "mpssvc" -StartupType "Automatic" -ErrorAction Continue
+    Set-Service -Name "mpssvc" -StartupType Automatic -ErrorAction Continue
     Start-Service -Name "mpssvc" -ErrorAction Continue
 
     # Windows Error Reporting Service (WerSvc): Automatic, Start
-    Set-Service -Name "WerSvc" -StartupType "Automatic" -ErrorAction Continue
+    Set-Service -Name "WerSvc" -StartupType Automatic -ErrorAction Continue
     Start-Service -Name "WerSvc" -ErrorAction Continue
 
     # Windows Event Log (EventLog): Automatic, Start
-    Set-Service -Name "EventLog" -StartupType "Automatic" -ErrorAction Continue
+    Set-Service -Name "EventLog" -StartupType Automatic -ErrorAction Continue
     Start-Service -Name "EventLog" -ErrorAction Continue
 
     # Windows Security Service (SecurityHealthService): Automatic, Start
-    Set-Service -Name "SecurityHealthService" -StartupType "Automatic" -ErrorAction Continue
+    Set-Service -Name "SecurityHealthService" -StartupType Automatic -ErrorAction Continue
     Start-Service -Name "SecurityHealthService" -ErrorAction Continue
 
     # Windows Update (wuauserv): Automatic, Start
-    Set-Service -Name "wuauserv" -StartupType "Automatic" -ErrorAction Continue
+    Set-Service -Name "wuauserv" -StartupType Automatic -ErrorAction Continue
     Start-Service -Name "wuauserv" -ErrorAction Continue
 
     # World Wide Web Publishing service (W3SVC): Disabled, stop
-    Set-Service -Name "W3SVC" -StartupType "Disabled" -ErrorAction Continue
+    Set-Service -Name "W3SVC" -StartupType Disabled -ErrorAction Continue
     Stop-Service -Name "W3SVC" -Force -ErrorAction Continue
 
     # Telnet (TlntSvr): Disabled, Stop 
-    Set-Service -Name "TlntSvr" -StartupType "Disabled" -ErrorAction Continue
+    Set-Service -Name "TlntSvr" -StartupType Disabled -ErrorAction Continue
     Stop-Service -Name "TlntSvr" -Force -ErrorAction Continue
 
     # Background Intelligent Transfer Service (BITS): Automatic, Start
-    Set-Service -Name "BITS" -StartupType "Automatic" -ErrorAction Continue
+    Set-Service -Name "BITS" -StartupType Automatic -ErrorAction Continue
     Start-Service -Name "BITS" -ErrorAction Continue
 
     # IPsec Policy Agent (PolicyAgent): Automatic, Start
-    Set-Service -Name "PolicyAgent" -StartupType "Automatic" -ErrorAction Continue
+    Set-Service -Name "PolicyAgent" -StartupType Automatic -ErrorAction Continue
     Start-Service -Name "PolicyAgent" -ErrorAction Continue
 
-    # FTP, File Transfer Protocol Service (FTPSVC): Disabled, Stop
-    Set-Service -Name "FTPSVC" -StartupType "Disabled" -ErrorAction Continue
-    Stop-Service -Name "FTPSVC" -Force -ErrorAction Continue
-
     # Remote Registry (RemoteRegistry): Disabled, Stop
-    Set-Service -Name "RemoteRegistry" -StartupType "Disabled" -ErrorAction Continue
+    Set-Service -Name "RemoteRegistry" -StartupType Disabled -ErrorAction Continue
     Stop-Service -Name "RemoteRegistry" -Force -ErrorAction Continue
+
+    # Internet Connection Sharing (SharedAccess): Disabled, Stop
+    Set-Service -Name "SharedAccess" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "SharedAccess" -Force -ErrorAction Continue
+
+    # UPnP Device Host (upnphost): Disabled, Stop
+    Set-Service -Name "upnphost" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "upnphost" -Force -ErrorAction Continue
+
+    # Net TCP Port Sharing Service (NetTcpPortSharing): Disabled, Stop
+    Set-Service -Name "NetTcpPortSharing" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "NetTcpPortSharing" -Force -ErrorAction Continue
+
+    # Windows Media Player Network Sharing Service (WMPNetworkSVC): Disabled, Stop
+    Set-Service -Name "WMPNetworkSVC" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "WMPNetworkSVC" -Force -ErrorAction Continue
+
+    # Disable Telnet
+    Disable-WindowsOptionalFeature -Online -FeatureName TelnetClient -NoRestart
+
+    # Disable PowerShell Remoting
+    Disable-PSRemoting -Force
 
     Write-Host "Successfully Configured Services!" -ForegroundColor Green
 }
 
 function Disable-RDP {
+    ## Services ##
+
+    # Remote Desktop Configuration (SessionEnv): Disabled, Stop
+    Set-Service -Name "SessionEnv" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "SessionEnv" -Force -ErrorAction Continue
+
+    # Remote Desktop Services (TermService): Disabled, Stop
+    Set-Service -Name "TermService" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "TermService" -Force  -ErrorAction Continue
+
+    # Remote Desktop Services UserMode Port Redirector (UmRdpService): Disabled, Stop
+    Set-Service -Name "UmRdpService" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "UmRdpService" -Force -ErrorAction Continue
+    
+    # Windows Remote Management (WinRM): Disabled, Stop
+    Set-Service -Name "WinRM" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "WinRM" -Force -ErrorAction Continue
+
+    ## Registry ##
+
+    # Remote Desktop
+    Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -value 1
+
+    # Remote Assistance
+    Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Remote Assistance' -Name "fAllowToGetHelp" -Value 0
+
+
+    ## Firewall ##
+    Disable-NetFirewallRule -DisplayGroup "Remote Desktop"
+
+    
+    ## Group Policy ##
+    $MachineDir = "$env:windir\System32\GroupPolicy\Machine\Registry.pol"
+
+    # Allow inbound RDP exceptions: disable
+    $RegPath = "SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Services\RemoteDesktop"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "Enabled" -Data 0 -Type "DWord"
+    $RegPath = "SOFTWARE\Policies\Microsoft\WindowsFirewall\StandardProfile\Services\RemoteDesktop"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "Enabled" -Data 0 -Type "DWord"
+
+    # Allow inbound Remote administration exceptions: disable
+    $RegPath = "SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\RemoteAdminSettings"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "Enabled" -Data 0 -Type "DWord"
+    $RegPath = "SOFTWARE\Policies\Microsoft\WindowsFirewall\StandardProfile\RemoteAdminSettings"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "Enabled" -Data 0 -Type "DWord"
+
+    # Set rules for remote control of Remote Desktop Services user sessions: No remote control allowed
+    $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "Shadow" -Data 0 -Type "DWord"
+
+    # Allow users to connect remotely by using Remote Desktop Services: disable
+    $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fDenyTSConnections" -Data 1 -Type "DWord"
+
+    # Solicited Remote Assistance: disable
+    $RegPath = "Software\policies\Microsoft\Windows NT\Terminal Services"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fAllowToGetHelp" -Data 0 -Type "DWord"
+
+    # Offer Remote Assistance: disable
+    $RegPath = "Software\policies\Microsoft\Windows NT\Terminal Services"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fAllowUnsolicited" -Data 0 -Type "DWord"
+
+    # Allow remote shell access: disable
+    $RegPath = "Software\Policies\Microsoft\Windows\WinRM\Service\WinRS"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowRemoteShellAccess" -Data 0 -Type "DWord"
+
+
+
     Write-Host "Successfully Disabled RDP!" -ForegroundColor Green
 }
 
 function Enable-RDP {
-    Set-Service -Name "FTPSVC" -StartupType "Disabled" -ErrorAction Continue
-    Stop-Service -Name "FTPSVC" -Force -ErrorAction Continue
+    ## Services ##
+    
+    # Remote Desktop Configuration (SessionEnv): Automatic, Start
+    Set-Service -Name "SessionEnv" -StartupType Automatic -ErrorAction Continue
+    Start-Service -Name "SessionEnv" -ErrorAction Continue
 
+    # Remote Desktop Services (TermService): Automatic, Start
+    Set-Service -Name "TermService" -StartupType Automatic -ErrorAction Continue
+    Start-Service -Name "TermService" -ErrorAction Continue
+
+    # Remote Desktop Services UserMode Port Redirector (UmRdpService): Automatic, Start
+    Set-Service -Name "UmRdpService" -StartupType Automatic -ErrorAction Continue
+    Start-Service -Name "UmRdpService" -ErrorAction Continue
+
+    # Windows Remote Management (WinRM): Automatic, Start
+    Set-Service -Name "WinRM" -StartupType Automatic -ErrorAction Continue
+    Start-Service -Name "WinRM" -ErrorAction Continue
+
+
+    ## Registry ##
+    
+    # Remote Desktop
+    Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -value 0
+
+    # Remote Assistance
+    Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Remote Assistance' -Name "fAllowToGetHelp" -Value 1
+    
+
+
+    
+    ## Firewall ##
+    Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+
+
+    ## Group Policy ##
+    $MachineDir = "$env:windir\System32\GroupPolicy\Machine\Registry.pol"
+
+    # Allow inbound RDP exceptions: enable
+    $RegPath = "SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\Services\RemoteDesktop"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "Enabled" -Data 1 -Type "DWord"
+    $RegPath = "SOFTWARE\Policies\Microsoft\WindowsFirewall\StandardProfile\Services\RemoteDesktop"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "Enabled" -Data 1 -Type "DWord"
+
+    # Allow inbound Remote administration exceptions: enable
+    $RegPath = "SOFTWARE\Policies\Microsoft\WindowsFirewall\DomainProfile\RemoteAdminSettings"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "Enabled" -Data 1 -Type "DWord"
+    $RegPath = "SOFTWARE\Policies\Microsoft\WindowsFirewall\StandardProfile\RemoteAdminSettings"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "Enabled" -Data 1 -Type "DWord"
+
+    # Allow users to connect remotely by using Remote Desktop Services: enable
+    $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fDenyTSConnections" -Data 0 -Type "DWord"
+
+    # Allow remote shell access: enable
+    $RegPath = "Software\Policies\Microsoft\Windows\WinRM\Service\WinRS"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowRemoteShellAccess" -Data 1 -Type "DWord"
 
 
     Write-Host "Successfully Enabled RDP!" -ForegroundColor Green
 }
 
 function Disable-FTP {
+    # FTP, File Transfer Protocol Service (FTPSVC): Disabled, Stop
+    Set-Service -Name "FTPSVC" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "FTPSVC" -Force -ErrorAction Continue
+
     Write-Host "Successfully Disabled FTP!" -ForegroundColor Green
 }
 
 function Enable-FTP {
+    # FTP, File Transfer Protocol Service (FTPSVC): Automatic, Start
+    Set-Service -Name "FTPSVC" -StartupType Automatic -ErrorAction Continue
+    Start-Service -Name "FTPSVC" -ErrorAction Continue
+
     Write-Host "Successfully Enabled FTP!" -ForegroundColor Green
 }
 function Search-Files {
-    # Prohibited file extensions
-    $prohibitedExtensions = @(
-    '*.midi', '*.mid', '*.mp3', '*.mp2', '*.mpa', '*.abs', '*.mpega', '*.au', '*.snd', '*.aiff', '*.aif', '*.sid', '*.flac', '*.cda', '*.wav', '*.aac', '*.ogg', '*.m4a', '*.wma', # Audio
-    '*.mpeg', '*.mpe', '*.dl', '*.movie', '*.movi', '*.mv', '*.iff', '*.anim5', '*.anim3', '*.anim7', '*.avi', '*.vfw', '*.avx', '*.fli', '*.flc', '*.mov', '*.qt', '*.spl', '*.swf', '*.dcr', '*.dxr', '*.rpm', '*.rm', '*.smi', '*.ra', '*.ram', '*.rv', '*.wmv', '*.asf', '*.asx', '*.wax', '*.wmx', '*.3gp', '*.mkv', '*.ts', '*.webm', '*.vob', '*.m2ts', '*.flv', '*.m4v', # Video
-    '*.tiff', '*.tif', '*.rs', '*.im1', '*.gif', '*.jpeg', '*.jpg', '*.jpe', '*.png', '*.rgb', '*.xwd', '*.xpm', '*.ppm', '*.pbm', '*.pgm', '*.pcx', '*.ico', '*.svg', '*.svgz', '*.bmp', '*.raw', '*.heic', '*.psd', # Image
-    '*.jar', '*.py', '*.exe', '*.bat', '*.ps1', '*.msi', '*.com', '*.cmd', '*.sh', '*.vbs', '*.reg', '*.hta', '*.js', '*.cpl', '*.scr', # Executables
-    '*.zip', '*.rar', '*.7z', '*.tar', '*.gz', '*.bz2', '*.iso', '*.img', # Archives/Containers
-    '*.txt', '*.csv', '*.json', '*.xml', '*.yaml', '*.yml', '*.log' # Text
-    )
     
     # Current user's folder
     $currentUserFolder = "$env:SystemDrive\Users\$env:USERNAME"
@@ -453,15 +527,13 @@ function Search-Files {
         $_.FullName -ne $currentUserFolder
     } | ForEach-Object {
             $userDir = $_.FullName
-            # Scan for prohibited files in the user's root folder
+            # Scan for files in each user's folder
             Get-ChildItem -Path $userDir -File -ErrorAction Continue | ForEach-Object {
-                if ($prohibitedExtensions -contains "*$($_.Extension)") {
-                    Write-Host "---------------------------------------------------------------------------------------" -ForegroundColor White
-                    Write-Host "File Name: $($_.Name)" -ForegroundColor Magenta
-                    Write-Host "Full Path: $($_.FullName)" -ForegroundColor Magenta
-                    Write-Host "---------------------------------------------------------------------------------------" -ForegroundColor White
-                    $filesFound = $true
-                }
+                Write-Host "---------------------------------------------------------------------------------------" -ForegroundColor White
+                Write-Host "File Name: $($_.Name)" -ForegroundColor Magenta
+                Write-Host "Full Path: $($_.FullName)" -ForegroundColor Magenta
+                Write-Host "---------------------------------------------------------------------------------------" -ForegroundColor White
+                $filesFound = $true
             }
 
             # Exclude folders like AppData and those starting with "."
@@ -470,15 +542,13 @@ function Search-Files {
             } | ForEach-Object {
                     $folder = $_.FullName
 
-                    # Scan for prohibited extensions
-                    foreach ($ext in $prohibitedExtensions) {
-                        Get-ChildItem -Path $folder -Recurse -Include $ext -ErrorAction Continue | ForEach-Object {
-                            Write-Host "---------------------------------------------------------------------------------------" -ForegroundColor White
-                            Write-Host "File Name: $($_.Name)" -ForegroundColor Magenta
-                            Write-Host "Full Path: $($_.FullName)" -ForegroundColor Magenta
-                            Write-Host "---------------------------------------------------------------------------------------" -ForegroundColor White
-                            $filesFound = $true
-                        }
+                    # Scan for files in "Users" folder
+                    Get-ChildItem -Path $folder -Recurse -File -ErrorAction Continue | ForEach-Object {
+                        Write-Host "---------------------------------------------------------------------------------------" -ForegroundColor White
+                        Write-Host "File Name: $($_.Name)" -ForegroundColor Magenta
+                        Write-Host "Full Path: $($_.FullName)" -ForegroundColor Magenta
+                        Write-Host "---------------------------------------------------------------------------------------" -ForegroundColor White
+                        $filesFound = $true
                     }
             }
         }
@@ -505,7 +575,7 @@ function Show-Network {
         }
     }
 
-    $disablesharing = $(Write-Host "Disable file/folder sharing? (y/n): " -ForegroundColor Blue -NoNewLine; Read-Host)
+    $disablesharing = $(Write-Host "Disable file/folder sharing? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
     if ($disablesharing -eq 'y') { 
         Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
         Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
@@ -576,7 +646,7 @@ if ($FTP -eq 'e') {
 
 $services = $(Write-Host "Configure Services? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
 if ($services -eq 'y') { 
-    Services
+    Set-Services
 } else {
     Write-Host "Not Configuring services" -ForegroundColor Yellow
 }   
