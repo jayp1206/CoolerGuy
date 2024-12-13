@@ -352,6 +352,10 @@ function Set-Services {
     Set-Service -Name "WMPNetworkSVC" -StartupType Disabled -ErrorAction Continue
     Stop-Service -Name "WMPNetworkSVC" -Force -ErrorAction Continue
 
+    # Cryptographic Services (CryptSvc): Automatic, Start
+    Set-Service -Name "CryptSvc" -StartupType Automatic -ErrorAction Continue
+    Start-Service -Name "CryptSvc" -ErrorAction Continue
+
     # Disable Telnet
     Disable-WindowsOptionalFeature -Online -FeatureName TelnetClient -NoRestart
 
