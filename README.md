@@ -284,6 +284,8 @@
 
 - Windows Remote Shell --> Allow Remote Shell Access: Enabled ✔
 
+- Allow Remote RPC: Enabled ✔
+
 ### Settings
 - Remote Desktop --> Enable Remote Desktop: Toggle ON (Registry) ✔
 - System Properties --> Allow Remote Assistance connections to this computer: CHECK (Registry) ✔
@@ -309,6 +311,8 @@
 - Windows Components --> Remote Desktop Services --> Remote Desktop Session Host --> Connections --> Set rules for remote control of Remote Desktop Services user sessions: No remote control allowed ✔
 
 - Windows Remote Shell --> Allow Remote Shell Access: Disabled ✔
+
+- Allow Remote RPC: Disabled ✔
 
 ### Group Policy --> System --> Remote Assistance
 - Configure Offer Remote Assistance: Disabled ✔
