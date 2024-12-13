@@ -461,10 +461,14 @@ function Enable-RDP {
     ## Registry ##
     
     # Remote Desktop
-    Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -value 0
+    $path = 'HKLM:\System\CurrentControlSet\Control\Terminal Server'
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "fDenyTSConnections" -value 0
 
     # Remote Assistance
-    Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Remote Assistance' -Name "fAllowToGetHelp" -Value 1
+    $path = 'HKLM:\System\CurrentControlSet\Control\Remote Assistance'
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "fAllowToGetHelp" -Value 1
     
 
 
