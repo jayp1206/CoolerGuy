@@ -386,7 +386,7 @@ function Disable-RDP {
     # Remote Desktop
     $path = 'HKLM:\System\CurrentControlSet\Control\Terminal Server'
     Set-ItemProperty -Path $path -Name "fDenyTSConnections" -Value 1
-    Set-Item -Path $path -Name "AllowRemoteRPC" -Value 0
+    Set-ItemProperty -Path $path -Name "AllowRemoteRPC" -Value 0
 
     # Remote Assistance
     $path = 'HKLM:\System\CurrentControlSet\Control\Remote Assistance'
@@ -462,7 +462,7 @@ function Enable-RDP {
     # Remote Desktop
     $path = 'HKLM:\System\CurrentControlSet\Control\Terminal Server'
     Set-ItemProperty -Path $path -Name "fDenyTSConnections" -Value 0
-    Set-Item -Path $path -Name "AllowRemoteRPC" -Value 1
+    Set-ItemProperty -Path $path -Name "AllowRemoteRPC" -Value 1
 
     # Remote Assistance
     $path = 'HKLM:\System\CurrentControlSet\Control\Remote Assistance'
