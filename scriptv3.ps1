@@ -385,7 +385,8 @@ function Disable-RDP {
 
     # Remote Desktop
     $path = 'HKLM:\System\CurrentControlSet\Control\Terminal Server'
-    Set-ItemProperty -Path $path -Name "fDenyTSConnections" -value 1
+    Set-ItemProperty -Path $path -Name "fDenyTSConnections" -Value 1
+    Set-Item -Path $path -Name "AllowRemoteRPC" -Value 0
 
     # Remote Assistance
     $path = 'HKLM:\System\CurrentControlSet\Control\Remote Assistance'
@@ -432,11 +433,6 @@ function Disable-RDP {
     $RegPath = "Software\Policies\Microsoft\Windows\WinRM\Service\WinRS"
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowRemoteShellAccess" -Data 0 -Type "DWord"
 
-    # Allow Remote RPC: disable
-    $RegPath = "SYSTEM\CurrentControlSet\Control\Terminal Server"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowRemoteRPC" -Data 0 -Type "DWord"
-
-
 
     Write-Host "Successfully Disabled RDP!" -ForegroundColor Green
 }
@@ -465,7 +461,8 @@ function Enable-RDP {
     
     # Remote Desktop
     $path = 'HKLM:\System\CurrentControlSet\Control\Terminal Server'
-    Set-ItemProperty -Path $path -Name "fDenyTSConnections" -value 0
+    Set-ItemProperty -Path $path -Name "fDenyTSConnections" -Value 0
+    Set-Item -Path $path -Name "AllowRemoteRPC" -Value 1
 
     # Remote Assistance
     $path = 'HKLM:\System\CurrentControlSet\Control\Remote Assistance'
@@ -501,12 +498,7 @@ function Enable-RDP {
     # Allow remote shell access: enable
     $RegPath = "Software\Policies\Microsoft\Windows\WinRM\Service\WinRS"
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowRemoteShellAccess" -Data 1 -Type "DWord"
-
-    # Allow Remote RPC: enable
-    $RegPath = "SYSTEM\CurrentControlSet\Control\Terminal Server"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowRemoteRPC" -Data 1 -Type "DWord"
     
-
 
     Write-Host "Successfully Enabled RDP!" -ForegroundColor Green
 }
