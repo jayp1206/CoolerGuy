@@ -267,13 +267,9 @@
 - UPnP Device Host (upnphost): Disabled, Stop ✔
 - Net TCP Port Sharing Service (NetTcpPortSharing): Disabled, Stop ✔
 - Windows Media Player Network Sharing Service (WMPNetworkSVC): Disabled, Stop ✔
-- Cryptographic Services (CryptSvc): Automatic, Start
-
-
+- Cryptographic Services (CryptSvc): Automatic, Start ✔
 
 - Disable Telnet Windows feature ✔
-- Disable remote Powershell ✔
-
 
 # (Enable or Disable RDP/Remote Assistance?)
 

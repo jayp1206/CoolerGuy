@@ -359,9 +359,6 @@ function Set-Services {
     # Disable Telnet
     Disable-WindowsOptionalFeature -Online -FeatureName TelnetClient -NoRestart
 
-    # Disable PowerShell Remoting
-    Disable-PSRemoting -Force
-
     Write-Host "Successfully Configured Services!" -ForegroundColor Green
 }
 
