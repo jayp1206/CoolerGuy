@@ -642,7 +642,7 @@ if ($RDP -eq 'e') {
 $FTP = $(Write-Host "Enable or Disable FTP? (e/d): " -ForegroundColor Cyan -NoNewLine; Read-Host)
 if ($FTP -eq 'e') { 
     Enable-FTP
-} elseif ($RDP -eq 'd') {
+} elseif ($FTP -eq 'd') {
     Disable-FTP
 } else {
     Write-Host "Not Configuring FTP" -ForegroundColor Yellow
