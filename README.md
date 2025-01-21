@@ -215,10 +215,42 @@
 - Configuration of wireless settings using Window Connect Now: Disabled ✔
 - Prohibit access of the Windows Connect Now wizards: Enabled ✔
 
+##### Windows Connection Manager ✔
+- Minimize the number of simultaneous connections to the internet or a Windows Domain: Prevent Wi-Fi when on Ethernet ✔
+
+##### WLAN Service --> WLAN Settings ✔
+- Allow Windows to automatically connect to suggested open hotspots, to networks shared by contacts, and to hotspots offering paid services: Disabled ✔
+
 #### System --> Remote Assistance ✔
 - Allow only Windows Vista or later connections: Enabled ✔
 - Turn on session logging: Enabled ✔
 
+
+#### Printers
+- Allow Print Spooler to accept client connections: Disabled
+- Configure Redirection Guard: Enabled
+- Protocol to use for outgoing RPC connections: Enabled (RPC over TCP)
+- Use authentication for outgoing RPC connections: Enabled
+- Protocols to allow for incoming RPC connections: Enabled (RPC over TCP)
+- Authentication Protocol to use for incoming RPC connections: Enabled (Negotiate)
+- Configure RPC over TCP port: Enabled (0)
+- Limits printer driver installation to Administrators: Enabled
+- Manage processing of Queue-specific files: Enabled (Limit Queue-specific files to Color profiles)
+- When installing drivers for a new connection: Enabled (Show warning and elevation prompt)
+- When updating drivers for an existing connection: Enabled (Show warning and elevation prompt)
+
+#### Start Menu and Taskbar --> Notifications
+- Turn of notifications network usage: Enabled
+- Remove Personalized Website Reccomendations from the Reccomended section in the Start Menu: Enabled
+
+#### System
+
+##### Audit Process Creation
+- Include command line in process creation events: Enabled
+
+##### Credentials Delegation
+- Encryption Oracle Remediation: Enabled (Force Updated Clients)
+- Remote host allows delegation of non-exportable credentials: Enabled
 
 ### Windows Components
 

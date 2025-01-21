@@ -335,6 +335,14 @@ function Group-Policies {
     $RegPath = "Software\Policies\Microsoft\Windows\WCN\UI"
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableWcnUi" -Data 1 -Type "DWord"
 
+    # Minimize number of internet connections: prevent wifi when on ethernet
+    $RegPath = "Software\Policies\Microsoft\Windows\WcmSvc\GroupPolicy"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fMinimizeConnections" -Data 3 -Type "DWord"
+
+    # Auto connect to hotspots: disable
+    $RegPath = "Software\Microsoft\wcmsvc\wifinetworkmanager\config"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AutoConnectAllowedOEM" -Data 0 -Type "DWord"
+
     #------------------------------------------- # WIN 11 ONLY # -------------------------------------------#
 
     ## Enhanced Phishing Protection ##
