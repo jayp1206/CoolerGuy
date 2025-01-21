@@ -1,3 +1,8 @@
+# Install PolicyFileEditor
+Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
+Install-Module -Name PolicyFileEditor -RequiredVersion 3.0.0 -Scope CurrentUser
+
 function Set-SecurityPolicies {
     # Copy current secpol.cfg file
     secedit /export /cfg original_secpol.cfg
@@ -24,6 +29,16 @@ function Enable-Firewall {
     Set-NetFirewallProfile -Name Private -DefaultOutboundAction Allow
     Set-NetFirewallProfile -Name Domain -DefaultOutboundAction Allow
 
+    # Set Logging Size Limit
+    Set-NetFirewallProfile -Name Private -LogMaxSizeKilobytes 20000
+    Set-NetFirewallProfile -Name Public -LogMaxSizeKilobytes 20000
+
+    # Log Dropped and Successful Packets
+    Set-NetFirewallProfile -Name Private -LogAllowed True -LogBlocked True
+    Set-NetFirewallProfile -Name Public -LogAllowed True -LogBlocked True
+
+
+    # Block file and printer sharing
     Disable-NetFirewallRule -DisplayGroup "File and Printer Sharing"
 
     Write-Host "Windows Firewall profiles configured successfully!" -ForegroundColor Green
@@ -40,12 +55,7 @@ function Enable-Audits {
 }
 
 function Group-Policies {
-    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
-    Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
-    Install-Module -Name PolicyFileEditor -RequiredVersion 3.0.0 -Scope CurrentUser
-
     $MachineDir = "$env:windir\System32\GroupPolicy\Machine\Registry.pol"
-
 
     ## Windows Defender Firewall ##
 
@@ -267,6 +277,93 @@ function Group-Policies {
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "PreventOverride" -Data 1 -Type "DWord"
 
 
+    ## Control Panel ##
+    
+    # Allow online tips: disable
+    $RegPath = "Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowOnlineTips" -Data 0 -Type "DWord"
+
+    # Allow speech recognition: disable
+    $RegPath = "Software\Policies\Microsoft\InputPersonalization"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowInputPersonalization" -Data 0 -Type "DWord"
+
+    # Prevent lock screen camera: enable
+    $RegPath = "Software\Policies\Microsoft\Windows\Personalization"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NoLockScreenCamera" -Data 1 -Type "DWord"
+
+    # Prevent lock screen slideshow: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NoLockScreenSlideshow" -Data 1 -Type "DWord"
+
+
+    ## Network ##
+
+    # Enable font providers: disable
+    $RegPath = "Software\Policies\Microsoft\Windows\System"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableFontProviders" -Data 0 -Type "DWord"
+
+    # Lanman: enable insecure guest logons: disable
+    $RegPath = "Software\Policies\Microsoft\Windows\LanmanWorkstation"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowInsecureGuestAuth" -Data 0 -Type "DWord"
+
+    # Turn on mapper i/o driver: disable
+    $RegPath = "Software\Policies\Microsoft\Windows\LLTD"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableLLTDIO" -Data 0 -Type "DWord"
+
+    # Turn on responder driver: disable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableRspndr" -Data 0 -Type "DWord"
+
+    # Turn off Microsoft p2p: enable
+    $RegPath = "Software\policies\Microsoft\Peernet"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "Disabled" -Data 1 -Type "DWord"
+
+    # Prohibit network bridge: enable
+    $RegPath = "Software\Policies\Microsoft\Windows\Network Connections"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NC_AllowNetBridge_NLA" -Data 0 -Type "DWord"
+    
+    # Prohibit internet connection sharing: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NC_ShowSharedAccessUI" -Data 0 -Type "DWord"
+
+    # Config wireless settings with connect now: disable
+    $RegPath = "Software\Policies\Microsoft\Windows\WCN\Registrars"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableRegistrars" -Data 0 -Type "DWord"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableUPnPRegistrar" -Data 0 -Type "DWord"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableInBand802DOT11Registrar" -Data 0 -Type "DWord"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableFlashConfigRegistrar" -Data 0 -Type "DWord"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableWPDRegistrar" -Data 0 -Type "DWord"
+
+    # Prohibit access of connect now wizards: enable
+    $RegPath = "Software\Policies\Microsoft\Windows\WCN\UI"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableWcnUi" -Data 1 -Type "DWord"
+
+    #------------------------------------------- # WIN 11 ONLY # -------------------------------------------#
+
+    ## Enhanced Phishing Protection ##
+
+    # Automatic data collection: enable
+    $RegPath = "\SOFTWARE\Policies\Microsoft\Windows\WTDS"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "CaptureThreatWindow" -Data 1 -Type "DWord"
+
+    # Notify malicious: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NotifyMalicious" -Data 1 -Type "DWord"
+
+    # Notify password reuse: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NotifyPasswordReuse" -Data 1 -Type "DWord"
+
+    # Notify unsafe app: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NotifyUnsafeApp" -Data 1 -Type "DWord"
+
+    # Service enabled: enable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "ServiceEnabled" -Data 1 -Type "DWord"
+
+
+    ## Network ##
+    
+    # Configure dns over http: enable doh
+    $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DoHPolicy" -Data 2 -Type "DWord"
+
+
+
     gpupdate.exe /force
     Write-Host "Successfully Configured Group Policy!" -ForegroundColor Green
 }
@@ -300,9 +397,9 @@ function Set-Services {
     Set-Service -Name "mpssvc" -StartupType Automatic -ErrorAction Continue
     Start-Service -Name "mpssvc" -ErrorAction Continue
 
-    # Windows Error Reporting Service (WerSvc): Automatic, Start
-    Set-Service -Name "WerSvc" -StartupType Automatic -ErrorAction Continue
-    Start-Service -Name "WerSvc" -ErrorAction Continue
+    # Windows Error Reporting Service (WerSvc): Disabled, Stop
+    Set-Service -Name "WerSvc" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "WerSvc" -ErrorAction Continue
 
     # Windows Event Log (EventLog): Automatic, Start
     Set-Service -Name "EventLog" -StartupType Automatic -ErrorAction Continue
@@ -355,6 +452,139 @@ function Set-Services {
     # Cryptographic Services (CryptSvc): Automatic, Start
     Set-Service -Name "CryptSvc" -StartupType Automatic -ErrorAction Continue
     Start-Service -Name "CryptSvc" -ErrorAction Continue
+
+    # Bluetooth Audio Gateway Service (BTAGService): Disabled, Stop
+    Set-Service -Name "BTAGService" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "BTAGService" -Force -ErrorAction Continue
+
+    # Bluetooth Support Service (bthserv): Disabled, Stop
+    Set-Service -Name "bthserv" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "bthserv" -Force -ErrorAction Continue
+
+    # Computer Browser (Browser): Disabled, Stop
+    Set-Service -Name "Browser" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "Browser" -Force -ErrorAction Continue
+
+    # Downloaded Maps Manager (MapsBroker): Disabled, Stop
+    Set-Service -Name "MapsBroker" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "MapsBroker" -Force -ErrorAction Continue
+
+    # Geolocation Service (lfsvc): Disabled, Stop
+    Set-Service -Name "lfsvc" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "lfsvc" -Force -ErrorAction Continue
+
+    # IIS Admin Service (IISADMIN): Disabled, Stop
+    Set-Service -Name "IISADMIN" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "IISADMIN" -Force -ErrorAction Continue
+
+    # Infrared monitor service (irmon): Disabled, Stop
+    Set-Service -Name "irmon" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "irmon" -Force -ErrorAction Continue
+
+    # Link-Layer Topology Discovery Mapper (lltdsvc): Disabled, Stop
+    Set-Service -Name "lltdsvc" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "lltdsvc" -Force -ErrorAction Continue
+
+    # LxssManager (LxssManager): Disabled, Stop
+    Set-Service -Name "LxssManager" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "LxssManager" -Force -ErrorAction Continue
+
+    # Microsoft iSCSI Initiator Service (MSiSCSI): Disabled, Stop
+    Set-Service -Name "MSiSCSI" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "MSiSCSI" -Force -ErrorAction Continue
+
+    # OpenSSH SSH Server (sshd): Disabled, Stop
+    Set-Service -Name "sshd" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "sshd" -Force -ErrorAction Continue
+
+    # Peer Name Resolution Protocol (PNRPsvc): Disabled, Stop
+    Set-Service -Name "PNRPsvc" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "PNRPsvc" -Force -ErrorAction Continue
+
+    # Peer Networking Grouping (p2psvc): Disabled, Stop
+    Set-Service -Name "p2psvc" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "p2psvc" -Force -ErrorAction Continue
+
+    # Peer Networking Identity Manager (p2pimsvc): Disabled, Stop
+    Set-Service -Name "p2pimsvc" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "p2pimsvc" -Force -ErrorAction Continue
+
+    # PNRP Machine Name Publication Service (PNRPAutoReg): Disabled, Stop
+    Set-Service -Name "PNRPAutoReg" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "PNRPAutoReg" -Force -ErrorAction Continue
+
+    # Problem Reports and Solutions Control Panel Support (wercplsupport): Disabled, Stop
+    Set-Service -Name "wercplsupport" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "wercplsupport" -Force -ErrorAction Continue
+
+    # Remote Access Auto Connection Manager (RasAuto): Disabled, Stop
+    Set-Service -Name "RasAuto" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "RasAuto" -Force -ErrorAction Continue
+
+    # Remote Procedure Call Locator (RpcLocator): Disabled, Stop
+    Set-Service -Name "RpcLocator" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "RpcLocator" -Force -ErrorAction Continue
+
+    # Routing and Remote Access (RemoteAccess): Disabled, Stop
+    Set-Service -Name "RemoteAccess" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "RemoteAccess" -Force -ErrorAction Continue
+
+    # Server (LanmanServer): Disabled, Stop
+    Set-Service -Name "LanmanServer" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "LanmanServer" -Force -ErrorAction Continue
+
+    # Simple TCP/IP Services (simptcp): Disabled, Stop
+    Set-Service -Name "simptcp" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "simptcp" -Force -ErrorAction Continue
+
+    # SNMP Service (SNMP): Disabled, Stop
+    Set-Service -Name "SNMP" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "SNMP" -Force -ErrorAction Continue
+
+    # Special Administration Console Helper (sacsvr): Disabled, Stop:
+    Set-Service -Name "sacsvr" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "sacsvr" -Force -ErrorAction Continue
+
+    # SSDP Discovery (SSDPSRV): Disabled, Stop
+    Set-Service -Name "SSDPSRV" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "SSDPSRV" -Force -ErrorAction Continue
+
+    # Web Management Service (WMSvc): Disabled, Stop
+    Set-Service -Name "WMSvc" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "WMSvc" -Force -ErrorAction Continue
+
+    # Windows Event Collector (Wecsvc): Disabled, Stop
+    Set-Service -Name "Wecsvc" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "Wecsvc" -Force -ErrorAction Continue
+
+    # Windows Mobile Hotspot Service (icssvc): Disabled, Stop
+    Set-Service -Name "icssvc" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "icssvc" -Force -ErrorAction Continue
+
+    # Windows Push Notifications System Service (WpnService): Disabled, Stop
+    Set-Service -Name "WpnService" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "WpnService" -Force -ErrorAction Continue
+
+    # Windows PushToInstall Service (PushToInstall): Disabled, Stop
+    Set-Service -Name "PushToInstall" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "PushToInstall" -Force -ErrorAction Continue
+
+    # Xbox Accessory Management Service (XboxGipSvc): Disabled, Stop
+    Set-Service -Name "XboxGipSvc" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "XboxGipSvc" -Force -ErrorAction Continue
+
+    # Xbox Live Auth Manager (XblAuthManager): Disabled, Stop
+    Set-Service -Name "XblAuthManager" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "XblAuthManager" -Force -ErrorAction Continue
+
+    # Xbox Live Game Save (XblGameSave): Disabled, Stop
+    Set-Service -Name "XblGameSave" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "XblGameSave" -Force -ErrorAction Continue
+
+    # Xbox Live Networking Service (XboxNetApiSvc): Disabled, Stop
+    Set-Service -Name "XboxNetApiSvc" -StartupType Disabled -ErrorAction Continue
+    Stop-Service -Name "XboxNetApiSvc" -Force -ErrorAction Continue
+
 
     # Disable Telnet
     Disable-WindowsOptionalFeature -Online -FeatureName TelnetClient -NoRestart
@@ -585,10 +815,6 @@ function Show-Network {
 
     $disablesharing = $(Write-Host "Disable file/folder sharing? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
     if ($disablesharing -eq 'y') { 
-        Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
-        Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
-        Install-Module -Name PolicyFileEditor -RequiredVersion 3.0.0 -Scope CurrentUser
-
         $UserDir = "$env:windir\system32\GroupPolicy\User\registry.pol"
 
         # Allow shared folders to be published: disable

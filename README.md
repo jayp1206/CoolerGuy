@@ -1,17 +1,18 @@
 # MUST RUN "Set-ExecutionPolicy unrestricted"
+### * = Windows 11 Only
 
 # Local Security Policy
 
 ## (Configure Security Policies?)
 
 ### Password Policy ✔
-- Enforce password history: 5 remembered ✔
+- Enforce password history: 25 remembered ✔
 - Max password age: 30 days ✔
-- Min password age: 10 days ✔
-- Minimum password length: 10 characters ✔
+- Min password age: 5 days ✔
+- Minimum password length: 14 characters ✔
 - Minimum password length audit: 10 characters ✔
 - Password must meet complexity requirements: Enabled ✔
-- Relax minimum password length limits: Disabled ✔
+- Relax minimum password length limits: Enabled ✔
 - Store passwords using reversible encryption: Disabled ✔
 
 ### Account Lockout Policy ✔
@@ -34,7 +35,8 @@
 #### Audit ✔
 - Audit the access of global system objects: Enabled ✔
 - Audit the use of Backup and Restore privileges: Enabled ✔
-- Shut down system immediately if unable to log security audits: Enabled ✔
+- Shut down system immediately if unable to log security audits: Disabled ✔
+- Force audit policy subcategory settings (Windows Vista or later) to override audit policy category settings: Enabled
 
 #### Devices ✔
 - Prevent users from installing printer drivers: Enabled ✔
@@ -55,7 +57,8 @@
 - Don't display username at sign-in: Enabled ✔
 - Machine account lockout threshold: 5 ✔
 - Machine inactivity limit: 600 sec ✔
-- Prompt user to change password before expiration: 5 days ✔
+- Prompt user to change password before expiration: 7 days ✔
+- Smart card removal behavior: Lock Workstation
 
 #### Microsoft Network Client ✔
 - Digitally sign communications (always): Enabled ✔
@@ -66,19 +69,32 @@
 - Digitally sign communications (always): Enabled ✔
 - Digitally sign communications (if client agrees): Enabled ✔
 - Disconnect clients when logon hours expire: Enabled ✔
+- Amount of idle time required before suspending session: 10 minutes
+- Server SPN target name validation level: Accept if provided by client
 
 #### Network Access ✔
 - Allow anonymous SID/Name translation: Disabled ✔
 - Do not allow anonymous enumeration of SAM accounts: Enabled ✔
-- Do not allow anonymous enumeration of SAM accounts and shared: Enabled ✔
+- Do not allow anonymous enumeration of SAM accounts and shares: Enabled ✔
 - Do not allow storage of passwords and credentials for network authentication: Enabled ✔
 - Let Everyone permissions apply to anonymous users: Disabled ✔
-- Shared that can be accessed anonymously: Not Defined (remove all) ✔
+- Shares that can be accessed anonymously: Not Defined (remove all) ✔
+- Restrict anonymous access to Named Pipes and Shares: Enabled
+- Sharing and security model for local accounts: Classic - local users authenticate as themselves
 
 #### Network Security ✔
 - Force logoff when logon hours expire: Enable ✔
 - Audit incoming NTLM Traffic: Enable auditing for all accounts ✔
 - Audit NTL authentication in this domain: Enable all ✔
+- Allow Local System to use computer identity for NTLM: Enabled
+- Allow LocalSystem NULL session fallback: Disabled
+- Allow PKU2U authentication requests to this computer to use online identities: Disabled
+- Do not store LAN Manager hash value on next password change: Enabled
+- LAN Manager authentication level: Send NTLMv2 reponse only. Refuse LM & NTLM
+- LDAP client signing requirements: Negotiate signing
+- Minimum session security for NTLM SSP based (including secure RPC) clients: Require NTLMv2 session security, Require 128-bit encryption
+- Minimum session security for NTLM SSP based (including secure RPC) servers: Require NTLMv2 session security, Require 128-bit encryption
+- Outgoing NTLM traffic to remote servers: Audit all
 
 #### Recovery Console ✔
 - Allow automatic administrative logon: Disabled ✔
@@ -87,20 +103,23 @@
 #### System Cryptography ✔
 - Force strong key protection for user keys stored on the computer: User must enter a password each time they use a key ✔
 - Use FIPS compliant algorithms for encryption, hashing, and signing: Enabled ✔
+- 
 
 #### System Objects ✔
 - Require case insensitivity for non-Windows subsystems: Enabled ✔
+- Strengthen default permissions of internal system objects: Enabled
 
 ### User Account Control (Configure User Account Control?) ✔
 - Admin Approval Mode for the Built-in Administrator account: Enabled ✔
 - Allow UIAccess applications to prompt for elevation without using the secure desktop: Disabled ✔
 - Behavior of the elevation prompt for administrators in Admin Approval Mode: Prompt for consent on the secure desktop ✔
-- Behavior of the elevation prompt for standard users: Prompt for credentials on the secure desktop ✔
 - Detect application installations and prompt for elevation: Enabled ✔
 - Only elevate executables that are signed and validated: Enabled ✔
 - Only elevate UIAccess applications that are installed in secure locations: Enabled ✔
 - Run all administrators in Admin Approval Mode: Enabled ✔
 - Switch to the secure desktop when prompting for elevation: Enabled ✔
+- Behavior of the elevation prompt for standard users: Automatically deny elevation requests
+- Virtualize file and registry write failures to per-user locations: Enabled
 
 ## (Configure Windows Defender Firewall?)
 
@@ -115,11 +134,17 @@
 - Firewall state: On ✔
 - Inbound connections: Block ✔
 - Outbound connections: Allow ✔
+- Logging -->  Size Limit (KB): 20,000 KB ✔
+- Logging --> Logged Dropped Packets: Yes ✔
+- Logging --> Log successful connections: Yes ✔
 
 #### Public Profile ✔
 - Firewall state: On ✔
 - Inbound connections: Block ✔
 - Outbound connections: Allow ✔
+- Logging -->  Size Limit (KB): 20,000 KB ✔
+- Logging --> Logged Dropped Packets: Yes ✔
+- Logging --> Log successful connections: Yes ✔
 
 #### Block File and Printer Sharing ✔
 
@@ -145,12 +170,50 @@
 ### Administrative Templates
 
 
-#### Network --> Network Connections --> Windows Defender Firewall (Domain Profile and Standard Profile) ✔
+#### Control Panel
+- Allow Online Tips: Disabled ✔
+
+##### Personalization ✔
+- Prevent enabling lock screen camera: Enabled ✔
+- Prevent enabling lock screen slideshow: Enabled ✔
+
+##### Regional and Language Options ✔
+- Allow users to enable online speech recognition services: Disabled ✔
+
+
+
+#### Network
+
+##### DNS Client ✔
+- Configure DNS over HTTP (DoH) name resolution: Enabled (Allow DoH) ✔ *
+
+##### Fonts ✔
+- Enable Font Providers: Disabled ✔
+
+##### Lanman Workstation ✔
+- Enable insecure guest logons: Disabled ✔
+
+##### Link-Layer Topology Discovery ✔
+- Turn on Mapper I/O (LLTDIO) driver: Disabled ✔
+- Turn on Responder (RSPNDR) driver: Disabled ✔
+
+##### Microsoft Peer-to-Peer Networking Services ✔
+- Turn off Microsoft Peer-to-Peer Networking Services: Enabled ✔
+
+##### Network Connections ✔
+- Prohibit installation and configuration of Network Bridge on your DNS domain network: Enabled ✔
+- Prohibit use of Internet Connection Sharing on your DNS domain network: Enabled ✔
+
+###### Windows Defender Firewall (Domain Profile and Standard Profile) ✔
 - Allow inbound file and printer sharing exception: Disabled ✔
 - Allow inbound UPnP framework exceptions: Disabled ✔
 - Allow logging: log dropped packets, log successful connections ✔
 - Prohibit unicast responses to multicast or broadcast requests: Enabled ✔
 - Protect all network connections: Enabled ✔
+
+##### Windows Connect Now ✔
+- Configuration of wireless settings using Window Connect Now: Disabled ✔
+- Prohibit access of the Windows Connect Now wizards: Enabled ✔
 
 #### System --> Remote Assistance ✔
 - Allow only Windows Vista or later connections: Enabled ✔
@@ -172,7 +235,7 @@
 - Windows Remote Management (WinRM) --> WinRM Service --> Allow unencrypted traffic: Disabled ✔
 
 #### Autoplay Policies ✔
-- Turn off Autoplay: Enabled ✔
+- Turn off Autoplay: For all drives ✔
 
 #### Windows Update 
 - Configure Automatic Updates: Enabled, auto download and schedule install ✔
@@ -222,11 +285,12 @@
 
 #### Windows Defender SmartScreen
 
-##### (Win11 ONLY) Enhanced Phishing Protection
-- Notify Malicious: Enabled
-- Notify Password Reuse: Enabled
-- Notify Unsafe App: Enabled
-- Service Enabled: Enabled
+##### Enhanced Phishing Protection ✔
+- Automatic Data Collection: Enabled ✔ *
+- Notify Malicious: Enabled ✔ *
+- Notify Password Reuse: Enabled ✔ *
+- Notify Unsafe App: Enabled ✔ *
+- Service Enabled: Enabled ✔ *
 
 ##### Explorer ✔
 - Configure Windows Defender SmartScreen: Enabled (Warn and prevent bypass) ✔
@@ -242,10 +306,10 @@
 - Allow shared folder to be published: Disabled ✔
 
 ### Windows Components --> Network Sharing ✔
-- Prevent users from sharing files within their profile ✔
+- Prevent users from sharing files within their profile: Enabled ✔
 
 
-# Services
+# Services ✔
 - Windows Defender Antivirus Network Inspection Service (WdNisSvc): Automatic, Start ✔
 - Windows Defender Antivirus Service (WinDefend): Automatic, Start ✔
 - Microsoft Defender Core Service (MDCoreSvc): Automatic, Start ✔
@@ -254,7 +318,7 @@
 - Security Center (wscsvc): Automatic, Start ✔
 - Software Protection (sppsvc): Automatic, Start ✔
 - Windows Defender Firewall (mpssvc): Automatic, Start ✔
-- Windows Error Reporting Service (WerSvc): Automatic, Start ✔
+- Windows Error Reporting Service (WerSvc): Disabled, Stop ✔
 - Windows Event Log (EventLog): Automatic, Start ✔
 - Windows Security Service (SecurityHealthService): Automatic, Start ✔
 - Windows Update (wuauserv): Automatic, Start ✔
@@ -268,8 +332,42 @@
 - Net TCP Port Sharing Service (NetTcpPortSharing): Disabled, Stop ✔
 - Windows Media Player Network Sharing Service (WMPNetworkSVC): Disabled, Stop ✔
 - Cryptographic Services (CryptSvc): Automatic, Start ✔
+- Bluetooth Audio Gateway Service (BTAGService): Disabled, Stop ✔
+- Bluetooth Support Service (bthserv): Disabled, Stop ✔
+- Computer Browser (Browser): Disabled, Stop ✔
+- Downloaded Maps Manager (MapsBroker): Disabled, Stop ✔
+- Geolocation Service (lfsvc): Disabled, Stop ✔
+- IIS Admin Service (IISADMIN): Disabled, Stop ✔
+- Infrared monitor service (irmon): Disabled, Stop ✔
+- Link-Layer Topology Discovery Mapper (lltdsvc): Disabled, Stop ✔
+- LxssManager (LxssManager): Disabled, Stop ✔
+- Microsoft iSCSI Initiator Service (MSiSCSI): Disabled, Stop ✔
+- OpenSSH SSH Server (sshd): Disabled, Stop ✔
+- Peer Name Resolution Protocol (PNRPsvc): Disabled, Stop ✔
+- Peer Networking Grouping (p2psvc): Disabled, Stop ✔
+- Peer Networking Identity Manager (p2pimsvc): Disabled, Stop ✔
+- PNRP Machine Name Publication Service (PNRPAutoReg): Disabled, Stop ✔
+- Problem Reports and Solutions Control Panel Support (wercplsupport): Disabled, Stop ✔
+- Remote Access Auto Connection Manager (RasAuto): Disabled, Stop ✔
+- Remote Procedure Call Locator (RpcLocator): Disabled, Stop ✔
+- Routing and Remote Access (RemoteAccess): Disabled, Stop ✔
+- Server (LanmanServer): Disabled, Stop ✔
+- Simple TCP/IP Services (simptcp): Disabled, Stop ✔
+- SNMP Service (SNMP): Disabled, Stop ✔
+- Special Administration Console Helper (sacsvr): Disabled, Stop: ✔
+- SSDP Discovery (SSDPSRV): Disabled, Stop ✔
+- Web Management Service (WMSvc): Disabled, Stop ✔
+- Windows Event Collector (Wecsvc): Disabled, Stop ✔
+- Windows Mobile Hotspot Service (icssvc): Disabled, Stop ✔
+- Windows Push Notifications System Service (WpnService): Disabled, Stop ✔
+- Windows PushToInstall Service (PushToInstall): Disabled, Stop ✔
+- Xbox Accessory Management Service (XboxGipSvc): Disabled, Stop ✔
+- Xbox Live Auth Manager (XblAuthManager): Disabled, Stop ✔
+- Xbox Live Game Save (XblGameSave): Disabled, Stop ✔
+- Xbox Live Networking Service (XboxNetApiSvc): Disabled, Stop ✔
 
 - Disable Telnet Windows feature ✔
+
 
 # (Enable or Disable RDP/Remote Assistance?)
 
