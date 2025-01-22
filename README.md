@@ -226,31 +226,80 @@
 - Turn on session logging: Enabled ✔
 
 
-#### Printers
-- Allow Print Spooler to accept client connections: Disabled
-- Configure Redirection Guard: Enabled
-- Protocol to use for outgoing RPC connections: Enabled (RPC over TCP)
-- Use authentication for outgoing RPC connections: Enabled
-- Protocols to allow for incoming RPC connections: Enabled (RPC over TCP)
-- Authentication Protocol to use for incoming RPC connections: Enabled (Negotiate)
-- Configure RPC over TCP port: Enabled (0)
-- Limits printer driver installation to Administrators: Enabled
-- Manage processing of Queue-specific files: Enabled (Limit Queue-specific files to Color profiles)
-- When installing drivers for a new connection: Enabled (Show warning and elevation prompt)
-- When updating drivers for an existing connection: Enabled (Show warning and elevation prompt)
+#### Printers ✔
+- Allow Print Spooler to accept client connections: Disabled ✔
+- Configure Redirection Guard: Enabled ✔ *
+- Protocol to use for outgoing RPC connections: Enabled (RPC over TCP) ✔ *
+- Use authentication for outgoing RPC connections: Enabled ✔ *
+- Protocols to allow for incoming RPC connections: Enabled (RPC over TCP) ✔ *
+- Authentication Protocol to use for incoming RPC connections: Enabled (Negotiate) ✔ *
+- Configure RPC over TCP port: Enabled (0) ✔ *
+- Limits printer driver installation to Administrators: Enabled ✔
+- Manage processing of Queue-specific files: Enabled (Limit Queue-specific files to Color profiles) ✔ *
+- When installing drivers for a new connection: Enabled (Show warning and elevation prompt) ✔
+- When updating drivers for an existing connection: Enabled (Show warning and elevation prompt) ✔
 
-#### Start Menu and Taskbar --> Notifications
-- Turn of notifications network usage: Enabled
-- Remove Personalized Website Reccomendations from the Reccomended section in the Start Menu: Enabled
 
 #### System
 
-##### Audit Process Creation
-- Include command line in process creation events: Enabled
+##### Audit Process Creation ✔
+- Include command line in process creation events: Enabled ✔
 
-##### Credentials Delegation
-- Encryption Oracle Remediation: Enabled (Force Updated Clients)
-- Remote host allows delegation of non-exportable credentials: Enabled
+##### Credentials Delegation ✔
+- Encryption Oracle Remediation: Enabled (Force Updated Clients) ✔
+- Remote host allows delegation of non-exportable credentials: Enabled ✔
+
+##### Device Installation --> Device Installation Restrictions ✔
+- Prevent device metadata retrieval from the Internet: Enabled ✔
+
+##### Early Launch Antimalware ✔
+- Boot-Start Driver Initialization Policy: Enabled (Good, unknown, and bad but critical) ✔
+
+##### Group Policy --> Logging and Tracing ✔
+- Continue experiences on this device: Disabled ✔
+
+##### Internet Communication Management --> Internet Communication Settings
+- Turn off access to the Store: Enabled ✔
+- Turn off downloading of printer drivers over HTTP: Enabled ✔
+- Turn off handwriting personalization data sharing: Enabled ✔
+- Turn off handwriting recognition error reporting: Enabled ✔
+- Turn off printing over HTTP: Enabled ✔
+- Turn off the "Order Prints" picture task: Enabled ✔
+- Turn off the "Publish to Web" task for files and folders: Enabled ✔
+
+##### Kerberos
+- Support device authentication using certificate: Enabled
+
+##### Local Security Authority
+- Allow Custom SSPs and APs to be loaded into LSASS: Disabled
+- Configures LSASS to run as a protected process: Enabled (Enabled with UEFI Lock)
+
+##### Locale Services
+- Disallow copying of user input methods to the system account for sign-in: Enabled
+
+##### Logon
+- Block user from showing account details on sign-in: Enabled
+- Do not display network selection UI: Enabled
+- Turn off app notifications on the lock screen: Enabled
+- Turn on convenience PIN sign-in: Disabled
+
+##### OS Policies
+- Allow Clipboard synchroniztion across devices: Disabled
+- Allow upload of User Activities: Disabled
+
+##### Sleep Settings
+- Require a password when a computer wakes (on battery): Enabled
+- Require a password when a computer wakes (plugged in): Enabled
+
+##### Remote Procedure Call
+- Enable RPC Endpoint Mapper Client Authentication: Enabled
+- Restrict Unauthenticated RPC clients: Enabled (Authenticated)
+
+##### Windows Performance PerfTrack
+- Enable/Disable PerfTrack: Disabled
+
+##### User Profiles
+- Turn off the advertising ID: Enabled
 
 ### Windows Components
 
@@ -331,14 +380,6 @@
 - Configure Windows Defender SmartScreen: Enabled ✔
 - Prevent bypassing Windows Defender SmartScreen prompts for sites: Enabled ✔
 
-# (Disable file/folder Sharing?)
-## User Configuration 
-
-### Shared Folders ✔
-- Allow shared folder to be published: Disabled ✔
-
-### Windows Components --> Network Sharing ✔
-- Prevent users from sharing files within their profile: Enabled ✔
 
 
 # Services ✔
@@ -472,4 +513,14 @@
 - File Transfer Protocol Service (FTPSVC): Disabled, Stop ✔
 
 
+
 # Scan for Prohibited Files ✔
+
+# (Disable file/folder Sharing?)
+## User Configuration 
+
+### Shared Folders ✔
+- Allow shared folder to be published: Disabled ✔
+
+### Windows Components --> Network Sharing ✔
+- Prevent users from sharing files within their profile: Enabled ✔

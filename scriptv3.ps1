@@ -343,7 +343,111 @@ function Group-Policies {
     $RegPath = "Software\Microsoft\wcmsvc\wifinetworkmanager\config"
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AutoConnectAllowedOEM" -Data 0 -Type "DWord"
 
-    #------------------------------------------- # WIN 11 ONLY # -------------------------------------------#
+
+    ## Printers ##
+
+    # Allow Print Spooler to accept client connections: Disabled    
+    $RegPath = "Software\Policies\Microsoft\Windows NT\Printers"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RegisterSpoolerRemoteRpcEndPoint" -Data 2 -Type "DWord"
+
+    # Limits printer driver installation to Administrators: Enabled
+    $RegPath = "Software\Policies\Microsoft\Windows NT\Printers\PointAndPrint"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RestrictDriverInstallationToAdministrators" -Data 1 -Type "DWord"
+
+    # When installing drivers for a new connection: Enabled (Show warning and elevation prompt)
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NoWarningNoElevationOnInstall" -Data 0 -Type "DWord"
+
+    # When updating drivers for an existing connection: Enabled (Show warning and elevation prompt)
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "UpdatePromptSettings" -Data 0 -Type "DWord"
+
+
+    ## System ##
+
+    # Include command line in process creation events: Enabled
+    $RegPath = "Software\Microsoft\Windows\CurrentVersion\Policies\System\Audit"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "ProcessCreationIncludeCmdLine_Enabled" -Data 1 -Type "DWord"
+
+    # Encryption Oracle Remediation: Enabled (Force Updated Clients)
+    $RegPath = "Software\Microsoft\Windows\CurrentVersion\Policies\System\CredSSP\Parameters"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowEncryptionOracle" -Data 0 -Type "DWord"
+
+    # Remote host allows delegation of non-exportable credentials: Enabled
+    $RegPath = "Software\Policies\Microsoft\Windows\CredentialsDelegation"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowProtectedCreds" -Data 1 -Type "DWord"
+
+    # Prevent device metadata retrieval from the Internet: Enabled
+    $RegPath = "SOFTWARE\Policies\Microsoft\Windows\Device Metadata"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "PreventDeviceMetadataFromNetwork" -Data 1 -Type "DWord"
+
+    # Boot-Start Driver Initialization Policy: Enabled (Good, unknown, and bad but critical)
+    $RegPath = "System\CurrentControlSet\Policies\EarlyLaunch"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DriverLoadPolicy" -Data 3 -Type "DWord"
+
+    # Continue experiences on this device: Disabled
+    $RegPath = "Software\Policies\Microsoft\Windows\System"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableCdp" -Data 0 -Type "DWord"
+
+    # Turn off access to the Store: Enabled
+    $RegPath = "Software\Policies\Microsoft\Windows\Explorer"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NoUseStoreOpenWith" -Data 1 -Type "DWord"
+
+    # Turn off downloading of printer drivers over HTTP: Enabled
+    $RegPath = "Software\Policies\Microsoft\Windows NT\Printers"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableWebPnPDownload" -Data 1 -Type "DWord"
+
+    # Turn off handwriting personalization data sharing: Enabled
+    $RegPath = "Software\Policies\Microsoft\Windows\TabletPC"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "PreventHandwritingDataSharing" -Data 1 -Type "DWord"
+
+    # Turn off handwriting recognition error reporting: Enabled
+    $RegPath = "Software\Policies\Microsoft\Windows\HandwritingErrorReports"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "PreventHandwritingErrorReports" -Data 1 -Type "DWord"
+
+    # Turn off printing over HTTP: Enabled
+    $RegPath = "Software\Policies\Microsoft\Windows NT\Printers"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableHTTPPrinting" -Data 1 -Type "DWord"
+
+    # Turn off the "Order Prints" picture task: Enabled
+    $RegPath = "Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NoOnlinePrintsWizard" -Data 1 -Type "DWord"
+
+    # Turn off the "Publish to Web" task for files and folders: Enabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NoPublishingWizard" -Data 1 -Type "DWord"
+
+    # Support device authentication using certificate: Enabled
+
+    # Allow Custom SSPs and APs to be loaded into LSASS: Disabled
+
+    # Configures LSASS to run as a protected process: Enabled (Enabled with UEFI Lock)
+
+    # Disallow copying of user input methods to the system account for sign-in: Enabled
+
+    # Block user from showing account details on sign-in: Enabled
+
+    # Do not display network selection UI: Enabled
+
+    # Turn off app notifications on the lock screen: Enabled
+
+    # Turn on convenience PIN sign-in: Disabled
+
+    # Allow Clipboard synchroniztion across devices: Disabled
+
+    # Allow upload of User Activities: Disabled
+
+    # Require a password when a computer wakes (on battery): Enabled
+
+    # Require a password when a computer wakes (plugged in): Enabled
+
+    # Enable RPC Endpoint Mapper Client Authentication: Enabled
+
+    # Restrict Unauthenticated RPC clients: Enabled (Authenticated)
+
+    # Enable/Disable PerfTrack: Disabled
+
+    # Turn off the advertising ID: Enabled
+
+
+    #---------------------------------------------# WIN 11 ONLY #---------------------------------------------#
 
     ## Enhanced Phishing Protection ##
 
@@ -370,7 +474,32 @@ function Group-Policies {
     $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DoHPolicy" -Data 2 -Type "DWord"
 
+    
+    ## Printers ##
 
+    # Configure Redirection Guard: Enabled
+    $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Printers"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RedirectionguardPolicy" -Data 1 -Type "DWord"
+
+    # Protocol to use for outgoing RPC connections: Enabled (RPC over TCP)
+    $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Printers\RPC"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RpcUseNamedPipeProtocol" -Data 0 -Type "DWord"
+
+    # Use authentication for outgoing RPC connections: Enabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RpcAuthentication" -Data 0 -Type "DWord"
+
+    # Protocols to allow for incoming RPC connections: Enabled (RPC over TCP)
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RpcProtocols" -Data 5 -Type "DWord"
+
+    # Authentication Protocol to use for incoming RPC connections: Enabled (Negotiate)
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "ForceKerberosForRpc" -Data 0 -Type "DWord"
+
+    # Configure RPC over TCP port: Enabled (0)
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RpcTcpPort" -Data 0 -Type "DWord"
+
+    # Manage processing of Queue-specific files: Enabled (Limit Queue-specific files to Color profiles)
+    $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Printers"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "CopyFilesPolicy" -Data 1 -Type "DWord"
 
     gpupdate.exe /force
     Write-Host "Successfully Configured Group Policy!" -ForegroundColor Green
