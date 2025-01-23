@@ -19,15 +19,10 @@ function Enable-Firewall {
     # Enable all firewall profiles
     Set-NetFirewallProfile -All -Enabled True
     
-    # Block inbound connections
-    Set-NetFirewallProfile -Name Public -DefaultInboundAction Block
-    Set-NetFirewallProfile -Name Private -DefaultInboundAction Block
-    Set-NetFirewallProfile -Name Domain -DefaultInboundAction Block
-
-    # Allow outbound connections
-    Set-NetFirewallProfile -Name Public -DefaultOutboundAction Allow
-    Set-NetFirewallProfile -Name Private -DefaultOutboundAction Allow
-    Set-NetFirewallProfile -Name Domain -DefaultOutboundAction Allow
+    # Block inbound connections & Allow outbound connections
+    Set-NetFirewallProfile -Name Public -DefaultInboundAction Block -DefaultOutboundAction Allow
+    Set-NetFirewallProfile -Name Private -DefaultInboundAction Block -DefaultOutboundAction Allow
+    Set-NetFirewallProfile -Name Domain -DefaultInboundAction Block -DefaultOutboundAction Allow
 
     # Set Logging Size Limit
     Set-NetFirewallProfile -Name Private -LogMaxSizeKilobytes 20000
@@ -519,226 +514,228 @@ function Group-Policies {
     $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Printers"
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "CopyFilesPolicy" -Data 1 -Type "DWord"
 
+    #---------------------------------------------------------------------------------------------------------#
+
     gpupdate.exe /force
     Write-Host "Successfully Configured Group Policy!" -ForegroundColor Green
 }
 
 function Set-Services {
     # Windows Defender Antivirus Network Inspection Service (WdNisSvc): Automatic, Start
-    Set-Service -Name "WdNisSvc" -StartupType Automatic -ErrorAction Continue
-    Start-Service -Name "WdNisSvc" -ErrorAction Continue
+    Set-Service -Name "WdNisSvc" -StartupType Automatic -ErrorAction SilentlyContinue
+    Start-Service -Name "WdNisSvc" -ErrorAction SilentlyContinue
     
     # Windows Defender Antivirus Service (WinDefend): Automatic, Start
-    Set-Service -Name "WinDefend" -StartupType Automatic -ErrorAction Continue
-    Start-Service -Name "WinDefend" -ErrorAction Continue
+    Set-Service -Name "WinDefend" -StartupType Automatic -ErrorAction SilentlyContinue
+    Start-Service -Name "WinDefend" -ErrorAction SilentlyContinue
 
     # Microsoft Defender Core Service (MDCoreSvc): Automatic, Start
-    Set-Service -Name "MDCoreSvc" -StartupType Automatic -ErrorAction Continue
-    Start-Service -Name "MDCoreSvc" -ErrorAction Continue
+    Set-Service -Name "MDCoreSvc" -StartupType Automatic -ErrorAction SilentlyContinue
+    Start-Service -Name "MDCoreSvc" -ErrorAction SilentlyContinue
 
     # Print Spooler (Spooler): Disabled, Stop
-    Set-Service -Name "Spooler" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "Spooler" -Force -ErrorAction Continue
+    Set-Service -Name "Spooler" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "Spooler" -Force -ErrorAction SilentlyContinue
 
     # Security Center (wscsvc): Automatic, Start
-    Set-Service -Name "wscsvc" -StartupType Automatic -ErrorAction Continue
-    Start-Service -Name "wscsvc" -ErrorAction Continue
+    Set-Service -Name "wscsvc" -StartupType Automatic -ErrorAction SilentlyContinue
+    Start-Service -Name "wscsvc" -ErrorAction SilentlyContinue
 
     # Software Protection (sppsvc): Automatic, Start
-    Set-Service -Name "sppsvc" -StartupType Automatic -ErrorAction Continue
-    Start-Service -Name "sppsvc" -ErrorAction Continue
+    Set-Service -Name "sppsvc" -StartupType Automatic -ErrorAction SilentlyContinue
+    Start-Service -Name "sppsvc" -ErrorAction SilentlyContinue
 
     # Windows Defender Firewall (mpssvc): Automatic, Start
-    Set-Service -Name "mpssvc" -StartupType Automatic -ErrorAction Continue
-    Start-Service -Name "mpssvc" -ErrorAction Continue
+    Set-Service -Name "mpssvc" -StartupType Automatic -ErrorAction SilentlyContinue
+    Start-Service -Name "mpssvc" -ErrorAction SilentlyContinue
 
     # Windows Error Reporting Service (WerSvc): Disabled, Stop
-    Set-Service -Name "WerSvc" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "WerSvc" -ErrorAction Continue
+    Set-Service -Name "WerSvc" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "WerSvc" -ErrorAction SilentlyContinue
 
     # Windows Event Log (EventLog): Automatic, Start
-    Set-Service -Name "EventLog" -StartupType Automatic -ErrorAction Continue
-    Start-Service -Name "EventLog" -ErrorAction Continue
+    Set-Service -Name "EventLog" -StartupType Automatic -ErrorAction SilentlyContinue
+    Start-Service -Name "EventLog" -ErrorAction SilentlyContinue
 
     # Windows Security Service (SecurityHealthService): Automatic, Start
-    Set-Service -Name "SecurityHealthService" -StartupType Automatic -ErrorAction Continue
-    Start-Service -Name "SecurityHealthService" -ErrorAction Continue
+    Set-Service -Name "SecurityHealthService" -StartupType Automatic -ErrorAction SilentlyContinue
+    Start-Service -Name "SecurityHealthService" -ErrorAction SilentlyContinue
 
     # Windows Update (wuauserv): Automatic, Start
-    Set-Service -Name "wuauserv" -StartupType Automatic -ErrorAction Continue
-    Start-Service -Name "wuauserv" -ErrorAction Continue
+    Set-Service -Name "wuauserv" -StartupType Automatic -ErrorAction SilentlyContinue
+    Start-Service -Name "wuauserv" -ErrorAction SilentlyContinue
 
     # World Wide Web Publishing service (W3SVC): Disabled, stop
-    Set-Service -Name "W3SVC" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "W3SVC" -Force -ErrorAction Continue
+    Set-Service -Name "W3SVC" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "W3SVC" -Force -ErrorAction SilentlyContinue
 
     # Telnet (TlntSvr): Disabled, Stop 
-    Set-Service -Name "TlntSvr" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "TlntSvr" -Force -ErrorAction Continue
+    Set-Service -Name "TlntSvr" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "TlntSvr" -Force -ErrorAction SilentlyContinue
 
     # Background Intelligent Transfer Service (BITS): Automatic, Start
-    Set-Service -Name "BITS" -StartupType Automatic -ErrorAction Continue
-    Start-Service -Name "BITS" -ErrorAction Continue
+    Set-Service -Name "BITS" -StartupType Automatic -ErrorAction SilentlyContinue
+    Start-Service -Name "BITS" -ErrorAction SilentlyContinue
 
     # IPsec Policy Agent (PolicyAgent): Automatic, Start
-    Set-Service -Name "PolicyAgent" -StartupType Automatic -ErrorAction Continue
-    Start-Service -Name "PolicyAgent" -ErrorAction Continue
+    Set-Service -Name "PolicyAgent" -StartupType Automatic -ErrorAction SilentlyContinue
+    Start-Service -Name "PolicyAgent" -ErrorAction SilentlyContinue
 
     # Remote Registry (RemoteRegistry): Disabled, Stop
-    Set-Service -Name "RemoteRegistry" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "RemoteRegistry" -Force -ErrorAction Continue
+    Set-Service -Name "RemoteRegistry" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "RemoteRegistry" -Force -ErrorAction SilentlyContinue
 
     # Internet Connection Sharing (SharedAccess): Disabled, Stop
-    Set-Service -Name "SharedAccess" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "SharedAccess" -Force -ErrorAction Continue
+    Set-Service -Name "SharedAccess" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "SharedAccess" -Force -ErrorAction SilentlyContinue
 
     # UPnP Device Host (upnphost): Disabled, Stop
-    Set-Service -Name "upnphost" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "upnphost" -Force -ErrorAction Continue
+    Set-Service -Name "upnphost" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "upnphost" -Force -ErrorAction SilentlyContinue
 
     # Net TCP Port Sharing Service (NetTcpPortSharing): Disabled, Stop
-    Set-Service -Name "NetTcpPortSharing" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "NetTcpPortSharing" -Force -ErrorAction Continue
+    Set-Service -Name "NetTcpPortSharing" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "NetTcpPortSharing" -Force -ErrorAction SilentlyContinue
 
     # Windows Media Player Network Sharing Service (WMPNetworkSVC): Disabled, Stop
-    Set-Service -Name "WMPNetworkSVC" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "WMPNetworkSVC" -Force -ErrorAction Continue
+    Set-Service -Name "WMPNetworkSVC" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "WMPNetworkSVC" -Force -ErrorAction SilentlyContinue
 
     # Cryptographic Services (CryptSvc): Automatic, Start
-    Set-Service -Name "CryptSvc" -StartupType Automatic -ErrorAction Continue
-    Start-Service -Name "CryptSvc" -ErrorAction Continue
+    Set-Service -Name "CryptSvc" -StartupType Automatic -ErrorAction SilentlyContinue
+    Start-Service -Name "CryptSvc" -ErrorAction SilentlyContinue
 
     # Bluetooth Audio Gateway Service (BTAGService): Disabled, Stop
-    Set-Service -Name "BTAGService" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "BTAGService" -Force -ErrorAction Continue
+    Set-Service -Name "BTAGService" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "BTAGService" -Force -ErrorAction SilentlyContinue
 
     # Bluetooth Support Service (bthserv): Disabled, Stop
-    Set-Service -Name "bthserv" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "bthserv" -Force -ErrorAction Continue
+    Set-Service -Name "bthserv" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "bthserv" -Force -ErrorAction SilentlyContinue
 
     # Computer Browser (Browser): Disabled, Stop
-    Set-Service -Name "Browser" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "Browser" -Force -ErrorAction Continue
+    Set-Service -Name "Browser" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "Browser" -Force -ErrorAction SilentlyContinue
 
     # Downloaded Maps Manager (MapsBroker): Disabled, Stop
-    Set-Service -Name "MapsBroker" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "MapsBroker" -Force -ErrorAction Continue
+    Set-Service -Name "MapsBroker" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "MapsBroker" -Force -ErrorAction SilentlyContinue
 
     # Geolocation Service (lfsvc): Disabled, Stop
-    Set-Service -Name "lfsvc" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "lfsvc" -Force -ErrorAction Continue
+    Set-Service -Name "lfsvc" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "lfsvc" -Force -ErrorAction SilentlyContinue
 
     # IIS Admin Service (IISADMIN): Disabled, Stop
-    Set-Service -Name "IISADMIN" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "IISADMIN" -Force -ErrorAction Continue
+    Set-Service -Name "IISADMIN" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "IISADMIN" -Force -ErrorAction SilentlyContinue
 
     # Infrared monitor service (irmon): Disabled, Stop
-    Set-Service -Name "irmon" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "irmon" -Force -ErrorAction Continue
+    Set-Service -Name "irmon" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "irmon" -Force -ErrorAction SilentlyContinue
 
     # Link-Layer Topology Discovery Mapper (lltdsvc): Disabled, Stop
-    Set-Service -Name "lltdsvc" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "lltdsvc" -Force -ErrorAction Continue
+    Set-Service -Name "lltdsvc" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "lltdsvc" -Force -ErrorAction SilentlyContinue
 
     # LxssManager (LxssManager): Disabled, Stop
-    Set-Service -Name "LxssManager" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "LxssManager" -Force -ErrorAction Continue
+    Set-Service -Name "LxssManager" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "LxssManager" -Force -ErrorAction SilentlyContinue
 
     # Microsoft iSCSI Initiator Service (MSiSCSI): Disabled, Stop
-    Set-Service -Name "MSiSCSI" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "MSiSCSI" -Force -ErrorAction Continue
+    Set-Service -Name "MSiSCSI" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "MSiSCSI" -Force -ErrorAction SilentlyContinue
 
     # OpenSSH SSH Server (sshd): Disabled, Stop
-    Set-Service -Name "sshd" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "sshd" -Force -ErrorAction Continue
+    Set-Service -Name "sshd" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "sshd" -Force -ErrorAction SilentlyContinue
 
     # Peer Name Resolution Protocol (PNRPsvc): Disabled, Stop
-    Set-Service -Name "PNRPsvc" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "PNRPsvc" -Force -ErrorAction Continue
+    Set-Service -Name "PNRPsvc" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "PNRPsvc" -Force -ErrorAction SilentlyContinue
 
     # Peer Networking Grouping (p2psvc): Disabled, Stop
-    Set-Service -Name "p2psvc" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "p2psvc" -Force -ErrorAction Continue
+    Set-Service -Name "p2psvc" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "p2psvc" -Force -ErrorAction SilentlyContinue
 
     # Peer Networking Identity Manager (p2pimsvc): Disabled, Stop
-    Set-Service -Name "p2pimsvc" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "p2pimsvc" -Force -ErrorAction Continue
+    Set-Service -Name "p2pimsvc" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "p2pimsvc" -Force -ErrorAction SilentlyContinue
 
     # PNRP Machine Name Publication Service (PNRPAutoReg): Disabled, Stop
-    Set-Service -Name "PNRPAutoReg" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "PNRPAutoReg" -Force -ErrorAction Continue
+    Set-Service -Name "PNRPAutoReg" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "PNRPAutoReg" -Force -ErrorAction SilentlyContinue
 
     # Problem Reports and Solutions Control Panel Support (wercplsupport): Disabled, Stop
-    Set-Service -Name "wercplsupport" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "wercplsupport" -Force -ErrorAction Continue
+    Set-Service -Name "wercplsupport" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "wercplsupport" -Force -ErrorAction SilentlyContinue
 
     # Remote Access Auto Connection Manager (RasAuto): Disabled, Stop
-    Set-Service -Name "RasAuto" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "RasAuto" -Force -ErrorAction Continue
+    Set-Service -Name "RasAuto" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "RasAuto" -Force -ErrorAction SilentlyContinue
 
     # Remote Procedure Call Locator (RpcLocator): Disabled, Stop
-    Set-Service -Name "RpcLocator" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "RpcLocator" -Force -ErrorAction Continue
+    Set-Service -Name "RpcLocator" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "RpcLocator" -Force -ErrorAction SilentlyContinue
 
     # Routing and Remote Access (RemoteAccess): Disabled, Stop
-    Set-Service -Name "RemoteAccess" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "RemoteAccess" -Force -ErrorAction Continue
+    Set-Service -Name "RemoteAccess" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "RemoteAccess" -Force -ErrorAction SilentlyContinue
 
     # Server (LanmanServer): Disabled, Stop
-    Set-Service -Name "LanmanServer" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "LanmanServer" -Force -ErrorAction Continue
+    Set-Service -Name "LanmanServer" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "LanmanServer" -Force -ErrorAction SilentlyContinue
 
     # Simple TCP/IP Services (simptcp): Disabled, Stop
-    Set-Service -Name "simptcp" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "simptcp" -Force -ErrorAction Continue
+    Set-Service -Name "simptcp" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "simptcp" -Force -ErrorAction SilentlyContinue
 
     # SNMP Service (SNMP): Disabled, Stop
-    Set-Service -Name "SNMP" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "SNMP" -Force -ErrorAction Continue
+    Set-Service -Name "SNMP" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "SNMP" -Force -ErrorAction SilentlyContinue
 
     # Special Administration Console Helper (sacsvr): Disabled, Stop:
-    Set-Service -Name "sacsvr" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "sacsvr" -Force -ErrorAction Continue
+    Set-Service -Name "sacsvr" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "sacsvr" -Force -ErrorAction SilentlyContinue
 
     # SSDP Discovery (SSDPSRV): Disabled, Stop
-    Set-Service -Name "SSDPSRV" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "SSDPSRV" -Force -ErrorAction Continue
+    Set-Service -Name "SSDPSRV" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "SSDPSRV" -Force -ErrorAction SilentlyContinue
 
     # Web Management Service (WMSvc): Disabled, Stop
-    Set-Service -Name "WMSvc" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "WMSvc" -Force -ErrorAction Continue
+    Set-Service -Name "WMSvc" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "WMSvc" -Force -ErrorAction SilentlyContinue
 
     # Windows Event Collector (Wecsvc): Disabled, Stop
-    Set-Service -Name "Wecsvc" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "Wecsvc" -Force -ErrorAction Continue
+    Set-Service -Name "Wecsvc" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "Wecsvc" -Force -ErrorAction SilentlyContinue
 
     # Windows Mobile Hotspot Service (icssvc): Disabled, Stop
-    Set-Service -Name "icssvc" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "icssvc" -Force -ErrorAction Continue
+    Set-Service -Name "icssvc" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "icssvc" -Force -ErrorAction SilentlyContinue
 
     # Windows Push Notifications System Service (WpnService): Disabled, Stop
-    Set-Service -Name "WpnService" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "WpnService" -Force -ErrorAction Continue
+    Set-Service -Name "WpnService" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "WpnService" -Force -ErrorAction SilentlyContinue
 
     # Windows PushToInstall Service (PushToInstall): Disabled, Stop
-    Set-Service -Name "PushToInstall" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "PushToInstall" -Force -ErrorAction Continue
+    Set-Service -Name "PushToInstall" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "PushToInstall" -Force -ErrorAction SilentlyContinue
 
     # Xbox Accessory Management Service (XboxGipSvc): Disabled, Stop
-    Set-Service -Name "XboxGipSvc" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "XboxGipSvc" -Force -ErrorAction Continue
+    Set-Service -Name "XboxGipSvc" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "XboxGipSvc" -Force -ErrorAction SilentlyContinue
 
     # Xbox Live Auth Manager (XblAuthManager): Disabled, Stop
-    Set-Service -Name "XblAuthManager" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "XblAuthManager" -Force -ErrorAction Continue
+    Set-Service -Name "XblAuthManager" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "XblAuthManager" -Force -ErrorAction SilentlyContinue
 
     # Xbox Live Game Save (XblGameSave): Disabled, Stop
-    Set-Service -Name "XblGameSave" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "XblGameSave" -Force -ErrorAction Continue
+    Set-Service -Name "XblGameSave" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "XblGameSave" -Force -ErrorAction SilentlyContinue
 
     # Xbox Live Networking Service (XboxNetApiSvc): Disabled, Stop
-    Set-Service -Name "XboxNetApiSvc" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "XboxNetApiSvc" -Force -ErrorAction Continue
+    Set-Service -Name "XboxNetApiSvc" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "XboxNetApiSvc" -Force -ErrorAction SilentlyContinue
 
 
     # Disable Telnet
@@ -751,20 +748,20 @@ function Disable-RDP {
     ## Services ##
 
     # Remote Desktop Configuration (SessionEnv): Disabled, Stop
-    Set-Service -Name "SessionEnv" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "SessionEnv" -Force -ErrorAction Continue
+    Set-Service -Name "SessionEnv" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "SessionEnv" -Force -ErrorAction SilentlyContinue
 
     # Remote Desktop Services (TermService): Disabled, Stop
-    Set-Service -Name "TermService" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "TermService" -Force  -ErrorAction Continue
+    Set-Service -Name "TermService" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "TermService" -Force  -ErrorAction SilentlyContinue
 
     # Remote Desktop Services UserMode Port Redirector (UmRdpService): Disabled, Stop
-    Set-Service -Name "UmRdpService" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "UmRdpService" -Force -ErrorAction Continue
+    Set-Service -Name "UmRdpService" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "UmRdpService" -Force -ErrorAction SilentlyContinue
     
     # Windows Remote Management (WinRM): Disabled, Stop
-    Set-Service -Name "WinRM" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "WinRM" -Force -ErrorAction Continue
+    Set-Service -Name "WinRM" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "WinRM" -Force -ErrorAction SilentlyContinue
 
     ## Registry ##
 
@@ -826,20 +823,20 @@ function Enable-RDP {
     ## Services ##
     
     # Remote Desktop Configuration (SessionEnv): Automatic, Start
-    Set-Service -Name "SessionEnv" -StartupType Automatic -ErrorAction Continue
-    Start-Service -Name "SessionEnv" -ErrorAction Continue
+    Set-Service -Name "SessionEnv" -StartupType Automatic -ErrorAction SilentlyContinue
+    Start-Service -Name "SessionEnv" -ErrorAction SilentlyContinue
 
     # Remote Desktop Services (TermService): Automatic, Start
-    Set-Service -Name "TermService" -StartupType Automatic -ErrorAction Continue
-    Start-Service -Name "TermService" -ErrorAction Continue
+    Set-Service -Name "TermService" -StartupType Automatic -ErrorAction SilentlyContinue
+    Start-Service -Name "TermService" -ErrorAction SilentlyContinue
 
     # Remote Desktop Services UserMode Port Redirector (UmRdpService): Automatic, Start
-    Set-Service -Name "UmRdpService" -StartupType Automatic -ErrorAction Continue
-    Start-Service -Name "UmRdpService" -ErrorAction Continue
+    Set-Service -Name "UmRdpService" -StartupType Automatic -ErrorAction SilentlyContinue
+    Start-Service -Name "UmRdpService" -ErrorAction SilentlyContinue
 
     # Windows Remote Management (WinRM): Automatic, Start
-    Set-Service -Name "WinRM" -StartupType Automatic -ErrorAction Continue
-    Start-Service -Name "WinRM" -ErrorAction Continue
+    Set-Service -Name "WinRM" -StartupType Automatic -ErrorAction SilentlyContinue
+    Start-Service -Name "WinRM" -ErrorAction SilentlyContinue
 
 
     ## Registry ##
@@ -890,16 +887,16 @@ function Enable-RDP {
 
 function Disable-FTP {
     # FTP, File Transfer Protocol Service (FTPSVC): Disabled, Stop
-    Set-Service -Name "FTPSVC" -StartupType Disabled -ErrorAction Continue
-    Stop-Service -Name "FTPSVC" -Force -ErrorAction Continue
+    Set-Service -Name "FTPSVC" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "FTPSVC" -Force -ErrorAction SilentlyContinue
 
     Write-Host "Successfully Disabled FTP!" -ForegroundColor Green
 }
 
 function Enable-FTP {
     # FTP, File Transfer Protocol Service (FTPSVC): Automatic, Start
-    Set-Service -Name "FTPSVC" -StartupType Automatic -ErrorAction Continue
-    Start-Service -Name "FTPSVC" -ErrorAction Continue
+    Set-Service -Name "FTPSVC" -StartupType Automatic -ErrorAction SilentlyContinue
+    Start-Service -Name "FTPSVC" -ErrorAction SilentlyContinue
 
     Write-Host "Successfully Enabled FTP!" -ForegroundColor Green
 }
