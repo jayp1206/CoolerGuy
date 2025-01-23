@@ -258,7 +258,7 @@
 ##### Group Policy --> Logging and Tracing ✔
 - Continue experiences on this device: Disabled ✔
 
-##### Internet Communication Management --> Internet Communication Settings
+##### Internet Communication Management --> Internet Communication Settings ✔
 - Turn off access to the Store: Enabled ✔
 - Turn off downloading of printer drivers over HTTP: Enabled ✔
 - Turn off handwriting personalization data sharing: Enabled ✔
@@ -267,39 +267,35 @@
 - Turn off the "Order Prints" picture task: Enabled ✔
 - Turn off the "Publish to Web" task for files and folders: Enabled ✔
 
-##### Kerberos
-- Support device authentication using certificate: Enabled
+##### Kerberos ✔
+- Support device authentication using certificate: Enabled (Forced) ✔
 
-##### Local Security Authority
-- Allow Custom SSPs and APs to be loaded into LSASS: Disabled
-- Configures LSASS to run as a protected process: Enabled (Enabled with UEFI Lock)
+##### Local Security Authority ✔
+- Allow Custom SSPs and APs to be loaded into LSASS: Disabled ✔
+- Configures LSASS to run as a protected process: Enabled (Enabled with UEFI Lock) ✔
 
-##### Locale Services
-- Disallow copying of user input methods to the system account for sign-in: Enabled
+##### Locale Services ✔
+- Disallow copying of user input methods to the system account for sign-in: Enabled ✔
 
-##### Logon
-- Block user from showing account details on sign-in: Enabled
-- Do not display network selection UI: Enabled
-- Turn off app notifications on the lock screen: Enabled
-- Turn on convenience PIN sign-in: Disabled
+##### Logon ✔
+- Block user from showing account details on sign-in: Enabled ✔
+- Do not display network selection UI: Enabled ✔
+- Turn off app notifications on the lock screen: Enabled ✔
+- Turn on convenience PIN sign-in: Disabled ✔
 
-##### OS Policies
-- Allow Clipboard synchroniztion across devices: Disabled
-- Allow upload of User Activities: Disabled
+##### OS Policies ✔
+- Allow Clipboard synchroniztion across devices: Disabled ✔
+- Allow upload of User Activities: Disabled ✔
 
-##### Sleep Settings
-- Require a password when a computer wakes (on battery): Enabled
-- Require a password when a computer wakes (plugged in): Enabled
+##### Sleep Settings ✔
+- Require a password when a computer wakes (plugged in): Enabled ✔
 
 ##### Remote Procedure Call
-- Enable RPC Endpoint Mapper Client Authentication: Enabled
-- Restrict Unauthenticated RPC clients: Enabled (Authenticated)
+- Enable RPC Endpoint Mapper Client Authentication: Enabled ✔
+- Restrict Unauthenticated RPC clients: Enabled (Authenticated) ✔
 
-##### Windows Performance PerfTrack
-- Enable/Disable PerfTrack: Disabled
-
-##### User Profiles
-- Turn off the advertising ID: Enabled
+##### User Profiles ✔
+- Turn off the advertising ID: Enabled ✔
 
 ### Windows Components
 

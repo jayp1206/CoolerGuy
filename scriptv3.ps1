@@ -415,37 +415,55 @@ function Group-Policies {
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NoPublishingWizard" -Data 1 -Type "DWord"
 
     # Support device authentication using certificate: Enabled
+    $RegPath = "Software\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DevicePKInitEnabled" -Data 1 -Type "DWord"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DevicePKInitBehavior" -Data 1 -Type "DWord"
 
     # Allow Custom SSPs and APs to be loaded into LSASS: Disabled
+    $RegPath = "SOFTWARE\Policies\Microsoft\Windows\System"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowCustomSSPsAPs" -Data 0 -Type "DWord"
 
     # Configures LSASS to run as a protected process: Enabled (Enabled with UEFI Lock)
+    $RegPath = "SYSTEM\CurrentControlSet\Control\Lsa"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RunAsPPL" -Data 1 -Type "DWord"
 
     # Disallow copying of user input methods to the system account for sign-in: Enabled
+    $RegPath = "Software\Policies\Microsoft\Control Panel\International"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "BlockUserInputMethodsForSignIn" -Data 1 -Type "DWord"
 
     # Block user from showing account details on sign-in: Enabled
+    $RegPath = "Software\Policies\Microsoft\Windows\System"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "BlockUserFromShowingAccountDetailsOnSignin" -Data 1 -Type "DWord"
 
     # Do not display network selection UI: Enabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DontDisplayNetworkSelectionUI" -Data 1 -Type "DWord"
 
     # Turn off app notifications on the lock screen: Enabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableLockScreenAppNotifications" -Data 1 -Type "DWord"
 
     # Turn on convenience PIN sign-in: Disabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowDomainPINLogon" -Data 0 -Type "DWord"
 
     # Allow Clipboard synchroniztion across devices: Disabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowCrossDeviceClipboard" -Data 0 -Type "DWord"
 
     # Allow upload of User Activities: Disabled
-
-    # Require a password when a computer wakes (on battery): Enabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "UploadUserActivities" -Data 0 -Type "DWord"
 
     # Require a password when a computer wakes (plugged in): Enabled
+    $RegPath = "SOFTWARE\Policies\Microsoft\Power\PowerSettings\0e796bdb-100d-47d6-a2d5-f7d2daa51f51"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "ACSettingIndex" -Data 1 -Type "DWord"
 
     # Enable RPC Endpoint Mapper Client Authentication: Enabled
+    $RegPath = "Software\Policies\Microsoft\Windows NT\Rpc"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableAuthEpResolution" -Data 1 -Type "DWord"
 
     # Restrict Unauthenticated RPC clients: Enabled (Authenticated)
-
-    # Enable/Disable PerfTrack: Disabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RestrictRemoteClients" -Data 1 -Type "DWord"
 
     # Turn off the advertising ID: Enabled
-
+    $RegPath = "Software\Policies\Microsoft\Windows\AdvertisingInfo"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisabledByGroupPolicy" -Data 1 -Type "DWord"
 
     #---------------------------------------------# WIN 11 ONLY #---------------------------------------------#
 
