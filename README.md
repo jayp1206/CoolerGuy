@@ -81,6 +81,7 @@
 - Shares that can be accessed anonymously: Not Defined (remove all) ✔
 - Restrict anonymous access to Named Pipes and Shares: Enabled
 - Sharing and security model for local accounts: Classic - local users authenticate as themselves
+- Name Pipes that can be accessed anonymously: None (remove all)
 
 #### Network Security ✔
 - Force logoff when logon hours expire: Enable ✔
@@ -103,7 +104,6 @@
 #### System Cryptography ✔
 - Force strong key protection for user keys stored on the computer: User must enter a password each time they use a key ✔
 - Use FIPS compliant algorithms for encryption, hashing, and signing: Enabled ✔
-- 
 
 #### System Objects ✔
 - Require case insensitivity for non-Windows subsystems: Enabled ✔
@@ -299,28 +299,128 @@
 
 ### Windows Components
 
-#### Remote Desktop Services --> Remote Desktop Session Host --> Security ✔
+#### App Package Deployment ✔
+- Allow a Windows app to share application data between users: Disabled ✔
+- Prevent non-admin users from installing packaged Windows apps: Enabled ✔
+
+#### App Privacy ✔
+- Let Windows apps activate with voice while the system is locked: Enabled (Force Deny) ✔
+
+#### App Runtime ✔
+- Block launching Universal Windows apps with Windows Runtime API access from hosted content: Enabled ✔
+
+#### Biometrics --> Facial Features ✔
+- Configure enhanced anti-spoofing: Enabled ✔
+
+#### Camera ✔
+- Allow Use of Camera: Disabled ✔
+
+#### Connect ✔
+- Require pin for pairing: Enabled (Always) ✔
+
+#### Desktop App Installer ✔
+- Enable App Installer Hash Override: Disabled ✔ *
+- Enable App Installer ms-appinstaller protocol: Disabled ✔ *
+
+#### File Explorer ✔
+- Turn off Data Execution Prevention for Explorer: Disabled ✔
+- Turn off heap termination on corruption: Disabled ✔
+- Turn off shell protocol protected mode: Disabled ✔
+
+#### Microsoft Account ✔
+- Block all consumer Microsoft account user authentication: Enabled ✔
+
+#### Remote Desktop Services  ✔
+
+##### Remote Desktop Connection Client --> RemoteFX USB Device Redirection ✔
+- Disable Cloud Clipboard integration for server-to-client data transfer: Enabled ✔ *
+- Do not allow passwords to be saved: Enabled ✔
+
+##### Remote Desktop Session Host ✔
+###### Device and Resource Redirection ✔
+- Allow UI Automation redirection: Disabled ✔
+- Do not allow COM port redirection: Enabled ✔
+- Do not allow drive redirection: Enabled ✔
+- Do not allow location redirection: Enabled ✔
+- Do not allow LPT port redirection: Enabled ✔
+- Do not allow supported Plug and Play device redirection: Enabled ✔
+- Do not allow WebAuthn redirection: Enabled ✔ *
+###### Security ✔
 - Require use of specific security layer for remote (RDP) connections: SSL ✔
 - Set client connection encryption level: Enabled, High Level ✔
 - Always prompt for password upon connection: Enabled ✔
 - Require secure RPC communication: Enabled ✔
-- Security --> Always prompt for password upon connection: Enabled ✔
-- Security --> Require user authentication for remote connections by using Network Level Authentication: Enabled ✔
-- Session Time Limits --> End session when time limits are reached: Enabled ✔
+- Require user authentication for remote connections by using Network Level Authentication: Enabled ✔
+###### Session Time Limits ✔
+- End session when time limits are reached: Enabled ✔
+- Set time limit for active but idle Remote Desktop Services sessions: Enabled (15 minutes) ✔
+- Set time limit for disconnected sessions: Enabled (1 minute) ✔
 
-#### Windows Remote Management
-- Windows Remote Management (WinRM) --> WinRM Service --> Allow unencrypted traffic: Disabled ✔
+
+#### RSS Feeds ✔
+- Prevent downloading of enclosures: Enabled ✔
+
+#### Search ✔
+- Allow Cloud Search: Enabled (Disable Cloud Search) ✔
+- Allow Cortana: Disabled ✔
+- Allow Cortana above lock screen: Disabled ✔
+- Allow indexing of encrypted files: Disabled ✔
+- Allow search and Cortana to use location: Disabled ✔
+- Allow search highlights: Disabled ✔
+
+#### Store ✔
+- Turn off Automatic Download and Install of updates: Disabled ✔
+
+#### Windows Game Recording and Broadcasting ✔
+- Enables or disables Windows Game Recording and Broadcasting: Disabled ✔
+
+#### Windows Hello for Business ✔
+- Enable ESS with Supported Peripherals: Enabled (1) ✔ *
+
+#### Windows Ink Workspace ✔
+- Allow Windows Ink Workspace: Enabled (On, but disallow access above lock) ✔
+
+#### Windows Installer ✔
+- Allow user control over installs: Disabled ✔
+- Always install with elevated privileges: Disabled ✔
+- Prevent Internet Explorer security prompt for Windows Installer scripts: Disabled ✔
+
+#### Windows Logon Options ✔
+- Enable MPR notifications for the system: Disabled ✔ *
+- Sign-in and lock last interactive user automatically after a restart: Disabled ✔
+
+#### Windows Remote Management (WinRM) ✔
+##### WinRM Client ✔
+- Allow Basic authentication: Disabled ✔
+- Allow unencrypted traffic: Disabled ✔
+- Disallow Digest authentication: Enabled ✔
+##### WinRM Service ✔
+- Allow Basic authentication: Disabled ✔
+- Allow remote server management through WinRM: Disabled ✔
+- Allow unencrypted traffic: Disabled ✔
+- Disallow WinRM from storing RunAs credentials: Enabled ✔
+
+#### Windows Sandbox ✔
+- Allow clipboard sharing with Windows Sandbox: Disabled ✔ *
+- Allow networking in Windows Sandbox: Disabled ✔ *
 
 #### Autoplay Policies ✔
-- Turn off Autoplay: For all drives ✔
+- Turn off Autoplay: Enabled (For all drives) ✔
+- Disallow Autoplay for non-volume devices: Enabled ✔
+- Set the default behavior for AutoRun: Enabled (Do not execute any autorun commands) ✔
 
-#### Windows Update 
+#### Windows Update ✔
+- No auto-restart with logged on users for scheduled automatic updates installation: Disabled ✔
+- Scheduled install day: 0 (Every day) ✔
+- Enable features introduced via servicing that are off by default: Disabled ✔ *
 - Configure Automatic Updates: Enabled, auto download and schedule install ✔
 - Allow Automatic Updates immediate installation: Enabled ✔
 - Automatic Updates detection frequency: 22 hours ✔
 
 #### Credential User Interface ✔
 - Do not display the password reveal button: Enabled ✔
+- Enumerate administrator accounts on elevation: Disabled ✔
+- Prevent the use of security questions for local accounts: Enabled ✔
 
 #### Event Log Service --> Setup ✔
 - Turn on Logging: Enabled ✔
@@ -328,10 +428,13 @@
 #### Microsoft Defender Antivirus ✔
 - Allow antimalware service to startup with normal priority: Enabled ✔
 - Turn off Microsoft Defender Antivirus: Disabled ✔
-- Configure detection for potentially unwanted applications: Enabled ✔
+- Configure detection for potentially unwanted applications: Enabled (Block) ✔
 
-##### Microsoft Defender Exploit Guard ✔
-- Network Protection --> Prevent users and apps from accessing dangerous websites: Enabled ✔
+##### Microsoft Defender Exploit Guard --> Network Protection ✔
+- Prevent users and apps from accessing dangerous websites: Enabled ✔
+
+##### MpEngine ✔
+- Enable file hash computation feature: Enabled ✔
 
 ##### Real Time Protection ✔
 - Turn off real-time protection: Disabled ✔
@@ -349,12 +452,15 @@
 - Scan packed executables: Enabled ✔
 - Scan network files: Enabled ✔
 - Specify the interval to run quick scans per day: Enabled (12) ✔
+- Turn on e-mail scanning: Enabled ✔
 
 ##### Security Intelligence Updates ✔
 - Turn on scan after security intelligence update: Enabled ✔
 - Allow real-time security intelligence updates based on reports to Microsoft MAPS: Enabled ✔
 - Check for the latest virus and spyware security intelligence on startup: Enabled ✔
 
+#### Push to Install ✔
+- Turn off Push to Install service: Enabled ✔
 
 #### Security Center ✔
 - Turn on Security Center (Domain PC's only) ✔
@@ -372,11 +478,27 @@
 ##### Explorer ✔
 - Configure Windows Defender SmartScreen: Enabled (Warn and prevent bypass) ✔
 
-##### Microsoft Edge✔
+##### Microsoft Edge ✔
 - Configure Windows Defender SmartScreen: Enabled ✔
 - Prevent bypassing Windows Defender SmartScreen prompts for sites: Enabled ✔
 
 
+## User Configuration
+
+### Administrative Templates --> Windows Components
+
+#### Attachment Manager ✔
+- Do not preserve zone information in file attachments: Disabled ✔
+- Notify antivirus programs when opening attachments: Enabled ✔
+
+#### Cloud Content ✔
+- Do not use diagnostic data for tailored experiences: Enabled ✔
+
+#### Windows Installer ✔
+- Always install with elevated privileges: Disabled ✔
+
+#### Windows Media Player --> Playback ✔
+- Prevent Codec Download: Enabled ✔
 
 # Services ✔
 - Windows Defender Antivirus Network Inspection Service (WdNisSvc): Automatic, Start ✔

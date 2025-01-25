@@ -51,6 +51,7 @@ function Enable-Audits {
 
 function Group-Policies {
     $MachineDir = "$env:windir\System32\GroupPolicy\Machine\Registry.pol"
+    $UserRegDir = "$env:windir\system32\GroupPolicy\User\registry.pol"
 
     ## Windows Defender Firewall ##
 
@@ -99,9 +100,10 @@ function Group-Policies {
 
 
     ## Remote Desktop Services ##
+    
+    # Require specific security layer for RDP connections: SSL
     $RegPath = "Software\Policies\Microsoft\Windows NT\Terminal Services"
 
-    # Require specific security layer for RDP connections: SSL
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "SecurityLayer" -Data 2 -Type "DWord"
 
     # Client connection encryption level: high
@@ -113,21 +115,69 @@ function Group-Policies {
     # Require secure RPC communication: enable
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fEncryptRPCTraffic" -Data 1 -Type "DWord"
 
-    # Always prompt for password: enable
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fPromptForPassword" -Data 1 -Type "DWord"
-
     # Require network level authentication: enable
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "UserAuthentication" -Data 1 -Type "DWord"
 
     # End session when time limit is reached: enable
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fResetBroken" -Data 1 -Type "DWord"
 
+    # Do not allow passwords to be saved: Enabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisablePasswordSaving" -Data 1 -Type "DWord"
+
+    # Allow UI Automation redirection: Disabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableUiaRedirection" -Data 0 -Type "DWord"
+
+    # Do not allow COM port redirection: Enabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fDisableCcm" -Data 1 -Type "DWord"
+
+    # Do not allow drive redirection: Enabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fDisableCdm" -Data 1 -Type "DWord"
+
+    # Do not allow location redirection: Enabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fDisablelocationRedir" -Data 1 -Type "DWord"
+
+    # Do not allow LPT port redirection: Enabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fDisableLPT" -Data 1 -Type "DWord"
+
+    # Do not allow supported Plug and Play device redirection: Enabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fDisablePNPRedir" -Data 1 -Type "DWord"
+
+    # Set time limit for active but idle Remote Desktop Services sessions: Enabled (15 minutes)
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "MaxIdleTime" -Data 900000 -Type "DWord"
+
+    # Set time limit for disconnected sessions: Enabled (1 minute)
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "MaxDisconnectionTime" -Data 60000 -Type "DWord"
+
 
     ## Windows Remote Management ## 
-    $RegPath = "Software\Policies\Microsoft\Windows\WinRM\Client"
+
+    ### CLIENT ###
     
-    # Allow unencrypted traffic: disable
+    # Allow Basic authentication: Disabled
+    $RegPath = "Software\Policies\Microsoft\Windows\WinRM\Client"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowBasic" -Data 0 -Type "DWord"
+
+    # Allow unencrypted traffic: Disabled
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowUnencryptedTraffic" -Data 0 -Type "DWord"
+
+    # Disallow Digest authentication: Enabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowDigest" -Data 0 -Type "DWord"
+
+
+    ### SERVICE ###
+
+    # Allow Basic authentication: Disabled
+    $RegPath = "Software\Policies\Microsoft\Windows\WinRM\Service"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowBasic" -Data 0 -Type "DWord"
+
+    # Allow remote server management through WinRM: Disabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowAutoConfig" -Data 0 -Type "DWord"
+
+    # Allow unencrypted traffic: Disabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowUnencryptedTraffic" -Data 0 -Type "DWord"
+
+    # Disallow WinRM from storing RunAs credentials: Enabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableRunAs" -Data 1 -Type "DWord"
 
 
     ## Autoplay Policies ##
@@ -135,6 +185,13 @@ function Group-Policies {
     # Turn off autoplay: for all drives
     $RegPath = "Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NoDriveTypeAutoRun" -Data 255 -Type "DWord"
+    
+    # Default autorun behavior: do not execute any autorun commands
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NoAutorun" -Data 1 -Type "DWord"
+
+    # Turn off autplay for non-volume devices: enabled
+    $RegPath = "Software\Policies\Microsoft\Windows\Explorer"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NoAutoplayfornonVolume" -Data 1 -Type "DWord"
 
 
     ## Windows Update ##
@@ -153,12 +210,26 @@ function Group-Policies {
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DetectionFrequencyEnabled" -Data 1 -Type "DWord"
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DetectionFrequency" -Data 22 -Type "DWord"
 
+    # No auto-restart with logged on users for scheduled automatic updates installation: Disabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NoAutoRebootWithLoggedOnUsers" -Data 0 -Type "DWord"
+
+    # Scheduled install day: 0 (Every day)
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "ScheduledInstallDay" -Data 0 -Type "DWord"
+
 
     ## Credential User Interface ##
 
     # Do not display password reveal button: enable
     $RegPath = "Software\Policies\Microsoft\Windows\CredUI"
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisablePasswordReveal" -Data 1 -Type "DWord"
+
+    # Enumerate administrator accounts on elevation: Disabled
+    $RegPath = "Software\Microsoft\Windows\CurrentVersion\Policies\CredUI"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnumerateAdministrators" -Data 0 -Type "DWord"
+
+    # Prevent the use of security questions for local accounts: Enabled
+    $RegPath = "Software\Policies\Microsoft\Windows\System"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NoLocalPasswordResetQuestions" -Data 1 -Type "DWord"
 
 
     ## Event Log Service ##
@@ -186,6 +257,12 @@ function Group-Policies {
     # Prevent users/apps from accessing dangerous websites: block
     $RegPath = "Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Network Protection"
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableNetworkProtection" -Data 1 -Type "DWord"
+
+    ## MpEngine ##
+
+    # Enable file hash computation feature: Enabled
+    $RegPath = "Software\Policies\Microsoft\Windows Defender\MpEngine"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableFileHashComputation" -Data 1 -Type "DWord"
 
 
     ## Real Time Protection ##
@@ -233,6 +310,9 @@ function Group-Policies {
 
     # Specify quick scan interval: 12 hours
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "QuickScanInterval" -Data 12 -Type "DWord"
+
+    # Turn on e-mail scanning: Enabled 
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableEmailScanning" -Data 0 -Type "DWord"
 
 
     ## Security Intelligence Updates ##
@@ -460,6 +540,178 @@ function Group-Policies {
     $RegPath = "Software\Policies\Microsoft\Windows\AdvertisingInfo"
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisabledByGroupPolicy" -Data 1 -Type "DWord"
 
+
+    ## App Package Deployment ##
+
+    # Allow a Windows app to share application data between users: Disabled
+    $RegPath = "Software\Policies\Microsoft\Windows\CurrentVersion\AppModel\StateManager"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowSharedLocalAppData" -Data 0 -Type "DWord"
+
+    # Prevent non-admin users from installing packaged Windows apps: Enabled
+    $RegPath = "Software\Policies\Microsoft\Windows\Appx"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "BlockNonAdminUserInstall" -Data 1 -Type "DWord"
+
+
+    ## App Privacy ##
+    
+    # Let Windows apps activate with voice while the system is locked: Enabled (Force Deny)
+    $RegPath = "Software\Policies\Microsoft\Windows\AppPrivacy"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "LetAppsActivateWithVoiceAboveLock" -Data 2 -Type "DWord"
+
+    
+    ## App Runtime ##
+    
+    # Block launching Universal Windows apps with Windows Runtime API access from hosted content: Enabled
+    $RegPath = "Software\Microsoft\Windows\CurrentVersion\Policies\System"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "BlockHostedAppAccessWinRT" -Data 1 -Type "DWord"
+    
+
+    ## Biometrics ##
+
+    # Configure enhanced anti-spoofing: Enabled
+    $RegPath = "SOFTWARE\Policies\Microsoft\Biometrics\FacialFeatures"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnhancedAntiSpoofing" -Data 1 -Type "DWord"
+
+
+    ## Camera ##
+
+    # Allow Use of Camera: Disabled
+    $RegPath = "software\Policies\Microsoft\Camera"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowCamera" -Data 0 -Type "DWord"
+
+
+    ## Connect ##
+    
+    # Require pin for pairing: Enabled (Always)
+    $RegPath = "Software\Policies\Microsoft\Windows\Connect"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RequirePinForPairing" -Data 2 -Type "DWord"
+
+
+    ## Push to Install ##
+
+    # Turn off Push to Install service: Enabled
+    $RegPath = "Software\Policies\Microsoft\PushToInstall"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisablePushToInstall" -Data 1 -Type "DWord"
+
+    
+    ## File Explorer ##
+
+    # Turn off Data Execution Prevention for Explorer: Disabled
+    $RegPath = "Software\Policies\Microsoft\Windows\Explorer"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NoDataExecutionPrevention" -Data 0 -Type "DWord"
+
+    # Turn off heap termination on corruption: Disabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NoHeapTerminationOnCorruption" -Data 0 -Type "DWord"
+
+    # Turn off shell protocol protected mode: Disabled
+    $RegPath = "Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "PreXPSP2ShellProtocolBehavior" -Data 0 -Type "DWord"
+
+
+    ## Microsoft Account ##
+
+    # Block all consumer Microsoft account user authentication: Enabled
+    $RegPath = "Software\Policies\Microsoft\MicrosoftAccount"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableUserAuth" -Data 1 -Type "DWord"
+
+
+    ## RSS Feeds ##
+    $RegPath = "Software\Policies\Microsoft\Internet Explorer\Feeds"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableEnclosureDownload" -Data 1 -Type "DWord"
+
+
+    ## Search ##
+
+    # Allow Cloud Search: Enabled (Disable Cloud Search)
+    $RegPath = "SOFTWARE\Policies\Microsoft\Windows\Windows Search"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowCloudSearch" -Data 0 -Type "DWord"
+
+    # Allow Cortana: Disabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowCortana" -Data 0 -Type "DWord"
+
+    # Allow Cortana above lock screen: Disabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowCortanaAboveLock" -Data 0 -Type "DWord"
+
+    # Allow indexing of encrypted files: Disabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowIndexingEncryptedStoresOrItems" -Data 0 -Type "DWord"
+
+    # Allow search and Cortana to use location: Disabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowSearchToUseLocation" -Data 0 -Type "DWord"
+
+    # Allow search highlights: Disabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableDynamicContentInWSB" -Data 0 -Type "DWord"
+
+
+    ## Store ##
+
+    # Turn off Automatic Download and Install of updates: Disabled
+    $RegPath = "Software\Policies\Microsoft\WindowsStore"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AutoDownload" -Data 4 -Type "DWord"
+
+    
+    ## Windows Game Recording and Broadcasting ##
+
+    # Enables or disables Windows Game Recording and Broadcasting: Disabled
+    $RegPath = "Software\Policies\Microsoft\Windows\GameDVR"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowGameDVR" -Data 0 -Type "DWord"
+
+
+    ## Windows Ink Workspace ##
+    
+    # Allow Windows Ink Workspace: Enabled (On, but disallow access above lock)
+    $RegPath = "Software\Policies\Microsoft\WindowsInkWorkspace"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowWindowsInkWorkspace" -Data 1 -Type "DWord"
+
+
+    ## Windows Installer ##
+
+    # Allow user control over installs: Disabled
+    $RegPath = "Software\Policies\Microsoft\Windows\Installer"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableUserControl" -Data 0 -Type "DWord"
+
+    # Always install with elevated privileges: Disabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AlwaysInstallElevated" -Data 0 -Type "DWord"
+
+    # Prevent Internet Explorer security prompt for Windows Installer scripts: Disabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "SafeForScripting" -Data 0 -Type "DWord"
+
+
+    ## Windows Logon Options ##
+
+    # Sign-in and lock last interactive user automatically after a restart: Disabled
+    $RegPath = "Software\Microsoft\Windows\CurrentVersion\Policies\System"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableAutomaticRestartSignOn" -Data 1 -Type "DWord"
+
+
+    ## Attachment Manager ## (USER)
+
+    # Do not preserve zone information in file attachments: Disabled
+    $RegPath = "Software\Microsoft\Windows\CurrentVersion\Policies\Attachments"
+    Set-PolicyFileEntry -Path $UserRegDir -Key $RegPath -ValueName "SaveZoneInformation" -Data 2 -Type "DWord"
+
+    # Notify antivirus programs when opening attachments: Enabled
+    Set-PolicyFileEntry -Path $UserRegDir -Key $RegPath -ValueName "ScanWithAntiVirus" -Data 3 -Type "DWord"
+
+
+    ## Cloud Content ## (USER)
+
+    # Do not use diagnostic data for tailored experiences: Enabled
+    $RegPath = "Software\Policies\Microsoft\Windows\CloudContent"
+    Set-PolicyFileEntry -Path $UserRegDir -Key $RegPath -ValueName "DisableTailoredExperiencesWithDiagnosticData" -Data 1 -Type "DWord"
+
+
+    ## Windows Installer ## (USER)
+
+    # Always install with elevated privileges: Disabled
+    $RegPath = "Software\Policies\Microsoft\Windows\Installer"
+    Set-PolicyFileEntry -Path $UserRegDir -Key $RegPath -ValueName "AlwaysInstallElevated" -Data 0 -Type "DWord"
+
+
+    ## Windows Media Player ## (USER)
+    $RegPath = "Software\Policies\Microsoft\WindowsMediaPlayer"
+    Set-PolicyFileEntry -Path $UserRegDir -Key $RegPath -ValueName "PreventCodecDownload" -Data 1 -Type "DWord"
+
+
     #---------------------------------------------# WIN 11 ONLY #---------------------------------------------#
 
     ## Enhanced Phishing Protection ##
@@ -514,6 +766,59 @@ function Group-Policies {
     $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Printers"
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "CopyFilesPolicy" -Data 1 -Type "DWord"
 
+
+    ## Desktop App Installer ##
+
+    # Enable App Installer Hash Override: Disabled
+    $RegPath = "SOFTWARE\Policies\Microsoft\Windows\AppInstaller"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableHashOverride" -Data 0 -Type "DWord"
+
+    # Enable App Installer ms-appinstaller protocol: Disabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableMSAppInstallerProtocol" -Data 0 -Type "DWord"
+
+
+    ## Remote Desktop Services ##
+
+    # Disable Cloud Clipboard integration for server-to-client data transfer: Enabled
+    $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\Client"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableCloudClipboardIntegration" -Data 1 -Type "DWord"
+
+    # Do not allow WebAuthn redirection: Enabled
+    $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fDisablewebauthn" -Data 1 -Type "DWord"
+
+
+    ## Windows Hello for Business ##
+
+    # Enable ESS with Supported Peripherals: Enabled (1)
+    $RegPath = "SOFTWARE\Microsoft\Policies\PassportForWork\Biometrics"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableESSwithSupportedPeripherals" -Data 1 -Type "DWord"
+
+
+    ## Windows Logon Options ##
+
+    # Enable MPR notifications for the system: Disabled
+    $RegPath = "SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableMPR" -Data 0 -Type "DWord"
+
+    
+    ## Windows Sandbox ##
+
+    # Allow clipboard sharing with Windows Sandbox: Disabled
+    $RegPath = "SOFTWARE\Policies\Microsoft\Windows\Sandbox"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowClipboardRedirection" -Data 0 -Type "DWord"
+
+    # Allow networking in Windows Sandbox: Disabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowNetworking" -Data 0 -Type "DWord"
+
+
+    ## Windows Update ##
+
+    # Enable features introduced via servicing that are off by default: Disabled
+    $RegPath = "SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowTemporaryEnterpriseFeatureControl" -Data 0 -Type "DWord"
+
+    
     #---------------------------------------------------------------------------------------------------------#
 
     gpupdate.exe /force
@@ -967,15 +1272,15 @@ function Show-Network {
 
     $disablesharing = $(Write-Host "Disable file/folder sharing? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
     if ($disablesharing -eq 'y') { 
-        $UserDir = "$env:windir\system32\GroupPolicy\User\registry.pol"
+        $UserRegDir = "$env:windir\system32\GroupPolicy\User\registry.pol"
 
         # Allow shared folders to be published: disable
         $RegPath = "Software\Policies\Microsoft\Windows NT\SharedFolders"
-        Set-PolicyFileEntry -Path $UserDir -Key $RegPath -ValueName "PublishSharedFolders" -Data 0 -Type "DWord"
+        Set-PolicyFileEntry -Path $UserRegDir -Key $RegPath -ValueName "PublishSharedFolders" -Data 0 -Type "DWord"
 
         # Prevent users from sharing files within their profile: enable
         $RegPath = "Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
-        Set-PolicyFileEntry -Path $UserDir -Key $RegPath -ValueName "NoInplaceSharing" -Data 1 -Type "DWord"
+        Set-PolicyFileEntry -Path $UserRegDir -Key $RegPath -ValueName "NoInplaceSharing" -Data 1 -Type "DWord"
 
         gpupdate.exe /force
         Write-Host "Disabled Folder Sharing!" -ForegroundColor Green
