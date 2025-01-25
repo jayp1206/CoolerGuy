@@ -8,7 +8,7 @@ function Set-SecurityPolicies {
     secedit /export /cfg original_secpol.cfg
 
     # Apply template config
-    secedit /configure /db c:\windows\security\local.sdb /cfg template3_secpol.cfg /areas SECURITYPOLICY
+    secedit /configure /db c:\windows\security\local.sdb /cfg template4_secpol.cfg /areas SECURITYPOLICY
     gpupdate /force
 
     Write-Host "Security policies configured successfully!" -ForegroundColor Green

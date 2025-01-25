@@ -6,7 +6,7 @@
 ## (Configure Security Policies?)
 
 ### Password Policy ✔
-- Enforce password history: 25 remembered ✔
+- Enforce password history: 24 remembered ✔
 - Max password age: 30 days ✔
 - Min password age: 5 days ✔
 - Minimum password length: 14 characters ✔
@@ -86,11 +86,11 @@
 #### Network Security ✔
 - Force logoff when logon hours expire: Enable ✔
 - Audit incoming NTLM Traffic: Enable auditing for all accounts ✔
-- Audit NTL authentication in this domain: Enable all ✔
+- Audit NTLM authentication in this domain: Enable all ✔
 - Allow Local System to use computer identity for NTLM: Enabled
 - Allow LocalSystem NULL session fallback: Disabled
 - Allow PKU2U authentication requests to this computer to use online identities: Disabled
-- Do not store LAN Manager hash value on next password change: Enabled
+- (NOT OPTION???) Do not store LAN Manager hash value on next password change: Enabled
 - LAN Manager authentication level: Send NTLMv2 reponse only. Refuse LM & NTLM
 - LDAP client signing requirements: Negotiate signing
 - Minimum session security for NTLM SSP based (including secure RPC) clients: Require NTLMv2 session security, Require 128-bit encryption
@@ -629,7 +629,6 @@
 
 ## Disable FTP
 - File Transfer Protocol Service (FTPSVC): Disabled, Stop ✔
-
 
 
 # Scan for Prohibited Files ✔
