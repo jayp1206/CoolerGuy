@@ -272,7 +272,6 @@
 
 ##### Local Security Authority ✔
 - Allow Custom SSPs and APs to be loaded into LSASS: Disabled ✔
-- Configures LSASS to run as a protected process: Enabled (Enabled with UEFI Lock) ✔
 
 ##### Locale Services ✔
 - Disallow copying of user input methods to the system account for sign-in: Enabled ✔

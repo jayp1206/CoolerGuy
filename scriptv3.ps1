@@ -1,7 +1,12 @@
-# Install PolicyFileEditor
-Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
-Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
-Install-Module -Name PolicyFileEditor -RequiredVersion 3.0.0 -Scope CurrentUser
+# Check if NuGet is installed
+if (-not (Get-PackageProvider -Name NuGet -ErrorAction SilentlyContinue)) {
+    Write-Host "PolicyFileEditor not found. Installing..."
+    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+    Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
+    Install-Module -Name PolicyFileEditor -RequiredVersion 3.0.0 -Scope CurrentUser
+}
+
+$Win11 = $(Write-Host "Windows 11? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
 
 function Set-SecurityPolicies {
     # Copy current secpol.cfg file
@@ -13,7 +18,6 @@ function Set-SecurityPolicies {
 
     Write-Host "Security policies configured successfully!" -ForegroundColor Green
 }
-
 
 function Enable-Firewall {
     # Enable all firewall profiles
@@ -338,11 +342,11 @@ function Group-Policies {
     ## SmartScreen ##
 
     # (Explorer) Configure SmartScreen: enable
-    $RegPath = "Software\Policies\Microsoft\Windows\System"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableSmartScreen" -Data 1 -Type "DWord"
+    #DISABLEDFORSERVER $RegPath = "Software\Policies\Microsoft\Windows\System"
+    #DISABLEDFORSERVER Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableSmartScreen" -Data 1 -Type "DWord"
 
     # (Explorer) Warn and prevent bypass
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "ShellSmartScreenLevel" -Data "Block" -Type "String"
+    #DISABLEDFORSERVER Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "ShellSmartScreenLevel" -Data "Block" -Type "String"
 
     # (Edge) Configure SmartScreen: enable
     $RegPath = "Software\Policies\Microsoft\MicrosoftEdge\PhishingFilter"
@@ -463,8 +467,8 @@ function Group-Policies {
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableCdp" -Data 0 -Type "DWord"
 
     # Turn off access to the Store: Enabled
-    $RegPath = "Software\Policies\Microsoft\Windows\Explorer"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NoUseStoreOpenWith" -Data 1 -Type "DWord"
+    #DISABLEDFORSERVER $RegPath = "Software\Policies\Microsoft\Windows\Explorer"
+    #DISABLEDFORSERVER Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NoUseStoreOpenWith" -Data 1 -Type "DWord"
 
     # Turn off downloading of printer drivers over HTTP: Enabled
     $RegPath = "Software\Policies\Microsoft\Windows NT\Printers"
@@ -497,10 +501,6 @@ function Group-Policies {
     # Allow Custom SSPs and APs to be loaded into LSASS: Disabled
     $RegPath = "SOFTWARE\Policies\Microsoft\Windows\System"
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowCustomSSPsAPs" -Data 0 -Type "DWord"
-
-    # Configures LSASS to run as a protected process: Enabled (Enabled with UEFI Lock)
-    $RegPath = "SYSTEM\CurrentControlSet\Control\Lsa"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RunAsPPL" -Data 1 -Type "DWord"
 
     # Disallow copying of user input methods to the system account for sign-in: Enabled
     $RegPath = "Software\Policies\Microsoft\Control Panel\International"
@@ -555,8 +555,8 @@ function Group-Policies {
     ## App Privacy ##
     
     # Let Windows apps activate with voice while the system is locked: Enabled (Force Deny)
-    $RegPath = "Software\Policies\Microsoft\Windows\AppPrivacy"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "LetAppsActivateWithVoiceAboveLock" -Data 2 -Type "DWord"
+    #DISABLEDFORSERVER $RegPath = "Software\Policies\Microsoft\Windows\AppPrivacy"
+    #DISABLEDFORSERVER Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "LetAppsActivateWithVoiceAboveLock" -Data 2 -Type "DWord"
 
     
     ## App Runtime ##
@@ -624,13 +624,13 @@ function Group-Policies {
 
     # Allow Cloud Search: Enabled (Disable Cloud Search)
     $RegPath = "SOFTWARE\Policies\Microsoft\Windows\Windows Search"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowCloudSearch" -Data 0 -Type "DWord"
+    #DISABLEDFORSERVER Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowCloudSearch" -Data 0 -Type "DWord"
 
     # Allow Cortana: Disabled
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowCortana" -Data 0 -Type "DWord"
+    #DISABLEDFORSERVER Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowCortana" -Data 0 -Type "DWord"
 
     # Allow Cortana above lock screen: Disabled
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowCortanaAboveLock" -Data 0 -Type "DWord"
+    #DISABLEDFORSERVER Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowCortanaAboveLock" -Data 0 -Type "DWord"
 
     # Allow indexing of encrypted files: Disabled
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowIndexingEncryptedStoresOrItems" -Data 0 -Type "DWord"
@@ -639,7 +639,7 @@ function Group-Policies {
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowSearchToUseLocation" -Data 0 -Type "DWord"
 
     # Allow search highlights: Disabled
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableDynamicContentInWSB" -Data 0 -Type "DWord"
+    #DISABLEDFORSERVER Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableDynamicContentInWSB" -Data 0 -Type "DWord"
 
 
     ## Store ##
@@ -652,15 +652,15 @@ function Group-Policies {
     ## Windows Game Recording and Broadcasting ##
 
     # Enables or disables Windows Game Recording and Broadcasting: Disabled
-    $RegPath = "Software\Policies\Microsoft\Windows\GameDVR"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowGameDVR" -Data 0 -Type "DWord"
+    #DISABLEDFORSERVER $RegPath = "Software\Policies\Microsoft\Windows\GameDVR"
+    #DISABLEDFORSERVER Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowGameDVR" -Data 0 -Type "DWord"
 
 
     ## Windows Ink Workspace ##
     
     # Allow Windows Ink Workspace: Enabled (On, but disallow access above lock)
-    $RegPath = "Software\Policies\Microsoft\WindowsInkWorkspace"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowWindowsInkWorkspace" -Data 1 -Type "DWord"
+    #DISABLEDFORSERVER $RegPath = "Software\Policies\Microsoft\WindowsInkWorkspace"
+    #DISABLEDFORSERVER Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowWindowsInkWorkspace" -Data 1 -Type "DWord"
 
 
     ## Windows Installer ##
@@ -713,112 +713,111 @@ function Group-Policies {
 
 
     #---------------------------------------------# WIN 11 ONLY #---------------------------------------------#
+    if ($Win11 -eq 'y') {
+        ## Enhanced Phishing Protection ##
 
-    ## Enhanced Phishing Protection ##
+        # Automatic data collection: enable
+        $RegPath = "\SOFTWARE\Policies\Microsoft\Windows\WTDS"
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "CaptureThreatWindow" -Data 1 -Type "DWord"
 
-    # Automatic data collection: enable
-    $RegPath = "\SOFTWARE\Policies\Microsoft\Windows\WTDS"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "CaptureThreatWindow" -Data 1 -Type "DWord"
+        # Notify malicious: enable
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NotifyMalicious" -Data 1 -Type "DWord"
 
-    # Notify malicious: enable
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NotifyMalicious" -Data 1 -Type "DWord"
+        # Notify password reuse: enable
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NotifyPasswordReuse" -Data 1 -Type "DWord"
 
-    # Notify password reuse: enable
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NotifyPasswordReuse" -Data 1 -Type "DWord"
+        # Notify unsafe app: enable
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NotifyUnsafeApp" -Data 1 -Type "DWord"
 
-    # Notify unsafe app: enable
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "NotifyUnsafeApp" -Data 1 -Type "DWord"
-
-    # Service enabled: enable
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "ServiceEnabled" -Data 1 -Type "DWord"
-
-
-    ## Network ##
-    
-    # Configure dns over http: enable doh
-    $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DoHPolicy" -Data 2 -Type "DWord"
-
-    
-    ## Printers ##
-
-    # Configure Redirection Guard: Enabled
-    $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Printers"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RedirectionguardPolicy" -Data 1 -Type "DWord"
-
-    # Protocol to use for outgoing RPC connections: Enabled (RPC over TCP)
-    $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Printers\RPC"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RpcUseNamedPipeProtocol" -Data 0 -Type "DWord"
-
-    # Use authentication for outgoing RPC connections: Enabled
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RpcAuthentication" -Data 0 -Type "DWord"
-
-    # Protocols to allow for incoming RPC connections: Enabled (RPC over TCP)
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RpcProtocols" -Data 5 -Type "DWord"
-
-    # Authentication Protocol to use for incoming RPC connections: Enabled (Negotiate)
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "ForceKerberosForRpc" -Data 0 -Type "DWord"
-
-    # Configure RPC over TCP port: Enabled (0)
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RpcTcpPort" -Data 0 -Type "DWord"
-
-    # Manage processing of Queue-specific files: Enabled (Limit Queue-specific files to Color profiles)
-    $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Printers"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "CopyFilesPolicy" -Data 1 -Type "DWord"
+        # Service enabled: enable
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "ServiceEnabled" -Data 1 -Type "DWord"
 
 
-    ## Desktop App Installer ##
+        ## Network ##
+        
+        # Configure dns over http: enable doh
+        $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\DNSClient"
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DoHPolicy" -Data 2 -Type "DWord"
 
-    # Enable App Installer Hash Override: Disabled
-    $RegPath = "SOFTWARE\Policies\Microsoft\Windows\AppInstaller"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableHashOverride" -Data 0 -Type "DWord"
+        
+        ## Printers ##
 
-    # Enable App Installer ms-appinstaller protocol: Disabled
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableMSAppInstallerProtocol" -Data 0 -Type "DWord"
+        # Configure Redirection Guard: Enabled
+        $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Printers"
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RedirectionguardPolicy" -Data 1 -Type "DWord"
 
+        # Protocol to use for outgoing RPC connections: Enabled (RPC over TCP)
+        $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Printers\RPC"
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RpcUseNamedPipeProtocol" -Data 0 -Type "DWord"
 
-    ## Remote Desktop Services ##
+        # Use authentication for outgoing RPC connections: Enabled
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RpcAuthentication" -Data 0 -Type "DWord"
 
-    # Disable Cloud Clipboard integration for server-to-client data transfer: Enabled
-    $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\Client"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableCloudClipboardIntegration" -Data 1 -Type "DWord"
+        # Protocols to allow for incoming RPC connections: Enabled (RPC over TCP)
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RpcProtocols" -Data 5 -Type "DWord"
 
-    # Do not allow WebAuthn redirection: Enabled
-    $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fDisablewebauthn" -Data 1 -Type "DWord"
+        # Authentication Protocol to use for incoming RPC connections: Enabled (Negotiate)
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "ForceKerberosForRpc" -Data 0 -Type "DWord"
 
+        # Configure RPC over TCP port: Enabled (0)
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "RpcTcpPort" -Data 0 -Type "DWord"
 
-    ## Windows Hello for Business ##
-
-    # Enable ESS with Supported Peripherals: Enabled (1)
-    $RegPath = "SOFTWARE\Microsoft\Policies\PassportForWork\Biometrics"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableESSwithSupportedPeripherals" -Data 1 -Type "DWord"
-
-
-    ## Windows Logon Options ##
-
-    # Enable MPR notifications for the system: Disabled
-    $RegPath = "SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableMPR" -Data 0 -Type "DWord"
-
-    
-    ## Windows Sandbox ##
-
-    # Allow clipboard sharing with Windows Sandbox: Disabled
-    $RegPath = "SOFTWARE\Policies\Microsoft\Windows\Sandbox"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowClipboardRedirection" -Data 0 -Type "DWord"
-
-    # Allow networking in Windows Sandbox: Disabled
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowNetworking" -Data 0 -Type "DWord"
+        # Manage processing of Queue-specific files: Enabled (Limit Queue-specific files to Color profiles)
+        $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Printers"
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "CopyFilesPolicy" -Data 1 -Type "DWord"
 
 
-    ## Windows Update ##
+        ## Desktop App Installer ##
 
-    # Enable features introduced via servicing that are off by default: Disabled
-    $RegPath = "SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowTemporaryEnterpriseFeatureControl" -Data 0 -Type "DWord"
+        # Enable App Installer Hash Override: Disabled
+        $RegPath = "SOFTWARE\Policies\Microsoft\Windows\AppInstaller"
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableHashOverride" -Data 0 -Type "DWord"
 
-    
+        # Enable App Installer ms-appinstaller protocol: Disabled
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableMSAppInstallerProtocol" -Data 0 -Type "DWord"
+
+
+        ## Remote Desktop Services ##
+
+        # Disable Cloud Clipboard integration for server-to-client data transfer: Enabled
+        $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\Client"
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableCloudClipboardIntegration" -Data 1 -Type "DWord"
+
+        # Do not allow WebAuthn redirection: Enabled
+        $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fDisablewebauthn" -Data 1 -Type "DWord"
+
+
+        ## Windows Hello for Business ##
+
+        # Enable ESS with Supported Peripherals: Enabled (1)
+        $RegPath = "SOFTWARE\Microsoft\Policies\PassportForWork\Biometrics"
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableESSwithSupportedPeripherals" -Data 1 -Type "DWord"
+
+
+        ## Windows Logon Options ##
+
+        # Enable MPR notifications for the system: Disabled
+        $RegPath = "SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableMPR" -Data 0 -Type "DWord"
+
+        
+        ## Windows Sandbox ##
+
+        # Allow clipboard sharing with Windows Sandbox: Disabled
+        $RegPath = "SOFTWARE\Policies\Microsoft\Windows\Sandbox"
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowClipboardRedirection" -Data 0 -Type "DWord"
+
+        # Allow networking in Windows Sandbox: Disabled
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowNetworking" -Data 0 -Type "DWord"
+
+
+        ## Windows Update ##
+
+        # Enable features introduced via servicing that are off by default: Disabled
+        $RegPath = "SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
+        Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AllowTemporaryEnterpriseFeatureControl" -Data 0 -Type "DWord"
+    }   
     #---------------------------------------------------------------------------------------------------------#
 
     gpupdate.exe /force
@@ -1205,6 +1204,7 @@ function Enable-FTP {
 
     Write-Host "Successfully Enabled FTP!" -ForegroundColor Green
 }
+
 function Search-Files {
     
     # Current user's folder
@@ -1255,7 +1255,7 @@ function Search-Files {
 function Show-Network {
     # Get all network shares excluding default ones (ADMIN$, C$, IPC$)
     $allshares = Get-WmiObject -Class Win32_Share | Where-Object {
-        $_.Name -notin @('ADMIN$', 'C$', 'IPC$')
+        $_.Name -notin @('ADMIN$', 'IPC$')
     }
 
     # Check if there are any shares
