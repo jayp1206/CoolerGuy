@@ -717,7 +717,7 @@ function Group-Policies {
         ## Enhanced Phishing Protection ##
 
         # Automatic data collection: enable
-        $RegPath = "\SOFTWARE\Policies\Microsoft\Windows\WTDS"
+        $RegPath = "SOFTWARE\Policies\Microsoft\Windows\WTDS\Components"
         Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "CaptureThreatWindow" -Data 1 -Type "DWord"
 
         # Notify malicious: enable
