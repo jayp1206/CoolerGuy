@@ -1,12 +1,143 @@
-# Check if NuGet is installed
-if (-not (Get-PackageProvider -Name NuGet -ErrorAction SilentlyContinue)) {
+# Check if PolicyFileEditor is installed
+if (-not (Get-Module -ListAvailable -Name PolicyFileEditor)) {
     Write-Host "PolicyFileEditor not found. Installing..."
-    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
     Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
-    Install-Module -Name PolicyFileEditor -RequiredVersion 3.0.0 -Scope CurrentUser
+    Install-Module -Name PolicyFileEditor -RequiredVersion 3.0.0 -Scope CurrentUser -Force
 }
 
 $Win11 = $(Write-Host "Windows 11? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
+
+function Sync-Users {
+    $scriptDir = Split-Path -Parent $PSCommandPath
+    $fileName = $(Write-Host "Enter the name of the authorized users file " -ForegroundColor Magenta -NoNewLine; Read-Host)
+    $filePath = Join-Path $scriptDir $fileName
+
+    if (-not (Test-Path $filePath)) {
+        Write-Error "File not found in script directory: $filePath"
+        return
+    }
+
+    # Parse the authorized users file
+    $fileContent = Get-Content $filePath -Raw
+    $authorizedAdmins = @()
+    $authorizedUsers = @()
+    $currentUser = $null
+    $passwords = @{}
+    
+    $lines = $fileContent -split "`r?`n"
+    $section = $null
+    
+    foreach ($line in $lines) {
+        $line = $line.Trim()
+        if ($line -eq "" -or $line -match "^Authorized") { 
+            if ($line -match "Authorized Administrators:") {
+                $section = "admins"
+            } elseif ($line -match "Authorized Users:") {
+                $section = "users"
+            }
+            continue 
+        }
+        
+        if ($line -match "^password:") {
+            if ($currentUser) {
+                $pswd = $line -replace "^password:\s*", ""
+                $passwords[$currentUser] = $pswd
+            }
+        } else {
+            # Check if this is the current user (marked with "(you)")
+            if ($line -match "\(you\)") {
+                $username = $line -replace "\s*\(you\)\s*", ""
+                $currentUser = $username
+            } else {
+                $currentUser = $line
+            }
+            
+            if ($section -eq "admins") {
+                $authorizedAdmins += $currentUser
+            } elseif ($section -eq "users") {
+                $authorizedUsers += $currentUser
+            }
+        }
+    }
+    
+    $standardPassword = "Cyb3r1a99!!$$"
+    $allAuthorized = $authorizedAdmins + $authorizedUsers
+    
+    Write-Host "`nAuthorized Admins: $($authorizedAdmins -join ', ')"
+    Write-Host "Authorized Users: $($authorizedUsers -join ', ')"
+    
+    # Get current local users (excluding built-in system accounts)
+    $excludeUsers = @('Administrator', 'Guest', 'DefaultAccount', 'WDAGUtilityAccount')
+    $currentUsers = Get-LocalUser | Where-Object { $excludeUsers -notcontains $_.Name }
+    
+    # Remove unauthorized users
+    foreach ($user in $currentUsers) {
+        if ($allAuthorized -notcontains $user.Name) {
+            Write-Host "Removing unauthorized user: $($user.Name)" -ForegroundColor Red
+            Remove-LocalUser -Name $user.Name -ErrorAction SilentlyContinue
+        }
+    }
+    
+    # Process authorized users
+    foreach ($username in $allAuthorized) {
+        $userExists = Get-LocalUser -Name $username -ErrorAction SilentlyContinue
+        $isAdmin = $authorizedAdmins -contains $username
+        
+        # Find the user marked with (you)
+        $isCurrentUser = $fileContent -match "$username\s*\(you\)"
+        
+        if (-not $userExists) {
+            # Create new user (skip if it's the current user - they should already exist)
+            if (-not $isCurrentUser) {
+                Write-Host "Creating user: $username" -ForegroundColor Green
+                $pswd = ConvertTo-SecureString $standardPassword -AsPlainText -Force
+                # Assign the new user object back to $userExists
+                $userExists = New-LocalUser -Name $username -Password $pswd -ErrorAction SilentlyContinue
+            } else {
+                Write-Warning "Current user $username does not exist - skipping creation"
+                continue
+            }
+        } else {
+            # Set password for existing user (except current user)
+            if (-not $isCurrentUser) {
+                Write-Host "Updating password for: $username" -ForegroundColor Yellow
+                $pswd = ConvertTo-SecureString $standardPassword -AsPlainText -Force
+                $userExists | Set-LocalUser -Password $pswd
+            } else {
+                Write-Host "Skipping password update for current user: $username" -ForegroundColor Cyan
+            }
+        }
+
+        # Check if user creation failed (e.g., password policy)
+        if (-not $userExists) {
+            Write-Error "Failed to create or find user: $username. Skipping group assignment."
+            continue
+        }
+
+        # Set admin/user group privileges
+        $isMemberOfAdmins = $null -ne (Get-LocalGroupMember -Group "Administrators" -ErrorAction SilentlyContinue | Where-Object { $_.Name -match "\\$username$" })
+        
+        if ($isAdmin) {
+            # This user is an ADMIN
+            if (-not $isMemberOfAdmins) {
+                Write-Host "Adding $username to Administrators group" -ForegroundColor Green
+                Add-LocalGroupMember -Group "Administrators" -Member $username -ErrorAction SilentlyContinue
+            }
+        } else {
+            $isMemberOfUsers = $null -ne (Get-LocalGroupMember -Group "Users" -ErrorAction SilentlyContinue | Where-Object { $_.Name -match "\\$username$" })
+            if (-not $isMemberOfUsers) {
+                 Add-LocalGroupMember -Group "Users" -Member $username -ErrorAction SilentlyContinue
+            }
+            if ($isMemberOfAdmins) {
+                Write-Host "Removing $username from Administrators group" -ForegroundColor Red
+                Remove-LocalGroupMember -Group "Administrators" -Member $username -ErrorAction SilentlyContinue
+            }
+        }
+    }
+    Write-Host "`nUser synchronization complete!" -ForegroundColor Green
+}
+
+
 
 function Set-SecurityPolicies {
     # Copy current secpol.cfg file
@@ -1228,7 +1359,7 @@ function Search-Files {
                 Write-Host "File Name: $($_.Name)" -ForegroundColor Magenta
                 Write-Host "Full Path: $($_.FullName)" -ForegroundColor Magenta
                 Write-Host "---------------------------------------------------------------------------------------" -ForegroundColor White
-                $filesFound = $true
+                $script:filesFound = $true
             }
 
             # Exclude folders like AppData and those starting with "."
@@ -1243,7 +1374,7 @@ function Search-Files {
                         Write-Host "File Name: $($_.Name)" -ForegroundColor Magenta
                         Write-Host "Full Path: $($_.FullName)" -ForegroundColor Magenta
                         Write-Host "---------------------------------------------------------------------------------------" -ForegroundColor White
-                        $filesFound = $true
+                        $script:filesFound = $true
                     }
             }
         }
@@ -1287,7 +1418,12 @@ function Show-Network {
     }
 }
 
-
+$syncUsers = $(Write-Host "Synchronize Users? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
+if ($syncUsers -eq 'y') { 
+    Sync-Users
+} else {
+    Write-Host "Skipping User Synchronization" -ForegroundColor Yellow
+}   
 
 $securityPolicy = $(Write-Host "Configure Security Policies? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
 if ($securityPolicy -eq 'y') { 
