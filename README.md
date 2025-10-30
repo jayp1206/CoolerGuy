@@ -224,6 +224,9 @@
 #### System --> Remote Assistance ✔
 - Allow only Windows Vista or later connections: Enabled ✔
 - Turn on session logging: Enabled ✔
+- Configure Offer Remote Assistance: Disabled ✔
+- Configure Solicited Remote Assistance: Disabled ✔
+- System Properties --> Allow Remote Assistance connections to this computer: UNCHECK (Registry) ✔
 
 
 #### Printers ✔
@@ -559,9 +562,9 @@
 - Disable Telnet Windows feature ✔
 
 
-# (Enable or Disable RDP/Remote Assistance?)
+# (Enable or Disable RDP?)
 
-## Enable RDP/Remote Assistance
+## Enable RDP
 
 ### Group Policy --> Computer Configuration --> Administrative Templates
 
@@ -576,7 +579,6 @@
 
 ### Settings
 - Remote Desktop --> Enable Remote Desktop: Toggle ON (Registry) ✔
-- System Properties --> Allow Remote Assistance connections to this computer: CHECK (Registry) ✔
 - System Properties --> Allow remote connections to this computer: SELECT (Registry) ✔
 
 ### Firewall
@@ -588,7 +590,7 @@
 - Remote Desktop Services UserMode Port Redirector (UmRdpService): Automatic, Start ✔
 - Windows Remote Management (WinRM): Automatic, Start ✔
 
-## Disable RDP/Remote Assistance
+## Disable RDP
 
 ### Group Policy --> Computer Configuration --> Administrative Templates
 
@@ -602,13 +604,8 @@
 
 - Allow Remote RPC: Disabled ✔
 
-### Group Policy --> System --> Remote Assistance
-- Configure Offer Remote Assistance: Disabled ✔
-- Configure Solicited Remote Assistance: Disabled ✔
-
 ### Settings
 - Remote Desktop --> Enable Remote Desktop: Toggle OFF (Registry) ✔
-- System Properties --> Allow Remote Assistance connections to this computer: UNCHECK (Registry) ✔
 - System Properties --> Don't Allow remote connections to this computer: SELECT (Registry) ✔
 
 ### Firewall

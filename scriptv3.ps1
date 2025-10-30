@@ -233,6 +233,16 @@ function Group-Policies {
     # Turn on session logging: enable
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "LoggingEnabled" -Data 1 -Type "DWord"
 
+    # Solicited Remote Assistance: disable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fAllowToGetHelp" -Data 0 -Type "DWord"
+
+    # Offer Remote Assistance: disable
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fAllowUnsolicited" -Data 0 -Type "DWord"
+
+    $path = 'HKLM:\System\CurrentControlSet\Control\Remote Assistance'
+    New-Item -Path $path -Force
+    Set-ItemProperty -Path $path -Name "fAllowToGetHelp" -Value 0
+
 
     ## Remote Desktop Services ##
     
@@ -1205,12 +1215,6 @@ function Disable-RDP {
     Set-ItemProperty -Path $path -Name "fDenyTSConnections" -Value 1
     Set-ItemProperty -Path $path -Name "AllowRemoteRPC" -Value 0
 
-    # Remote Assistance
-    $path = 'HKLM:\System\CurrentControlSet\Control\Remote Assistance'
-    New-Item -Path $path -Force
-    Set-ItemProperty -Path $path -Name "fAllowToGetHelp" -Value 0
-
-
     ## Firewall ##
     Disable-NetFirewallRule -DisplayGroup "Remote Desktop"
 
@@ -1237,14 +1241,6 @@ function Disable-RDP {
     # Allow users to connect remotely by using Remote Desktop Services: disable
     $RegPath = "SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fDenyTSConnections" -Data 1 -Type "DWord"
-
-    # Solicited Remote Assistance: disable
-    $RegPath = "Software\policies\Microsoft\Windows NT\Terminal Services"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fAllowToGetHelp" -Data 0 -Type "DWord"
-
-    # Offer Remote Assistance: disable
-    $RegPath = "Software\policies\Microsoft\Windows NT\Terminal Services"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "fAllowUnsolicited" -Data 0 -Type "DWord"
 
     # Allow remote shell access: disable
     $RegPath = "Software\Policies\Microsoft\Windows\WinRM\Service\WinRS"
@@ -1280,14 +1276,6 @@ function Enable-RDP {
     $path = 'HKLM:\System\CurrentControlSet\Control\Terminal Server'
     Set-ItemProperty -Path $path -Name "fDenyTSConnections" -Value 0
     Set-ItemProperty -Path $path -Name "AllowRemoteRPC" -Value 1
-
-    # Remote Assistance
-    $path = 'HKLM:\System\CurrentControlSet\Control\Remote Assistance'
-    New-Item -Path $path -Force
-    Set-ItemProperty -Path $path -Name "fAllowToGetHelp" -Value 1
-    
-
-
     
     ## Firewall ##
     Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
