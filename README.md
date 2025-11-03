@@ -36,7 +36,7 @@
 - Audit the access of global system objects: Enabled ✔
 - Audit the use of Backup and Restore privileges: Enabled ✔
 - Shut down system immediately if unable to log security audits: Disabled ✔
-- Force audit policy subcategory settings (Windows Vista or later) to override audit policy category settings: Enabled
+- Force audit policy subcategory settings (Windows Vista or later) to override audit policy category settings: Enabled ✔
 
 #### Devices ✔
 - Prevent users from installing printer drivers: Enabled ✔
@@ -558,7 +558,7 @@
 - Xbox Live Auth Manager (XblAuthManager): Disabled, Stop ✔
 - Xbox Live Game Save (XblGameSave): Disabled, Stop ✔
 - Xbox Live Networking Service (XboxNetApiSvc): Disabled, Stop ✔
-- Simple Mail Transfer Protocol (smtpsvc): Disabled, Stop
+- Simple Mail Transfer Protocol (smtpsvc): Disabled, Stop ✔
 
 - Disable Telnet Windows feature ✔
 
