@@ -1431,18 +1431,18 @@ if ($firewall -eq 'y') {
     Write-Host "Skipping Firewall Configuration" -ForegroundColor Yellow
 }
 
-$auditing = $(Write-Host "Configure Advanced Auditing? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
-if ($auditing -eq 'y') { 
-    Enable-Audits
-} else {
-    Write-Host "Skipping Advanced Audit Policies" -ForegroundColor Yellow
-}   
-
 $groupPolicy = $(Write-Host "Configure Group Policy? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
 if ($groupPolicy -eq 'y') { 
     Group-Policies
 } else {
     Write-Host "Skipping Group Policy" -ForegroundColor Yellow
+}   
+
+$auditing = $(Write-Host "Configure Advanced Auditing? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
+if ($auditing -eq 'y') { 
+    Enable-Audits
+} else {
+    Write-Host "Skipping Advanced Audit Policies" -ForegroundColor Yellow
 }   
 
 $RDP = $(Write-Host "Enable or Disable RDP? (e/d): " -ForegroundColor Cyan -NoNewLine; Read-Host)
