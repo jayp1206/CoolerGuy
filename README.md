@@ -558,6 +558,7 @@
 - Xbox Live Auth Manager (XblAuthManager): Disabled, Stop ✔
 - Xbox Live Game Save (XblGameSave): Disabled, Stop ✔
 - Xbox Live Networking Service (XboxNetApiSvc): Disabled, Stop ✔
+- Simple Mail Transfer Protocol (smtpsvc): Disabled, Stop
 
 - Disable Telnet Windows feature ✔
 

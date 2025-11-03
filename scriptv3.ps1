@@ -1182,6 +1182,10 @@ function Set-Services {
     Set-Service -Name "XboxNetApiSvc" -StartupType Disabled -ErrorAction SilentlyContinue
     Stop-Service -Name "XboxNetApiSvc" -Force -ErrorAction SilentlyContinue
 
+    # Simple Mail Transfer Protocol (smtpsvc): Disabled, Stop
+    Set-Service -Name "smtpsvc" -StartupType Disabled -ErrorAction SilentlyContinue
+    Stop-Service -Name "smtpsvc" -Force -ErrorAction SilentlyContinue
+
 
     # Disable Telnet
     Disable-WindowsOptionalFeature -Online -FeatureName TelnetClient -NoRestart
@@ -1459,20 +1463,19 @@ if ($FTP -eq 'e') {
     Write-Host "Not Configuring FTP" -ForegroundColor Yellow
 } 
 
-$services = $(Write-Host "Configure Services? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
-if ($services -eq 'y') { 
-    Set-Services
-} else {
-    Write-Host "Not Configuring services" -ForegroundColor Yellow
-}   
-
-
 $scanfiles = $(Write-Host "Scan for Prohibited Files? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
 if ($scanfiles -eq 'y') { 
     Search-Files
 } else {
     Write-Host "Not Scanning Files" -ForegroundColor Yellow
-}   
+}  
+
+$services = $(Write-Host "Configure Services? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
+if ($services -eq 'y') { 
+    Set-Services
+} else {
+    Write-Host "Not Configuring services" -ForegroundColor Yellow
+}    
 
 $shares = $(Write-Host "List All Network Shares? (y/n):  " -ForegroundColor Cyan -NoNewLine; Read-Host)
 if ($shares -eq 'y') {
