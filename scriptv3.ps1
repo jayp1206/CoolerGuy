@@ -181,6 +181,8 @@ function Enable-Audits {
 
     gpupdate /force
 
+    auditpol /get /category:*
+
     Write-Host "Advanced Audit Policies Configured Successfully!" -ForegroundColor Green
 }
 
