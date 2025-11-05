@@ -60,7 +60,7 @@ function Sync-Users {
         }
     }
     
-    $standardPassword = "Cyb3r1a99!!$$"
+    $standardPassword = "Cyb3r1a@ARL99!!$$"
     $allAuthorized = $authorizedAdmins + $authorizedUsers
     
     Write-Host "`nAuthorized Admins: $($authorizedAdmins -join ', ')"
@@ -73,7 +73,7 @@ function Sync-Users {
     # Remove unauthorized users
     foreach ($user in $currentUsers) {
         if ($allAuthorized -notcontains $user.Name) {
-            Write-Host "Removing unauthorized user: $($user.Name)" -ForegroundColor Red
+            Write-Host "Removing unauthorized user: $($user.Name)" -ForegroundColor DarkMagenta
             Remove-LocalUser -Name $user.Name -ErrorAction SilentlyContinue
         }
     }
@@ -89,7 +89,7 @@ function Sync-Users {
         if (-not $userExists) {
             # Create new user (skip if it's the current user - they should already exist)
             if (-not $isCurrentUser) {
-                Write-Host "Creating user: $username" -ForegroundColor Green
+                Write-Host "Creating user: $username" -ForegroundColor DarkGreen
                 $pswd = ConvertTo-SecureString $standardPassword -AsPlainText -Force
                 # Assign the new user object back to $userExists
                 $userExists = New-LocalUser -Name $username -Password $pswd -ErrorAction SilentlyContinue
@@ -100,11 +100,11 @@ function Sync-Users {
         } else {
             # Set password for existing user (except current user)
             if (-not $isCurrentUser) {
-                Write-Host "Updating password for: $username" -ForegroundColor Yellow
+                Write-Host "Updating password for: $username" -ForegroundColor DarkYellow
                 $pswd = ConvertTo-SecureString $standardPassword -AsPlainText -Force
                 $userExists | Set-LocalUser -Password $pswd
             } else {
-                Write-Host "Skipping password update for current user: $username" -ForegroundColor Cyan
+                Write-Host "Skipping password update for current user: $username" -ForegroundColor DarkCyan
             }
         }
 
@@ -120,7 +120,7 @@ function Sync-Users {
         if ($isAdmin) {
             # This user is an ADMIN
             if (-not $isMemberOfAdmins) {
-                Write-Host "Adding $username to Administrators group" -ForegroundColor Green
+                Write-Host "Adding $username to Administrators group" -ForegroundColor DarkGreen
                 Add-LocalGroupMember -Group "Administrators" -Member $username -ErrorAction SilentlyContinue
             }
         } else {
@@ -129,11 +129,28 @@ function Sync-Users {
                  Add-LocalGroupMember -Group "Users" -Member $username -ErrorAction SilentlyContinue
             }
             if ($isMemberOfAdmins) {
-                Write-Host "Removing $username from Administrators group" -ForegroundColor Red
+                Write-Host "Removing $username from Administrators group" -ForegroundColor DarkMagenta
                 Remove-LocalGroupMember -Group "Administrators" -Member $username -ErrorAction SilentlyContinue
             }
         }
     }
+
+    $currentUser = $env:USERNAME
+    $users = Get-LocalUser
+
+    foreach ($user in $users) {
+        if ($user.Name -in @($currentUser, 'Administrator', 'Guest')) {
+            continue
+        }
+        if ($user.PasswordNeverExpires) {
+            Write-Host "Disabling 'Password never expires' for user: $($user.Name)" -ForegroundColor DarkMagenta
+            Set-LocalUser -Name $user.Name -PasswordNeverExpires $false
+        }
+        else {
+            Write-Host "Password expiration already enabled for: $($user.Name)" -ForegroundColor DarkGreen
+        }
+    }
+
     Write-Host "`nUser synchronization complete!" -ForegroundColor Green
 }
 

@@ -1,6 +1,14 @@
 # MUST RUN "Set-ExecutionPolicy unrestricted"
 ### * = Windows 11 Only
 
+# User Synchronization
+- Remove all admins who should be standard users ✔
+- Promote any standard users who should be admins ✔
+- Delete any unauthorized accounts ✔
+- Create any nonexistent authorized accounts ✔
+- Set all user passwords (except current user) to Cyb3r1a@ARL99!!$$ ✔
+- Disable "Password Never Expires" for all users (except current user)
+
 # Local Security Policy
 
 ## (Configure Security Policies?)
