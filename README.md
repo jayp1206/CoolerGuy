@@ -7,7 +7,7 @@
 - Delete any unauthorized accounts ✔
 - Create any nonexistent authorized accounts ✔
 - Set all user passwords (except current user) to Cyb3r1a@ARL99!!$$ ✔
-- Disable "Password Never Expires" for all users (except current user)
+- Disable "Password Never Expires" for all users (except current user) ✔
 
 # Local Security Policy
 
