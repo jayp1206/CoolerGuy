@@ -142,13 +142,7 @@ function Sync-Users {
         if ($user.Name -in @($currentUser, 'Administrator', 'Guest')) {
             continue
         }
-        if ($user.PasswordNeverExpires) {
-            Write-Host "Disabling 'Password never expires' for user: $($user.Name)" -ForegroundColor DarkMagenta
-            Set-LocalUser -Name $user.Name -PasswordNeverExpires $false
-        }
-        else {
-            Write-Host "Password expiration already enabled for: $($user.Name)" -ForegroundColor DarkGreen
-        }
+        Set-LocalUser -Name $user.Name -PasswordNeverExpires $false
     }
 
     Write-Host "`nUser synchronization complete!" -ForegroundColor Green
