@@ -409,6 +409,11 @@ function Group-Policies {
     # Configure detection for unwanted applications: enable
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "PUAProtection" -Data 1 -Type "DWord"
 
+    ## MAPS ## 
+
+    # Join Microsoft MAPS: Enabled, Advanced MAPS
+    $RegPath = "Software\Policies\Microsoft\Windows Defender\Spynet"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "SpynetReporting" -Data 2 -Type "DWord"
 
     ## Exploit Guard ##
 
@@ -417,13 +422,16 @@ function Group-Policies {
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableNetworkProtection" -Data 1 -Type "DWord"
 
     ## MpEngine ##
+    $RegPath = "Software\Policies\Microsoft\Windows Defender\MpEngine"
 
     # Enable file hash computation feature: Enabled
-    $RegPath = "Software\Policies\Microsoft\Windows Defender\MpEngine"
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableFileHashComputation" -Data 1 -Type "DWord"
 
+    # Select cloud protection level: High+
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "MpCloudBlockLevel" -Data 4 -Type "DWord"
 
     ## Real Time Protection ##
+
     $RegPath = "Software\Policies\Microsoft\Windows Defender\Real-Time Protection"
 
     # Turn off real time protection: disable

@@ -440,11 +440,15 @@
 - Turn off Microsoft Defender Antivirus: Disabled ✔
 - Configure detection for potentially unwanted applications: Enabled (Block) ✔
 
+##### MAPS
+- Join Microsoft MAPS: Enabled, Advanced MAPS ✔
+
 ##### Microsoft Defender Exploit Guard --> Network Protection ✔
 - Prevent users and apps from accessing dangerous websites: Enabled ✔
 
 ##### MpEngine ✔
 - Enable file hash computation feature: Enabled ✔
+- Select cloud protection level: High+ ✔
 
 ##### Real Time Protection ✔
 - Turn off real-time protection: Disabled ✔
