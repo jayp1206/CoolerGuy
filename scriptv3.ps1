@@ -415,7 +415,18 @@ function Group-Policies {
     $RegPath = "Software\Policies\Microsoft\Windows Defender\Spynet"
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "SpynetReporting" -Data 2 -Type "DWord"
 
+    # Configure the 'Block at First Sight' feature: Enabled
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableBlockAtFirstSeen" -Data 0 -Type "DWord"
+
+    # Send file samples when further analysis is required: Enabled (Send safe samples)
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "SubmitSamplesConsent" -Data 1 -Type "DWord"
+
+
     ## Exploit Guard ##
+
+    # Configure Attack Surface Reduction rules: Enabled (Block execution of potentially obfuscated scripts)
+    $RegPath = "Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "5BEB7EFE-FD9A-4556-801D-275E5FFC04CC" -Data 1 -Type "DWord"
 
     # Prevent users/apps from accessing dangerous websites: block
     $RegPath = "Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Network Protection"
@@ -480,6 +491,9 @@ function Group-Policies {
     # Turn on e-mail scanning: Enabled 
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "DisableEmailScanning" -Data 0 -Type "DWord"
 
+    # Specify the day of the week to run a scheduled scan: Enabled (Every Day) 
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "ScheduleDay" -Data 0 -Type "DWord"
+
 
     ## Security Intelligence Updates ##
     $RegPath = "Software\Policies\Microsoft\Windows Defender\Signature Updates"
@@ -493,6 +507,16 @@ function Group-Policies {
     # Check for latest virus/spyware sec intel on startup: enable
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "UpdateOnStartUp" -Data 1 -Type "DWord"
 
+    # Define the number of days before spyware security intelligence considered out of date: Enabled (5)
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "ASSignatureDue" -Data 5 -Type "DWord"
+
+    # Define the number of days before virus security intelligence considered out of date: Enabled (5)
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "AVSignatureDue" -Data 5 -Type "DWord"
+
+    # Specify the day of the week to check for security intelligence updates: Enabled (Every Day)
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "ScheduleDay" -Data 0 -Type "DWord"
+
+
     
     ## Security Center ##
 
@@ -504,11 +528,11 @@ function Group-Policies {
     ## SmartScreen ##
 
     # (Explorer) Configure SmartScreen: enable
-    #DISABLEDFORSERVER $RegPath = "Software\Policies\Microsoft\Windows\System"
-    #DISABLEDFORSERVER Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableSmartScreen" -Data 1 -Type "DWord"
+    $RegPath = "Software\Policies\Microsoft\Windows\System"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableSmartScreen" -Data 1 -Type "DWord"
 
-    # (Explorer) Warn and prevent bypass
-    #DISABLEDFORSERVER Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "ShellSmartScreenLevel" -Data "Block" -Type "String"
+    # (Explorer) Warn
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "ShellSmartScreenLevel" -Data "Warn" -Type "String"
 
     # (Edge) Configure SmartScreen: enable
     $RegPath = "Software\Policies\Microsoft\MicrosoftEdge\PhishingFilter"
@@ -517,6 +541,10 @@ function Group-Policies {
     # (Edge) Prevent bypassing smartscreen prompts for sites: enable
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "PreventOverride" -Data 1 -Type "DWord"
 
+    ## Windows Powershell ##
+    # Turn on PowerShell Script Block Logging: Enabled
+    $RegPath = "Software\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "EnableScriptBlockLogging" -Data 1 -Type "DWord"
 
     ## Control Panel ##
     

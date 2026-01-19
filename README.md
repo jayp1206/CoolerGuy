@@ -25,7 +25,7 @@
 
 ### Account Lockout Policy ✔
 - Account lockout duration: 30 mins ✔
-- Account lockout threshold: 5 ✔
+- Account lockout threshold: 3 ✔
 - Allow Administrator account lockout: Enabled ✔
 - Reset account lockout counter after: 30 mins ✔
 
@@ -440,10 +440,17 @@
 - Turn off Microsoft Defender Antivirus: Disabled ✔
 - Configure detection for potentially unwanted applications: Enabled (Block) ✔
 
-##### MAPS
+##### MAPS ✔
 - Join Microsoft MAPS: Enabled, Advanced MAPS ✔
+- Configure the 'Block at First Sight' feature: Enabled ✔
+- Send file samples when further analysis is required: Enabled (Send safe samples) ✔
 
-##### Microsoft Defender Exploit Guard --> Network Protection ✔
+##### Microsoft Defender Exploit Guard
+
+###### Attack Surface Reduction
+- Configure Attack Surface Reduction rules: Enabled (Block execution of potentially obfuscated scripts) ✔
+
+###### Network Protection ✔
 - Prevent users and apps from accessing dangerous websites: Enabled ✔
 
 ##### MpEngine ✔
@@ -467,11 +474,15 @@
 - Scan network files: Enabled ✔
 - Specify the interval to run quick scans per day: Enabled (12) ✔
 - Turn on e-mail scanning: Enabled ✔
+- Specify the day of the week to run a scheduled scan: Enabled (Every Day) ✔
 
 ##### Security Intelligence Updates ✔
 - Turn on scan after security intelligence update: Enabled ✔
 - Allow real-time security intelligence updates based on reports to Microsoft MAPS: Enabled ✔
 - Check for the latest virus and spyware security intelligence on startup: Enabled ✔
+- Define the number of days before spyware security intelligence considered out of date: Enabled (5) ✔
+- Define the number of days before virus security intelligence considered out of date: Enabled (5) ✔
+- Specify the day of the week to check for security intelligence updates: Enabled (Every Day) ✔
 
 #### Push to Install ✔
 - Turn off Push to Install service: Enabled ✔
@@ -490,12 +501,14 @@
 - Service Enabled: Enabled ✔ *
 
 ##### Explorer ✔
-- Configure Windows Defender SmartScreen: Enabled (Warn and prevent bypass) ✔
+- Configure Windows Defender SmartScreen: Enabled (Warn) ✔
 
 ##### Microsoft Edge ✔
 - Configure Windows Defender SmartScreen: Enabled ✔
 - Prevent bypassing Windows Defender SmartScreen prompts for sites: Enabled ✔
 
+#### Windows PowerShell
+- Turn on PowerShell Script Block Logging: Enabled ✔
 
 ## User Configuration
 
