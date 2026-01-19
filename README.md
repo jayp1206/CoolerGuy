@@ -13,6 +13,8 @@
 
 ## (Configure Security Policies?)
 
+- Disable PowerShell Remoting
+
 ### Password Policy ✔
 - Enforce password history: 24 remembered ✔
 - Max password age: 30 days ✔
@@ -445,9 +447,9 @@
 - Configure the 'Block at First Sight' feature: Enabled ✔
 - Send file samples when further analysis is required: Enabled (Send safe samples) ✔
 
-##### Microsoft Defender Exploit Guard
+##### Microsoft Defender Exploit Guard ✔
 
-###### Attack Surface Reduction
+###### Attack Surface Reduction ✔
 - Configure Attack Surface Reduction rules: Enabled (Block execution of potentially obfuscated scripts) ✔
 
 ###### Network Protection ✔

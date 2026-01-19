@@ -158,6 +158,7 @@ function Set-SecurityPolicies {
     secedit /configure /db c:\windows\security\local.sdb /cfg template4_secpol.cfg /areas SECURITYPOLICY
     gpupdate /force
 
+    Disable-PSRemoting -Force
     Write-Host "Security policies configured successfully!" -ForegroundColor Green
 }
 
@@ -425,8 +426,10 @@ function Group-Policies {
     ## Exploit Guard ##
 
     # Configure Attack Surface Reduction rules: Enabled (Block execution of potentially obfuscated scripts)
+    $RegPath = "Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "ExploitGuard_ASR_Rules" -Data 1 -Type "DWord"
     $RegPath = "Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules"
-    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "5BEB7EFE-FD9A-4556-801D-275E5FFC04CC" -Data 1 -Type "DWord"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "5BEB7EFE-FD9A-4556-801D-275E5FFC04CC" -Data 1 -Type "String"
 
     # Prevent users/apps from accessing dangerous websites: block
     $RegPath = "Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Network Protection"
