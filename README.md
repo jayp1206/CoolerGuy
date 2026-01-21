@@ -449,8 +449,14 @@
 
 ##### Microsoft Defender Exploit Guard ✔
 
-###### Attack Surface Reduction ✔
-- Configure Attack Surface Reduction rules: Enabled (Block execution of potentially obfuscated scripts) ✔
+###### Attack Surface Reduction
+- Configure Attack Surface Reduction rules: Enabled ✔
+- Block execution of potentially obfuscated scripts ✔
+- Block executable files from running unless they meet a prevalence, age, or trusted list criterion ✔
+- Use advanced protection against ransomware ✔
+- Block abuse of exploited vulnerable signed drivers ✔
+- Block credential stealing from the Windows local security authority subsystem (lsass.exe) ✔
+- Block use of copied or impersonated system tools ✔
 
 ###### Network Protection ✔
 - Prevent users and apps from accessing dangerous websites: Enabled ✔
@@ -485,6 +491,9 @@
 - Define the number of days before spyware security intelligence considered out of date: Enabled (5) ✔
 - Define the number of days before virus security intelligence considered out of date: Enabled (5) ✔
 - Specify the day of the week to check for security intelligence updates: Enabled (Every Day) ✔
+
+##### Threats
+- Specify threat alert levels at which default action should not be taken when detected: (Severe: Remove, High: Remove, Medium: Remove, Low: Remove) ✔
 
 #### Push to Install ✔
 - Turn off Push to Install service: Enabled ✔

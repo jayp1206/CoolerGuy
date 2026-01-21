@@ -425,11 +425,28 @@ function Group-Policies {
 
     ## Exploit Guard ##
 
-    # Configure Attack Surface Reduction rules: Enabled (Block execution of potentially obfuscated scripts)
+    # Configure Attack Surface Reduction rules: Enabled 
     $RegPath = "Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR"
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "ExploitGuard_ASR_Rules" -Data 1 -Type "DWord"
+    
     $RegPath = "Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\ASR\Rules"
+    # Block execution of potentially obfuscated scripts
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "5BEB7EFE-FD9A-4556-801D-275E5FFC04CC" -Data 1 -Type "String"
+
+    # Block executable files from running unless they meet a prevalence, age, or trusted list criterion
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "01443614-cd74-433a-b99e-2ecdc07bfc25" -Data 1 -Type "String"
+
+    # Use advanced protection against ransomware
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "c1db55ab-c21a-4637-bb3f-a12568109d35" -Data 1 -Type "String"
+
+    # Block abuse of exploited vulnerable signed drivers
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "56a863a9-875e-4185-98a7-b882c64b5ce5" -Data 1 -Type "String"
+
+    # Block credential stealing from the Windows local security authority subsystem (lsass.exe)
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "9e6c4e1f-7d60-472f-ba1a-a39ef669e4b2" -Data 1 -Type "String"
+
+    # Block use of copied or impersonated system tools
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "c0033c00-d16d-4114-a5a0-dc9b3a7d2ceb" -Data 1 -Type "String"
 
     # Prevent users/apps from accessing dangerous websites: block
     $RegPath = "Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Network Protection"
@@ -519,6 +536,20 @@ function Group-Policies {
     # Specify the day of the week to check for security intelligence updates: Enabled (Every Day)
     Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "ScheduleDay" -Data 0 -Type "DWord"
 
+    ## Threats ##
+    # Specify threat alert levels at which default action should not be taken when detected: Enabled
+    $RegPath = "Software\Policies\Microsoft\Windows Defender\Threats"
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "Threats_ThreatSeverityDefaultAction" -Data 1 -Type "DWord"
+
+    $RegPath = "Software\Policies\Microsoft\Windows Defender\Threats\ThreatSeverityDefaultAction"
+    # Severe: Remove
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "5" -Data 3 -Type "String"
+    # High: Remove
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "4" -Data 3 -Type "String"
+    # Medium: Remove
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "2" -Data 3 -Type "String"
+    # Low: Remove
+    Set-PolicyFileEntry -Path $MachineDir -Key $RegPath -ValueName "1" -Data 3 -Type "String"
 
     
     ## Security Center ##
