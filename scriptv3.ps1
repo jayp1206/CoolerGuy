@@ -159,6 +159,7 @@ function Set-SecurityPolicies {
     gpupdate /force
 
     Disable-PSRemoting -Force
+    Disable-WindowsOptionalFeature -Online -FeatureName MicrosoftWindowsPowerShellV2Root
     Write-Host "Security policies configured successfully!" -ForegroundColor Green
 }
 

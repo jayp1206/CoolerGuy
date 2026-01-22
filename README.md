@@ -11,9 +11,10 @@
 
 # Local Security Policy
 
-## (Configure Security Policies?)
+## (Configure Security Policies?) ✔
 
-- Disable PowerShell Remoting
+- Disable PowerShell Remoting ✔
+- Disable Powershell 2.0 ✔
 
 ### Password Policy ✔
 - Enforce password history: 24 remembered ✔
