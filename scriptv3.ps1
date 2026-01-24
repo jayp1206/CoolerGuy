@@ -1554,6 +1554,13 @@ if ($scanfiles -eq 'y') {
     Write-Host "Not Scanning Files" -ForegroundColor Yellow
 }  
 
+$shares = $(Write-Host "List All Network Shares? (y/n):  " -ForegroundColor Cyan -NoNewLine; Read-Host)
+if ($shares -eq 'y') {
+    Show-Network
+} else {
+    Write-Host "Skipping Network Shares List" -ForegroundColor Yellow
+}
+
 $services = $(Write-Host "Configure Services? (y/n): " -ForegroundColor Cyan -NoNewLine; Read-Host)
 if ($services -eq 'y') { 
     Set-Services
@@ -1561,9 +1568,4 @@ if ($services -eq 'y') {
     Write-Host "Not Configuring services" -ForegroundColor Yellow
 }    
 
-$shares = $(Write-Host "List All Network Shares? (y/n):  " -ForegroundColor Cyan -NoNewLine; Read-Host)
-if ($shares -eq 'y') {
-    Show-Network
-} else {
-    Write-Host "Skipping Network Shares List" -ForegroundColor Yellow
-}
+
